@@ -1,38 +1,51 @@
-" Name: localvimrc.vim
-" Version: $Id$
-" Author: Markus Braun
-" Description: Search local vimrc files (".lvimrc") in the tree (root dir
-" up to current dir) and load them.
-" Installation: put this file into your plugin directory (~/.vim/plugin)
-if exists("loaded_localvimrc")
-	finish
-end
-let loaded_localvimrc = 1
+" Name:         localvimrc.vim
+" Version:      $Id$
+" Author:       Markus Braun
+" Description:  Search local vimrc files (".lvimrc") in the tree (root dir
+"               up to current dir) and load them.
+" Installation: Put this file into your plugin directory (~/.vim/plugin)
+" Licence:      This program is free software; you can redistribute it and/or
+"               modify it under the terms of the GNU General Public License.
+"               See http://www.gnu.org/copyleft/gpl.txt
 
-function! Localvimrc() 
-	let path = expand("%:p:h")
-	if path == ""
-		let path = getcwd()
-	endif
-	let path = path . "/"
-	let currpath = "/"
+" Section: Plugin header {{{1
+" guard against multiple loads {{{2
+if exists("g:loaded_localvimrc")
+  finish
+endif
+let g:loaded_localvimrc = 1
 
-	while 1
-		let filename = currpath . ".lvimrc"
-		if filereadable(filename)
-			exec 'source ' . escape(filename, ' ~|!"$%&()=?{[]}+*#'."'")
-			"echo 'Loaded ' . filename
-		endif
-		if path == currpath
-			break
-		endif
-		let pos = matchend(path, "/", strlen(currpath))
-		let currpath = strpart(path, 0, pos)
-	endwhile
+" check for correct vim version {{{2
+if version < 700
+  finish
+endif
+
+" Section: Functions {{{1
+" Function: s:localvimrc {{{2
+"
+" search all .lvimrc files from current directory up to root directory and
+" source them in reverse order.
+"
+function! s:localvimrc() 
+  " directory of current file (correctly escaped)
+  let l:directory = escape(expand("%:p:h"), ' ~|!"$%&()=?{[]}+*#'."'")
+
+  " generate a list of all .lvimrc files along path to root
+  let l:rcfiles = findfile(".lvimrc", l:directory . ";", -1)
+
+  " source all found .lvimrc files along path from root (reverse order)
+  for l:rcfile in reverse(l:rcfiles)
+    if filereadable(l:rcfile)
+      exec 'source ' . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
+      "echom 'sourced ' . l:rcfile
+    endif
+  endfor
 endfunction
 
-" Call Localvimrc() when loading this plugin
+" Section: Autocmd setup {{{1
 if has("autocmd")
-	autocmd BufNewFile,BufRead * call Localvimrc()
+  " call s:localvimrc() when creating ore reading any file
+  autocmd BufNewFile,BufRead * call s:localvimrc()
 endif
-" vim600:fdm=marker:commentstring="\ %s:
+
+" vim600: set foldmethod=marker
