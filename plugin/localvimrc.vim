@@ -10,10 +10,10 @@
 
 " Section: Plugin header {{{1
 " guard against multiple loads {{{2
-if exists("g:loaded_localvimrc")
+if (exists("g:loaded_localvimrc") || &cp)
   finish
 endif
-let g:loaded_localvimrc = 1
+let g:loaded_localvimrc = "$Revision$"
 
 " check for correct vim version {{{2
 if version < 700
