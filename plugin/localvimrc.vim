@@ -44,8 +44,11 @@ endfunction
 
 " Section: Autocmd setup {{{1
 if has("autocmd")
-  " call s:localvimrc() when creating ore reading any file
-  autocmd BufNewFile,BufRead * call s:localvimrc()
+  augroup localvimrc                                                                                                                                                                                                 
+    autocmd!
+    " call s:localvimrc() when creating ore reading any file
+    autocmd BufNewFile,BufRead * call s:localvimrc()
+  augroup END
 endif
 
 " vim600: set foldmethod=marker
