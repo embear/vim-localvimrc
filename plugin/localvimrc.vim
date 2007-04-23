@@ -65,7 +65,7 @@ function! s:localvimrc()
   let l:rcfiles = findfile(g:localvimrc_name, l:directory . ";", -1)
 
   " shrink list of found files
-  let l:rcfiles = l:rcfiles[1:g:localvimrc_count]
+  let l:rcfiles = l:rcfiles[0:g:localvimrc_count]
 
   " source all found local vimrc files along path from root (reverse order)
   for l:rcfile in reverse(l:rcfiles)
