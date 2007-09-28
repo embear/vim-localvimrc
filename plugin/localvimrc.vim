@@ -26,8 +26,8 @@
 "     Filename of local vimrc files. Defaults to ".lvimrc".
 "
 "   g:localvimrc_count
-"     Number of local vimrc files, that are sources on the way up to root
-"     directory. Defaults to -1 (all)
+"     On the way from root, the last localvimrc_count files are sourced.
+"     Defaults to -1 (all)
 "
 " Section: Plugin header {{{1
 " guard against multiple loads {{{2
@@ -65,7 +65,13 @@ function! s:localvimrc()
   let l:rcfiles = findfile(g:localvimrc_name, l:directory . ";", -1)
 
   " shrink list of found files
-  let l:rcfiles = l:rcfiles[0:g:localvimrc_count]
+  if g:localvimrc_count == -1
+    let l:rcfiles = l:rcfiles[0:-1]
+  elseif g:localvimrc_count == 0
+    let l:rcfiles = []
+  else
+    let l:rcfiles = l:rcfiles[0:(g:localvimrc_count-1)]
+  endif
 
   " source all found local vimrc files along path from root (reverse order)
   for l:rcfile in reverse(l:rcfiles)
@@ -85,4 +91,4 @@ if has("autocmd")
   augroup END
 endif
 
-" vim600: set foldmethod=marker
+" vim600: foldmethod=marker
