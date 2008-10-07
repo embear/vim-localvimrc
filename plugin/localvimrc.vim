@@ -29,6 +29,9 @@
 "     On the way from root, the last localvimrc_count files are sourced.
 "     Defaults to -1 (all)
 "
+" Credits:
+" - Simon Howard for his hint about "sandbox"
+"
 " Section: Plugin header {{{1
 " guard against multiple loads {{{2
 if (exists("g:loaded_localvimrc") || &cp)
@@ -76,7 +79,7 @@ function! s:localvimrc()
   " source all found local vimrc files along path from root (reverse order)
   for l:rcfile in reverse(l:rcfiles)
     if filereadable(l:rcfile)
-      exec 'source ' . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
+      sandbox exec 'source ' . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
       "echom 'sourced ' . l:rcfile
     endif
   endfor
