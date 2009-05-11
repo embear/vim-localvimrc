@@ -8,7 +8,7 @@
 " Section: Documentation {{{1
 " Description:
 "
-"   This plugin searches for local vimrc files in the filesystem tree of the
+"   This plugin searches for local vimrc files in the file system tree of the
 "   currently opened file. By default it searches for all ".lvimrc" files from
 "   the file's directory up to the root directory and loads them in reverse
 "   order. The filename and amount of loaded files is customizable through
@@ -16,7 +16,7 @@
 "
 " Installation:
 "
-"   Copy the gnupg.vim file to the $HOME/.vim/plugin directory.
+"   Copy the localvimrc.vim file to the $HOME/.vim/plugin directory.
 "   Refer to ':help add-plugin', ':help add-global-plugin' and ':help
 "   runtimepath' for more details about Vim plugins.
 "
