@@ -73,18 +73,26 @@ if (!exists("g:localvimrc_ask"))
   let g:localvimrc_ask = 1
 endif
 
+" define default for debugging {{{2
+if (!exists("g:localvimrc_debug"))
+  let g:localvimrc_debug = 0
+endif
+
 " Section: Functions {{{1
 " Function: s:localvimrc {{{2
 "
 " search all local vimrc files from current directory up to root directory and
 " source them in reverse order.
-"
 function! s:localvimrc()
+  " print version
+  call s:localvimrcDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
+
   " directory of current file (correctly escaped)
   let l:directory = escape(expand("%:p:h"), ' ~|!"$%&()=?{[]}+*#'."'")
 
   " generate a list of all local vimrc files along path to root
   let l:rcfiles = findfile(g:localvimrc_name, l:directory . ";", -1)
+  call s:localvimrcDebug(1, "found files: " . string(l:rcfiles))
 
   " shrink list of found files
   if g:localvimrc_count == -1
@@ -94,16 +102,20 @@ function! s:localvimrc()
   else
     let l:rcfiles = l:rcfiles[0:(g:localvimrc_count-1)]
   endif
+  call s:localvimrcDebug(1, "candidate files: " . string(l:rcfiles))
 
   " source all found local vimrc files along path from root (reverse order)
   let l:answer = ""
   for l:rcfile in reverse(l:rcfiles)
+    call s:localvimrcDebug(2, "processing \"" . l:rcfile . "\"")
+
     if filereadable(l:rcfile)
       " ask if this rcfile should be loaded
       if (l:answer != "a")
         if (g:localvimrc_ask == 1)
           let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
           let l:answer = input(l:message)
+          call s:localvimrcDebug(2, "answer is \"" . l:answer . "\"")
         else
           let l:answer = "a"
         endif
@@ -115,6 +127,7 @@ function! s:localvimrc()
         " add 'sandbox' if requested
         if (g:localvimrc_sandbox != 0)
           let l:command = "sandbox "
+          call s:localvimrcDebug(2, "using sandbox")
         else
           let l:command = ""
         endif
@@ -122,10 +135,14 @@ function! s:localvimrc()
 
         " execute the command
         exec l:command
-        "echom "localvimrc: sourced " . l:rcfile
+        call s:localvimrcDebug(1, "sourced " . l:rcfile)
 
-      elseif (l:answer == "q")
-        break
+      else
+        call s:localvimrcDebug(1, "skipping " . l:rcfile)
+        if (l:answer == "q")
+          call s:localvimrcDebug(1, "end processing files")
+          break
+        endif
       endif
 
     endif
@@ -133,6 +150,15 @@ function! s:localvimrc()
 
   " clear command line
   redraw!
+endfunction
+
+" Function: s:localvimrcDebug(level, text) {{{2
+"
+" output debug message, if this message has high enough importance
+function! s:localvimrcDebug(level, text)
+  if (g:localvimrc_debug >= a:level)
+    echom "localvimrc: " . a:text
+  endif
 endfunction
 
 " Section: Autocmd setup {{{1
