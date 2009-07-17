@@ -89,6 +89,10 @@ function! s:localvimrc()
 
   " directory of current file (correctly escaped)
   let l:directory = escape(expand("%:p:h"), ' ~|!"$%&()=?{[]}+*#'."'")
+  if empty(l:directory)
+    let l:directory = escape(getcwd(), ' ~|!"$%&()=?{[]}+*#'."'")
+  endif
+  call s:localvimrcDebug(2, "searching directory \"" . l:directory . "\"")
 
   " generate a list of all local vimrc files along path to root
   let l:rcfiles = findfile(g:localvimrc_name, l:directory . ";", -1)
@@ -166,7 +170,7 @@ if has("autocmd")
   augroup localvimrc
     autocmd!
     " call s:localvimrc() when creating ore reading any file
-    autocmd BufNewFile,BufRead * call s:localvimrc()
+    autocmd VimEnter,BufNewFile,BufRead * call s:localvimrc()
   augroup END
 endif
 
