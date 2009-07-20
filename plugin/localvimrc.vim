@@ -64,8 +64,12 @@ if (!exists("g:localvimrc_count"))
 endif
 
 " define default for sandbox {{{2
+" copy to script local variable to prevent .lvimrc disabling the sandbox
+" again.
 if (!exists("g:localvimrc_sandbox"))
-  let g:localvimrc_sandbox = 1
+  let s:localvimrc_sandbox = 1
+else
+  let s:localvimrc_sandbox = g:localvimrc_sandbox
 endif
 
 " define default for asking {{{2
@@ -129,7 +133,7 @@ function! s:localvimrc()
       if (l:answer == "y" || l:answer == "a")
 
         " add 'sandbox' if requested
-        if (g:localvimrc_sandbox != 0)
+        if (s:localvimrc_sandbox != 0)
           let l:command = "sandbox "
           call s:localvimrcDebug(2, "using sandbox")
         else
