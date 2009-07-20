@@ -55,12 +55,16 @@ endif
 
 " define default local vimrc file name {{{2
 if (!exists("g:localvimrc_name"))
-  let g:localvimrc_name = ".lvimrc"
+  let s:localvimrc_name = ".lvimrc"
+else
+  let s:localvimrc_name = g:localvimrc_name
 endif
 
 " define default "search depth" {{{2
 if (!exists("g:localvimrc_count"))
-  let g:localvimrc_count = -1
+  let s:localvimrc_count = -1
+else
+  let s:localvimrc_count = g:localvimrc_count
 endif
 
 " define default for sandbox {{{2
@@ -73,8 +77,12 @@ else
 endif
 
 " define default for asking {{{2
+" copy to script local variable to prevent .lvimrc disabling the sandbox
+" again.
 if (!exists("g:localvimrc_ask"))
-  let g:localvimrc_ask = 1
+  let s:localvimrc_ask = 1
+else
+  let s:localvimrc_ask = g:localvimrc_ask
 endif
 
 " define default for debugging {{{2
@@ -99,16 +107,16 @@ function! s:localvimrc()
   call s:localvimrcDebug(2, "searching directory \"" . l:directory . "\"")
 
   " generate a list of all local vimrc files along path to root
-  let l:rcfiles = findfile(g:localvimrc_name, l:directory . ";", -1)
+  let l:rcfiles = findfile(s:localvimrc_name, l:directory . ";", -1)
   call s:localvimrcDebug(1, "found files: " . string(l:rcfiles))
 
   " shrink list of found files
-  if g:localvimrc_count == -1
+  if s:localvimrc_count == -1
     let l:rcfiles = l:rcfiles[0:-1]
-  elseif g:localvimrc_count == 0
+  elseif s:localvimrc_count == 0
     let l:rcfiles = []
   else
-    let l:rcfiles = l:rcfiles[0:(g:localvimrc_count-1)]
+    let l:rcfiles = l:rcfiles[0:(s:localvimrc_count-1)]
   endif
   call s:localvimrcDebug(1, "candidate files: " . string(l:rcfiles))
 
@@ -120,7 +128,7 @@ function! s:localvimrc()
     if filereadable(l:rcfile)
       " ask if this rcfile should be loaded
       if (l:answer != "a")
-        if (g:localvimrc_ask == 1)
+        if (s:localvimrc_ask == 1)
           let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
           let l:answer = input(l:message)
           call s:localvimrcDebug(2, "answer is \"" . l:answer . "\"")
