@@ -1,12 +1,14 @@
 " Name:    localvimrc.vim
 " Version: $Id$
-" Author:  Markus Braun
-" Summary: Search local vimrc files and load them.
+" Author:  Markus Braun <markus.braun@krawel.de>
+" Summary: Vim plugin to search local vimrc files and load them.
 " Licence: This program is free software; you can redistribute it and/or
 "          modify it under the terms of the GNU General Public License.
 "          See http://www.gnu.org/copyleft/gpl.txt
+"
 " Section: Documentation {{{1
-" Description:
+"
+" Description: {{{2
 "
 "   This plugin searches for local vimrc files in the file system tree of the
 "   currently opened file. By default it searches for all ".lvimrc" files from
@@ -14,13 +16,13 @@
 "   order. The filename and amount of loaded files is customizable through
 "   global variables.
 "
-" Installation:
+" Installation: {{{2
 "
 "   Copy the localvimrc.vim file to the $HOME/.vim/plugin directory.
 "   Refer to ':help add-plugin', ':help add-global-plugin' and ':help
 "   runtimepath' for more details about Vim plugins.
 "
-" Variables:
+" Variables: {{{2
 "
 "   g:localvimrc_name
 "     Filename of local vimrc files.
@@ -38,10 +40,12 @@
 "     Ask before sourcing any local vimrc file.
 "     Defaults to 1.
 "
-" Credits:
+" Credits: {{{2
+"
 " - Simon Howard for his hint about "sandbox"
 "
 " Section: Plugin header {{{1
+
 " guard against multiple loads {{{2
 if (exists("g:loaded_localvimrc") || &cp)
   finish
@@ -53,21 +57,21 @@ if version < 700
   finish
 endif
 
-" define default local vimrc file name {{{2
+" define default "localvimrc_name" {{{2
 if (!exists("g:localvimrc_name"))
   let s:localvimrc_name = ".lvimrc"
 else
   let s:localvimrc_name = g:localvimrc_name
 endif
 
-" define default "search depth" {{{2
+" define default "localvimrc_count" {{{2
 if (!exists("g:localvimrc_count"))
   let s:localvimrc_count = -1
 else
   let s:localvimrc_count = g:localvimrc_count
 endif
 
-" define default for sandbox {{{2
+" define default "localvimrc_sandbox" {{{2
 " copy to script local variable to prevent .lvimrc disabling the sandbox
 " again.
 if (!exists("g:localvimrc_sandbox"))
@@ -76,7 +80,7 @@ else
   let s:localvimrc_sandbox = g:localvimrc_sandbox
 endif
 
-" define default for asking {{{2
+" define default "localvimrc_ask" {{{2
 " copy to script local variable to prevent .lvimrc disabling the sandbox
 " again.
 if (!exists("g:localvimrc_ask"))
@@ -85,30 +89,43 @@ else
   let s:localvimrc_ask = g:localvimrc_ask
 endif
 
-" define default for debugging {{{2
+" define default "localvimrc_debug" {{{2
 if (!exists("g:localvimrc_debug"))
   let g:localvimrc_debug = 0
 endif
 
+" Section: Autocmd setup {{{1
+
+if has("autocmd")
+  augroup localvimrc
+    autocmd!
+
+    " call s:LocalVimRC() when creating ore reading any file
+    autocmd VimEnter,BufNewFile,BufRead * call s:LocalVimRC()
+  augroup END
+endif
+
 " Section: Functions {{{1
-" Function: s:localvimrc {{{2
+
+" Function: s:LocalVimRC() {{{2
 "
 " search all local vimrc files from current directory up to root directory and
 " source them in reverse order.
-function! s:localvimrc()
+"
+function! s:LocalVimRC()
   " print version
-  call s:localvimrcDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
+  call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
 
   " directory of current file (correctly escaped)
   let l:directory = escape(expand("%:p:h"), ' ~|!"$%&()=?{[]}+*#'."'")
   if empty(l:directory)
     let l:directory = escape(getcwd(), ' ~|!"$%&()=?{[]}+*#'."'")
   endif
-  call s:localvimrcDebug(2, "searching directory \"" . l:directory . "\"")
+  call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
 
   " generate a list of all local vimrc files along path to root
   let l:rcfiles = findfile(s:localvimrc_name, l:directory . ";", -1)
-  call s:localvimrcDebug(1, "found files: " . string(l:rcfiles))
+  call s:LocalVimRCDebug(1, "found files: " . string(l:rcfiles))
 
   " shrink list of found files
   if s:localvimrc_count == -1
@@ -118,12 +135,12 @@ function! s:localvimrc()
   else
     let l:rcfiles = l:rcfiles[0:(s:localvimrc_count-1)]
   endif
-  call s:localvimrcDebug(1, "candidate files: " . string(l:rcfiles))
+  call s:LocalVimRCDebug(1, "candidate files: " . string(l:rcfiles))
 
   " source all found local vimrc files along path from root (reverse order)
   let l:answer = ""
   for l:rcfile in reverse(l:rcfiles)
-    call s:localvimrcDebug(2, "processing \"" . l:rcfile . "\"")
+    call s:LocalVimRCDebug(2, "processing \"" . l:rcfile . "\"")
 
     if filereadable(l:rcfile)
       " ask if this rcfile should be loaded
@@ -131,7 +148,7 @@ function! s:localvimrc()
         if (s:localvimrc_ask == 1)
           let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
           let l:answer = input(l:message)
-          call s:localvimrcDebug(2, "answer is \"" . l:answer . "\"")
+          call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
         else
           let l:answer = "a"
         endif
@@ -143,7 +160,7 @@ function! s:localvimrc()
         " add 'sandbox' if requested
         if (s:localvimrc_sandbox != 0)
           let l:command = "sandbox "
-          call s:localvimrcDebug(2, "using sandbox")
+          call s:LocalVimRCDebug(2, "using sandbox")
         else
           let l:command = ""
         endif
@@ -151,12 +168,12 @@ function! s:localvimrc()
 
         " execute the command
         exec l:command
-        call s:localvimrcDebug(1, "sourced " . l:rcfile)
+        call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
 
       else
-        call s:localvimrcDebug(1, "skipping " . l:rcfile)
+        call s:LocalVimRCDebug(1, "skipping " . l:rcfile)
         if (l:answer == "q")
-          call s:localvimrcDebug(1, "end processing files")
+          call s:LocalVimRCDebug(1, "end processing files")
           break
         endif
       endif
@@ -168,22 +185,14 @@ function! s:localvimrc()
   redraw!
 endfunction
 
-" Function: s:localvimrcDebug(level, text) {{{2
+" Function: s:LocalVimRCDebug(level, text) {{{2
 "
 " output debug message, if this message has high enough importance
-function! s:localvimrcDebug(level, text)
+"
+function! s:LocalVimRCDebug(level, text)
   if (g:localvimrc_debug >= a:level)
     echom "localvimrc: " . a:text
   endif
 endfunction
 
-" Section: Autocmd setup {{{1
-if has("autocmd")
-  augroup localvimrc
-    autocmd!
-    " call s:localvimrc() when creating ore reading any file
-    autocmd VimEnter,BufNewFile,BufRead * call s:localvimrc()
-  augroup END
-endif
-
-" vim600: foldmethod=marker
+" vim600: foldmethod=marker foldlevel=0 :
