@@ -1,5 +1,5 @@
 " Name:    localvimrc.vim
-" Version: $Id$
+" Version: 0.1.0
 " Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin to search local vimrc files and load them.
 " Licence: This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@
 if (exists("g:loaded_localvimrc") || &cp)
   finish
 endif
-let g:loaded_localvimrc = "$Revision$"
+let g:loaded_localvimrc = 1
 
 " check for correct vim version {{{2
 if version < 700
