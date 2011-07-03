@@ -1,13 +1,34 @@
-" Name:         localvimrc.vim
-" Version:      $Id$
-" Author:       Markus Braun
-" Description:  Search local vimrc files (".lvimrc") in the tree (root dir
-"               up to current dir) and load them.
-" Installation: Put this file into your plugin directory (~/.vim/plugin)
-" Licence:      This program is free software; you can redistribute it and/or
-"               modify it under the terms of the GNU General Public License.
-"               See http://www.gnu.org/copyleft/gpl.txt
-
+" Name:    localvimrc.vim
+" Version: $Id$
+" Author:  Markus Braun
+" Summary: Search local vimrc files and load them.
+" Licence: This program is free software; you can redistribute it and/or
+"          modify it under the terms of the GNU General Public License.
+"          See http://www.gnu.org/copyleft/gpl.txt
+" Section: Documentation {{{1
+" Description:
+"
+"   This plugin searches for local vimrc files in the filesystem tree of the
+"   currently opened file. By default it searches for all ".lvimrc" files from
+"   the file's directory up to the root directory and loads them in reverse
+"   order. The filename and amount of loaded files is customizable through
+"   global variables.
+"
+" Installation: 
+"
+"   Copy the gnupg.vim file to the $HOME/.vim/plugin directory.
+"   Refer to ':help add-plugin', ':help add-global-plugin' and ':help
+"   runtimepath' for more details about Vim plugins.
+"
+" Variables:
+"
+"   g:localvimrc_name
+"     Filename of local vimrc files. Defaults to ".lvimrc".
+"
+"   g:localvimrc_count
+"     Number of local vimrc files, that are sources on the way up to root
+"     directory. Defaults to -1 (all)
+"
 " Section: Plugin header {{{1
 " guard against multiple loads {{{2
 if (exists("g:loaded_localvimrc") || &cp)
