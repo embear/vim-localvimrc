@@ -34,6 +34,10 @@
 "     Source the found local vimrc files in a sandbox for security reasons.
 "     Defaults to 1.
 "
+"   g:localvimrc_ask
+"     Ask before sourcing any local vimrc file.
+"     Defaults to 1.
+"
 " Credits:
 " - Simon Howard for his hint about "sandbox"
 "
@@ -64,6 +68,11 @@ if (!exists("g:localvimrc_sandbox"))
   let g:localvimrc_sandbox = 1
 endif
 
+" define default for asking {{{2
+if (!exists("g:localvimrc_ask"))
+  let g:localvimrc_ask = 1
+endif
+
 " Section: Functions {{{1
 " Function: s:localvimrc {{{2
 "
@@ -87,19 +96,37 @@ function! s:localvimrc()
   endif
 
   " source all found local vimrc files along path from root (reverse order)
+  let l:answer = ""
   for l:rcfile in reverse(l:rcfiles)
     if filereadable(l:rcfile)
-      " add 'sandbox' if requested
-      if (g:localvimrc_sandbox != 0)
-        let l:command = "sandbox "
-      else
-        let l:command = ""
+      " ask if this rcfile should be loaded
+      if (l:answer != "a")
+        if (g:localvimrc_ask == 1)
+          let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
+          let l:answer = input(l:message)
+        else
+          let l:answer = "a"
+        endif
       endif
-      let l:command .= "source " . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
 
-      " execute the command
-      exec l:command
-      "echom "localvimrc: sourced " . l:rcfile
+      " check the answer
+      if (l:answer == "y" || l:answer == "a")
+
+        " add 'sandbox' if requested
+        if (g:localvimrc_sandbox != 0)
+          let l:command = "sandbox "
+        else
+          let l:command = ""
+        endif
+        let l:command .= "source " . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
+
+        " execute the command
+        exec l:command
+        "echom "localvimrc: sourced " . l:rcfile
+
+      elseif (l:answer == "q")
+        break
+      endif
 
     endif
   endfor
