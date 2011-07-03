@@ -14,7 +14,7 @@
 "   order. The filename and amount of loaded files is customizable through
 "   global variables.
 "
-" Installation: 
+" Installation:
 "
 "   Copy the gnupg.vim file to the $HOME/.vim/plugin directory.
 "   Refer to ':help add-plugin', ':help add-global-plugin' and ':help
@@ -23,11 +23,16 @@
 " Variables:
 "
 "   g:localvimrc_name
-"     Filename of local vimrc files. Defaults to ".lvimrc".
+"     Filename of local vimrc files.
+"     Defaults to ".lvimrc".
 "
 "   g:localvimrc_count
 "     On the way from root, the last localvimrc_count files are sourced.
 "     Defaults to -1 (all)
+"
+"   g:localvimrc_sandbox
+"     Source the found local vimrc files in a sandbox for security reasons.
+"     Defaults to 1.
 "
 " Credits:
 " - Simon Howard for his hint about "sandbox"
@@ -54,13 +59,18 @@ if (!exists("g:localvimrc_count"))
   let g:localvimrc_count = -1
 endif
 
+" define default for sandbox {{{2
+if (!exists("g:localvimrc_sandbox"))
+  let g:localvimrc_sandbox = 1
+endif
+
 " Section: Functions {{{1
 " Function: s:localvimrc {{{2
 "
 " search all local vimrc files from current directory up to root directory and
 " source them in reverse order.
 "
-function! s:localvimrc() 
+function! s:localvimrc()
   " directory of current file (correctly escaped)
   let l:directory = escape(expand("%:p:h"), ' ~|!"$%&()=?{[]}+*#'."'")
 
@@ -79,15 +89,28 @@ function! s:localvimrc()
   " source all found local vimrc files along path from root (reverse order)
   for l:rcfile in reverse(l:rcfiles)
     if filereadable(l:rcfile)
-      sandbox exec 'source ' . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
-      "echom 'sourced ' . l:rcfile
+      " add 'sandbox' if requested
+      if (g:localvimrc_sandbox != 0)
+        let l:command = "sandbox "
+      else
+        let l:command = ""
+      endif
+      let l:command .= "source " . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
+
+      " execute the command
+      exec l:command
+      "echom "localvimrc: sourced " . l:rcfile
+
     endif
   endfor
+
+  " clear command line
+  redraw!
 endfunction
 
 " Section: Autocmd setup {{{1
 if has("autocmd")
-  augroup localvimrc                                                                                                                                                                                                 
+  augroup localvimrc
     autocmd!
     " call s:localvimrc() when creating ore reading any file
     autocmd BufNewFile,BufRead * call s:localvimrc()
