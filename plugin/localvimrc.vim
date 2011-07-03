@@ -20,20 +20,33 @@ if version < 700
   finish
 endif
 
+" define default local vimrc file name {{{2
+if (!exists("g:localvimrc_name"))
+  let g:localvimrc_name = ".lvimrc"
+endif
+
+" define default "search depth" {{{2
+if (!exists("g:localvimrc_count"))
+  let g:localvimrc_count = -1
+endif
+
 " Section: Functions {{{1
 " Function: s:localvimrc {{{2
 "
-" search all .lvimrc files from current directory up to root directory and
+" search all local vimrc files from current directory up to root directory and
 " source them in reverse order.
 "
 function! s:localvimrc() 
   " directory of current file (correctly escaped)
   let l:directory = escape(expand("%:p:h"), ' ~|!"$%&()=?{[]}+*#'."'")
 
-  " generate a list of all .lvimrc files along path to root
-  let l:rcfiles = findfile(".lvimrc", l:directory . ";", -1)
+  " generate a list of all local vimrc files along path to root
+  let l:rcfiles = findfile(g:localvimrc_name, l:directory . ";", -1)
 
-  " source all found .lvimrc files along path from root (reverse order)
+  " shrink list of found files
+  let l:rcfiles = l:rcfiles[1:g:localvimrc_count]
+
+  " source all found local vimrc files along path from root (reverse order)
   for l:rcfile in reverse(l:rcfiles)
     if filereadable(l:rcfile)
       exec 'source ' . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
