@@ -40,6 +40,20 @@
 "     Ask before sourcing any local vimrc file.
 "     Defaults to 1.
 "
+"   g:localvimrc_whitelist
+"     If a local vimrc file matches the regular expression given by
+"     g:localvimrc_whitelist this file is loaded unconditionally.
+"     Defaults to "".
+"
+"   g:localvimrc_blacklist
+"     If a local vimrc file matches the regular expression given by
+"     g:localvimrc_blacklist this file is skipped unconditionally.
+"     Defaults to "".
+"
+"   g:localvimrc_debug
+"     Debug level for this script.
+"     Defaults to 0.
+"
 " Credits: {{{2
 "
 " - Simon Howard for his hint about "sandbox"
@@ -50,7 +64,7 @@
 if (exists("g:loaded_localvimrc") || &cp)
   finish
 endif
-let g:loaded_localvimrc = 1
+let g:loaded_localvimrc = 2
 
 " check for correct vim version {{{2
 if version < 700
@@ -87,6 +101,22 @@ if (!exists("g:localvimrc_ask"))
   let s:localvimrc_ask = 1
 else
   let s:localvimrc_ask = g:localvimrc_ask
+endif
+
+" define default "localvimrc_whitelist" {{{2
+" copy to script local variable to prevent .lvimrc modifying the whitelist.
+if (!exists("g:localvimrc_whitelist"))
+  let s:localvimrc_whitelist = "^$" " This never matches a file
+else
+  let s:localvimrc_whitelist = g:localvimrc_whitelist
+endif
+
+" define default "localvimrc_blacklist" {{{2
+" copy to script local variable to prevent .lvimrc modifying the blacklist.
+if (!exists("g:localvimrc_blacklist"))
+  let s:localvimrc_blacklist = "^$" " This never matches a file
+else
+  let s:localvimrc_blacklist = g:localvimrc_blacklist
 endif
 
 " define default "localvimrc_debug" {{{2
@@ -141,28 +171,59 @@ function! s:LocalVimRC()
   let l:answer = ""
   for l:rcfile in reverse(l:rcfiles)
     call s:LocalVimRCDebug(2, "processing \"" . l:rcfile . "\"")
+    let l:rcfile_load = 0
 
     if filereadable(l:rcfile)
-      " ask if this rcfile should be loaded
-      if (l:answer != "a")
-        if (s:localvimrc_ask == 1)
-          let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
-          let l:answer = input(l:message)
-          call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
-        else
-          let l:answer = "a"
+      " check if whitelisted
+      if (l:rcfile_load == 0)
+        if (match(expand(l:rcfile), s:localvimrc_whitelist) != -1)
+          call s:LocalVimRCDebug(2, l:rcfile . " is whitelisted")
+          let l:rcfile_load = 1
         endif
       endif
 
-      " check the answer
-      if (l:answer == "y" || l:answer == "a")
+      " check if blacklisted
+      if (l:rcfile_load == 0)
+        if (match(expand(l:rcfile), s:localvimrc_blacklist) != -1)
+          call s:LocalVimRCDebug(2, l:rcfile . " is blacklisted")
+          let l:rcfile_load = -1
+        endif
+      endif
+
+      " ask if in interactive mode
+      if (l:rcfile_load == 0)
+        if (s:localvimrc_ask == 1)
+          if (l:answer != "a")
+            let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
+            let l:answer = input(l:message)
+            call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
+          endif
+        endif
+
+        " check the answer
+        if (l:answer == "y" || l:answer == "a")
+          let l:rcfile_load = 1
+        elseif (l:answer == "q")
+          call s:LocalVimRCDebug(1, "ended processing files")
+          break
+        endif
+      endif
+
+      " load unconditionally if in non-interactive mode
+      if (l:rcfile_load == 0)
+        if (s:localvimrc_ask == 0)
+          let l:rcfile_load = 1
+        endif
+      endif
+
+      " should this rc file be loaded?
+      if (l:rcfile_load == 1)
+        let l:command = ""
 
         " add 'sandbox' if requested
         if (s:localvimrc_sandbox != 0)
-          let l:command = "sandbox "
+          let l:command .= "sandbox "
           call s:LocalVimRCDebug(2, "using sandbox")
-        else
-          let l:command = ""
         endif
         let l:command .= "source " . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
 
@@ -172,10 +233,6 @@ function! s:LocalVimRC()
 
       else
         call s:LocalVimRCDebug(1, "skipping " . l:rcfile)
-        if (l:answer == "q")
-          call s:LocalVimRCDebug(1, "end processing files")
-          break
-        endif
       endif
 
     endif
