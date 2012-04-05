@@ -119,6 +119,9 @@ else
   let s:localvimrc_blacklist = g:localvimrc_blacklist
 endif
 
+" initialize checksum dictionary
+let s:localvimrc_checksums = {}
+
 " define default "localvimrc_debug" {{{2
 if (!exists("g:localvimrc_debug"))
   let g:localvimrc_debug = 0
@@ -171,27 +174,33 @@ function! s:LocalVimRC()
   let l:answer = ""
   for l:rcfile in reverse(l:rcfiles)
     call s:LocalVimRCDebug(2, "processing \"" . l:rcfile . "\"")
-    let l:rcfile_load = 0
+    let l:rcfile_load = "unknown"
 
     if filereadable(l:rcfile)
       " check if whitelisted
-      if (l:rcfile_load == 0)
+      if (l:rcfile_load == "unknown")
         if (match(fnamemodify(l:rcfile, ":p"), s:localvimrc_whitelist) != -1)
           call s:LocalVimRCDebug(2, l:rcfile . " is whitelisted")
-          let l:rcfile_load = 1
+          let l:rcfile_load = "yes"
         endif
       endif
 
       " check if blacklisted
-      if (l:rcfile_load == 0)
+      if (l:rcfile_load == "unknown")
         if (match(fnamemodify(l:rcfile, ":p"), s:localvimrc_blacklist) != -1)
           call s:LocalVimRCDebug(2, l:rcfile . " is blacklisted")
-          let l:rcfile_load = -1
+          let l:rcfile_load = "no"
         endif
+      endif
+      
+      " check if file had been loaded already
+      if (s:LocalVimRCCheckChecksum(l:rcfile) == 1)
+        call s:LocalVimRCDebug(2, l:rcfile . " was loaded at least once")
+        let l:rcfile_load = "yes"
       endif
 
       " ask if in interactive mode
-      if (l:rcfile_load == 0)
+      if (l:rcfile_load == "unknown")
         if (s:localvimrc_ask == 1)
           if (l:answer != "a")
             let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
@@ -202,7 +211,7 @@ function! s:LocalVimRC()
 
         " check the answer
         if (l:answer == "y" || l:answer == "a")
-          let l:rcfile_load = 1
+          let l:rcfile_load = "yes"
         elseif (l:answer == "q")
           call s:LocalVimRCDebug(1, "ended processing files")
           break
@@ -210,14 +219,19 @@ function! s:LocalVimRC()
       endif
 
       " load unconditionally if in non-interactive mode
-      if (l:rcfile_load == 0)
+      if (l:rcfile_load == "unknown")
         if (s:localvimrc_ask == 0)
-          let l:rcfile_load = 1
+          let l:rcfile_load = "yes"
         endif
       endif
 
       " should this rc file be loaded?
-      if (l:rcfile_load == 1)
+      if (l:rcfile_load == "yes")
+        " calculate checksum
+        if (s:LocalVimRCCheckChecksum(l:rcfile) == 0)
+          call s:LocalVimRCCalcChecksum(l:rcfile)
+        endif
+
         let l:command = ""
 
         " add 'sandbox' if requested
@@ -240,6 +254,39 @@ function! s:LocalVimRC()
 
   " clear command line
   redraw!
+endfunction
+
+" Function: s:LocalVimRCCalcChecksum(filename) {{{2
+"
+" calculate checksum and store it in dictionary
+"
+function! s:LocalVimRCCalcChecksum(filename)
+  let l:file = escape(a:filename, ' ~|!"$%&()=?{[]}+*#'."'")
+  let l:checksum = getfsize(l:file) . getfperm(l:file) . getftime(l:file)
+  let s:localvimrc_checksums[l:file] = l:checksum
+
+  call s:LocalVimRCDebug(3, "checksum calc -> ".l:file . " : " . l:checksum)
+endfunction
+
+" Function: s:LocalVimRCCheckChecksum(filename) {{{2
+"
+" Check checksum in dictionary. Return "0" if it does not exist, "1" otherwise
+"
+function! s:LocalVimRCCheckChecksum(filename)
+  let l:return = 0
+  let l:file = escape(a:filename, ' ~|!"$%&()=?{[]}+*#'."'")
+  let l:checksum = getfsize(l:file) . getfperm(l:file) . getftime(l:file)
+
+  if exists("s:localvimrc_checksums[l:file]")
+    call s:LocalVimRCDebug(3, "checksum check -> ".l:file . " : " . l:checksum . " : " . s:localvimrc_checksums[l:file])
+
+    if s:localvimrc_checksums[l:file] == l:checksum
+      let l:return = 1
+    endif
+
+  endif
+
+  return l:return
 endfunction
 
 " Function: s:LocalVimRCDebug(level, text) {{{2
