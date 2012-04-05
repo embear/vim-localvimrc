@@ -150,9 +150,9 @@ function! s:LocalVimRC()
   call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
 
   " directory of current file (correctly escaped)
-  let l:directory = escape(expand("%:p:h"), ' ~|!"$%&()=?{[]}+*#'."'")
+  let l:directory = fnameescape(expand("%:p:h"))
   if empty(l:directory)
-    let l:directory = escape(getcwd(), ' ~|!"$%&()=?{[]}+*#'."'")
+    let l:directory = fnameescape(getcwd())
   endif
   call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
 
@@ -239,7 +239,7 @@ function! s:LocalVimRC()
           let l:command .= "sandbox "
           call s:LocalVimRCDebug(2, "using sandbox")
         endif
-        let l:command .= "source " . escape(l:rcfile, ' ~|!"$%&()=?{[]}+*#'."'")
+        let l:command .= "source " . fnameescape(l:rcfile)
 
         " execute the command
         exec l:command
@@ -261,7 +261,7 @@ endfunction
 " calculate checksum and store it in dictionary
 "
 function! s:LocalVimRCCalcChecksum(filename)
-  let l:file = escape(a:filename, ' ~|!"$%&()=?{[]}+*#'."'")
+  let l:file = fnameescape(a:filename)
   let l:checksum = getfsize(l:file) . getfperm(l:file) . getftime(l:file)
   let s:localvimrc_checksums[l:file] = l:checksum
 
@@ -274,7 +274,7 @@ endfunction
 "
 function! s:LocalVimRCCheckChecksum(filename)
   let l:return = 0
-  let l:file = escape(a:filename, ' ~|!"$%&()=?{[]}+*#'."'")
+  let l:file = fnameescape(a:filename)
   let l:checksum = getfsize(l:file) . getfperm(l:file) . getftime(l:file)
 
   if exists("s:localvimrc_checksums[l:file]")
