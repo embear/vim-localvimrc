@@ -1,62 +1,10 @@
 " Name:    localvimrc.vim
-" Version: 0.1.0
+" Version: 2.0.0
 " Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin to search local vimrc files and load them.
 " Licence: This program is free software; you can redistribute it and/or
 "          modify it under the terms of the GNU General Public License.
 "          See http://www.gnu.org/copyleft/gpl.txt
-"
-" Section: Documentation {{{1
-"
-" Description: {{{2
-"
-"   This plugin searches for local vimrc files in the file system tree of the
-"   currently opened file. By default it searches for all ".lvimrc" files from
-"   the file's directory up to the root directory and loads them in reverse
-"   order. The filename and amount of loaded files is customizable through
-"   global variables.
-"
-" Installation: {{{2
-"
-"   Copy the localvimrc.vim file to the $HOME/.vim/plugin directory.
-"   Refer to ':help add-plugin', ':help add-global-plugin' and ':help
-"   runtimepath' for more details about Vim plugins.
-"
-" Variables: {{{2
-"
-"   g:localvimrc_name
-"     Filename of local vimrc files.
-"     Defaults to ".lvimrc".
-"
-"   g:localvimrc_count
-"     On the way from root, the last localvimrc_count files are sourced.
-"     Defaults to -1 (all)
-"
-"   g:localvimrc_sandbox
-"     Source the found local vimrc files in a sandbox for security reasons.
-"     Defaults to 1.
-"
-"   g:localvimrc_ask
-"     Ask before sourcing any local vimrc file.
-"     Defaults to 1.
-"
-"   g:localvimrc_whitelist
-"     If a local vimrc file matches the regular expression given by
-"     g:localvimrc_whitelist this file is loaded unconditionally.
-"     Defaults to "".
-"
-"   g:localvimrc_blacklist
-"     If a local vimrc file matches the regular expression given by
-"     g:localvimrc_blacklist this file is skipped unconditionally.
-"     Defaults to "".
-"
-"   g:localvimrc_debug
-"     Debug level for this script.
-"     Defaults to 0.
-"
-" Credits: {{{2
-"
-" - Simon Howard for his hint about "sandbox"
 "
 " Section: Plugin header {{{1
 

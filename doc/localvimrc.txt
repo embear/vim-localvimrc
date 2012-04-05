@@ -1,0 +1,138 @@
+*localvimrc.txt*             For Vim version 7.3       Last change: 2012 April 5
+                          
+localvimrc                 Version 2.0.0                     *localvimrc* *lvimrc*
+                          
+|localvimrc-description|     Description
+|localvimrc-settings|        Settings
+|localvimrc-contribute|      Contribute
+|localvimrc-credits|         Credits
+|localvimrc-changelog|       Changelog
+
+==============================================================================
+DESCRIPTION                                             *localvimrc-description*
+
+This plugin searches for local vimrc files in the file system tree of the
+currently opened file. By default it searches for all ".lvimrc" files from the
+file's directory up to the root directory and loads them in reverse order. The
+filename and amount of loaded files are customizable through global variables.
+
+For security reasons it the plugin asks for confirmation before loading a
+local vimrc file and loads it using |:sandbox| command. The plugin asks once
+per session and local vimrc before loading it, if the file didn't change since
+previous loading.
+
+It is possible to define a whitelist and a blacklist of local vimrc files that
+are loaded or ignored unconditionally.
+
+
+==============================================================================
+SETTINGS                                                   *localvimrc-settings*
+
+Use: >
+    let g:option_name=option_value
+to set them in your global vimrc.
+
+------------------------------------------------------------------------------
+*g:localvimrc_name*
+
+Filename of local vimrc files.
+
+Default: ".lvimrc"
+
+------------------------------------------------------------------------------
+*g:localvimrc_count*
+
+On the way from root, the last localvimrc_count files are sourced.
+
+Default: -1 (all)
+
+------------------------------------------------------------------------------
+*g:localvimrc_sandbox*
+
+Source the found local vimrc files in a sandbox for security reasons.
+
+Value    Description~
+0        Don't load vimrc file in a sandbox.
+1        Load vimrc file in a sandbox.
+
+Default: 1
+
+------------------------------------------------------------------------------
+*g:localvimrc_ask*
+
+Ask before sourcing any local vimrc file.
+
+Value    Description~
+0        Don't ask before loading a vimrc file.
+1        Ask before loading a vimrc file.
+
+Default: 1
+
+------------------------------------------------------------------------------
+*g:localvimrc_whitelist*
+
+If a local vimrc file matches the regular expression given by
+g:localvimrc_whitelist this file is loaded unconditionally.
+
+Default:  ""
+
+------------------------------------------------------------------------------
+*g:localvimrc_blacklist*
+
+If a local vimrc file matches the regular expression given by
+g:localvimrc_blacklist this file is skipped unconditionally.
+
+Default:  ""
+
+------------------------------------------------------------------------------
+*g:localvimrc_debug*
+
+Debug level for this script.
+
+Default: 0
+
+==============================================================================
+CONTRIBUTE                                               *localvimrc-contribute*
+
+To contact the author (Markus Braun), please email: markus.braun@krawel.de
+
+If you think this plugin could be improved, fork on GitHub and send a pull
+request or just tell me your ideas.
+
+GitHub: https://github.com/embear/vim-localvimrc
+
+==============================================================================
+CREDITS                                                     *localvimrc-credits*
+
+- Simon Howard for his hint about "sandbox"
+- Mark Weber for the idea of using checksums
+
+==============================================================================
+CHANGELOG                                                 *localvimrc-changelog*
+
+v2.0.0 : 2012-04-05
+  - added g:localvimrc_whitelist and g:localvimrc_blacklist settings.
+  - ask only once per session and local vimrc before loading it, if it didn't
+    change.
+
+v2758 : 2009-05-11
+  - source .lvimrc in a sandbox to better maintain security, configurable
+    using g:localvimrc_sandbox.
+  - ask user before sourcing any local vimrc file, configurable using
+    g:localvimrc_ask.
+
+v1870 : 2007-09-28
+  - new configuration variable g:localvimrc_name to change filename.
+  - new configuration variable g:localvimrc_count to limit number of loaded
+    files.
+
+v1613 : 2007-04-05
+  - switched to arrays in vim 7.
+  - escape file/path names correctly.
+
+v1.2 : 2002-10-09
+  - initial version
+
+==============================================================================
+
+vim:tw=78:ts=8:ft=help:norl:
