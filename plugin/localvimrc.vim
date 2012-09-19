@@ -103,6 +103,11 @@ endif
 " source them in reverse order.
 "
 function! s:LocalVimRC()
+  " only consider normal buffers (skip especially CommandT's GoToFile buffer)
+  if &buftype != ''
+    return
+  endif
+
   " print version
   call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
 
