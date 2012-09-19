@@ -103,6 +103,11 @@ endif
 " source them in reverse order.
 "
 function! s:LocalVimRC()
+  " only consider normal buffers (skip especially CommandT's GoToFile buffer)
+  if &buftype != ''
+    return
+  endif
+
   " print version
   call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
 
@@ -160,7 +165,7 @@ function! s:LocalVimRC()
       if (l:rcfile_load == "unknown")
         if (s:localvimrc_ask == 1)
           if (l:answer != "a")
-            let l:message = "localvimrc: source " . l:rcfile . "? (y/n/a/q) "
+            let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit localvimrc) "
             let l:answer = input(l:message)
             call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
           endif
