@@ -76,7 +76,10 @@ else
   let s:localvimrc_blacklist = g:localvimrc_blacklist
 endif
 
-" initialize checksum dictionary
+" initialize answer dictionary {{{2
+let s:localvimrc_answers = {}
+
+" initialize checksum dictionary {{{2
 let s:localvimrc_checksums = {}
 
 " define default "localvimrc_debug" {{{2
@@ -159,24 +162,45 @@ function! s:LocalVimRC()
       if (s:LocalVimRCCheckChecksum(l:rcfile) == 1)
         call s:LocalVimRCDebug(2, l:rcfile . " was loaded at least once")
         let l:rcfile_load = "yes"
+      else
+        " reset cached answer
+        if exists("s:localvimrc_answers[l:rcfile]")
+          call remove(s:localvimrc_answers, l:rcfile)
+        endif
       endif
 
       " ask if in interactive mode
       if (l:rcfile_load == "unknown")
         if (s:localvimrc_ask == 1)
-          if (l:answer != "a")
-            let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit localvimrc) "
-            let l:answer = input(l:message)
-            call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
+          if exists("s:localvimrc_answers[l:rcfile]")
+            let l:answer = s:localvimrc_answers[l:rcfile]
+            call s:LocalVimRCDebug(2, "reuse previous answer \"" . l:answer . "\"")
+          else
+            if (l:answer != "a")
+              while (l:answer !~? '^[ynaq]$')
+                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit localvimrc) "
+                let l:answer = input(l:message)
+                call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
+              endwhile
+            endif
           endif
-        endif
 
-        " check the answer
-        if (l:answer == "y" || l:answer == "a")
-          let l:rcfile_load = "yes"
-        elseif (l:answer == "q")
-          call s:LocalVimRCDebug(1, "ended processing files")
-          break
+          " store y/n answers
+          if (l:answer =~? "^y$")
+            let s:localvimrc_answers[l:rcfile] = l:answer
+          elseif (l:answer =~? "^n$")
+            let s:localvimrc_answers[l:rcfile] = l:answer
+          elseif (l:answer =~? "^a$")
+            let s:localvimrc_answers[l:rcfile] = "y"
+          endif
+
+          " check the answer
+          if (l:answer =~? '^[ya]$')
+            let l:rcfile_load = "yes"
+          elseif (l:answer =~? "^q$")
+            call s:LocalVimRCDebug(1, "ended processing files")
+            break
+          endif
         endif
       endif
 
