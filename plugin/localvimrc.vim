@@ -158,31 +158,33 @@ function! s:LocalVimRC()
         endif
       endif
 
-      " check if file had been loaded already
-      if (s:LocalVimRCCheckChecksum(l:rcfile) == 1)
-        call s:LocalVimRCDebug(2, l:rcfile . " was loaded at least once")
-        let l:rcfile_load = "yes"
-      else
-        " reset cached answer
-        if exists("s:localvimrc_answers[l:rcfile]")
-          call remove(s:localvimrc_answers, l:rcfile)
+      " check if an answer has been given for the same file
+      if exists("s:localvimrc_answers[l:rcfile]")
+        if (s:LocalVimRCCheckChecksum(l:rcfile) == 1)
+          call s:LocalVimRCDebug(2, "reuse previous answer \"" . s:localvimrc_answers[l:rcfile] . "\"")
+
+          " check the answer
+          if (s:localvimrc_answers[l:rcfile] =~? '^[ya]$')
+            let l:rcfile_load = "yes"
+          elseif (s:localvimrc_answers[l:rcfile] =~? '^n$')
+            let l:rcfile_load = "no"
+          endif
+        else
+          call s:LocalVimRCDebug(2, "checksum mismatch, no answer reuse")
         endif
       endif
 
       " ask if in interactive mode
       if (l:rcfile_load == "unknown")
         if (s:localvimrc_ask == 1)
-          if exists("s:localvimrc_answers[l:rcfile]")
-            let l:answer = s:localvimrc_answers[l:rcfile]
-            call s:LocalVimRCDebug(2, "reuse previous answer \"" . l:answer . "\"")
-          else
-            if (l:answer != "a")
-              while (l:answer !~? '^[ynaq]$')
-                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit localvimrc) "
-                let l:answer = input(l:message)
-                call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
-              endwhile
-            endif
+          if (l:answer != "a")
+            call s:LocalVimRCDebug(2, "need to ask")
+            let l:answer = ""
+            while (l:answer !~? '^[ynaq]$')
+              let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit localvimrc) "
+              let l:answer = input(l:message)
+              call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
+            endwhile
           endif
 
           " store y/n answers
@@ -213,11 +215,6 @@ function! s:LocalVimRC()
 
       " should this rc file be loaded?
       if (l:rcfile_load == "yes")
-        " calculate checksum
-        if (s:LocalVimRCCheckChecksum(l:rcfile) == 0)
-          call s:LocalVimRCCalcChecksum(l:rcfile)
-        endif
-
         let l:command = ""
 
         " add 'sandbox' if requested
@@ -234,6 +231,9 @@ function! s:LocalVimRC()
       else
         call s:LocalVimRCDebug(1, "skipping " . l:rcfile)
       endif
+
+      " calculate checksum for each processed file
+      call s:LocalVimRCCalcChecksum(l:rcfile)
 
     endif
   endfor
