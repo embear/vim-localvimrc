@@ -72,17 +72,37 @@ Default: 1
 *g:localvimrc_whitelist*
 
 If a local vimrc file matches the regular expression given by
-g:localvimrc_whitelist this file is loaded unconditionally.
+|g:localvimrc_whitelist| this file is loaded unconditionally.
 
-Default:  ""
+Files matching |g:localvimrc_whitelist| are sourced even if they are matched
+by |g:localvimrc_blacklist|.
+
+See |regular-expression| for patterns that are accepted.
+
+Example:
+
+" whitelist all local vimrc files in users project foo and bar
+let g:localvimrc_whitelist='/home/user/projects/\(foo\|bar\)/.*'
+
+Default:  No whitelist
 
 ------------------------------------------------------------------------------
 *g:localvimrc_blacklist*
 
 If a local vimrc file matches the regular expression given by
-g:localvimrc_blacklist this file is skipped unconditionally.
+|g:localvimrc_blacklist| this file is skipped unconditionally.
 
-Default:  ""
+Files matching |g:localvimrc_whitelist| are sourced even if they are matched
+by |g:localvimrc_blacklist|.
+
+See |regular-expression| for patterns that are accepted.
+
+Example:
+
+" blacklist all local vimrc files in shared project directory
+let g:localvimrc_whitelist='/share/projects/.*'
+
+Default:  No blacklist
 
 ------------------------------------------------------------------------------
 *g:localvimrc_debug*
