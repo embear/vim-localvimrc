@@ -155,7 +155,7 @@ function! s:LocalVimRC()
     if filereadable(l:rcfile)
       " check if whitelisted
       if (l:rcfile_load == "unknown")
-        if (match(fnamemodify(l:rcfile, ":p"), s:localvimrc_whitelist) != -1)
+        if (match(l:rcfile, s:localvimrc_whitelist) != -1)
           call s:LocalVimRCDebug(2, l:rcfile . " is whitelisted")
           let l:rcfile_load = "yes"
         endif
@@ -163,7 +163,7 @@ function! s:LocalVimRC()
 
       " check if blacklisted
       if (l:rcfile_load == "unknown")
-        if (match(fnamemodify(l:rcfile, ":p"), s:localvimrc_blacklist) != -1)
+        if (match(l:rcfile, s:localvimrc_blacklist) != -1)
           call s:LocalVimRCDebug(2, l:rcfile . " is blacklisted")
           let l:rcfile_load = "no"
         endif
