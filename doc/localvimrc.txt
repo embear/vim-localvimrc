@@ -30,6 +30,7 @@ SETTINGS                                                   *localvimrc-settings*
 
 Use: >
     let g:option_name=option_value
+
 to set them in your global vimrc.
 
 ------------------------------------------------------------------------------
@@ -60,13 +61,28 @@ Default: 1
 ------------------------------------------------------------------------------
 *g:localvimrc_ask*
 
-Ask before sourcing any local vimrc file.
+Ask before sourcing any local vimrc file. In a vim session the question is
+only asked once as long as the local vimrc file has not been changed.
 
 Value    Description~
 0        Don't ask before loading a vimrc file.
 1        Ask before loading a vimrc file.
 
 Default: 1
+
+------------------------------------------------------------------------------
+*g:localvimrc_persistent*
+
+Make the decisions given when asked before sourcing local vimrc files
+persistent over multiple vim runs. This is done by storing the decisions in
+viminfo. Therefore it is required to include the |viminfo-!| flag in your
+viminfo setting.
+
+Value    Description~
+0        Don't store and restore decisions.
+1        Store and restore decisions.
+
+Default: 0
 
 ------------------------------------------------------------------------------
 *g:localvimrc_whitelist*
@@ -130,6 +146,9 @@ CREDITS                                                     *localvimrc-credits*
 
 ==============================================================================
 CHANGELOG                                                 *localvimrc-changelog*
+
+dev    : XXXX-XX-XX
+  - add possibility to make decisions persistent
 
 v2.0.0 : 2012-04-05
   - added g:localvimrc_whitelist and g:localvimrc_blacklist settings.

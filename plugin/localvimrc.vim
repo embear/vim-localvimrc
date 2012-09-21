@@ -82,6 +82,14 @@ let s:localvimrc_answers = {}
 " initialize checksum dictionary {{{2
 let s:localvimrc_checksums = {}
 
+" define default "localvimrc_persistent" {{{2
+" make decisions persistent over multiple vim runs
+if (!exists("g:localvimrc_persistent"))
+  let s:localvimrc_persistent = 0
+else
+  let s:localvimrc_persistent = g:localvimrc_persistent
+endif
+
 " define default "localvimrc_debug" {{{2
 if (!exists("g:localvimrc_debug"))
   let g:localvimrc_debug = 0
@@ -106,6 +114,9 @@ endif
 " source them in reverse order.
 "
 function! s:LocalVimRC()
+  " read persistent information
+  call s:LocalVimRCReadPersistent()
+
   " only consider normal buffers (skip especially CommandT's GoToFile buffer)
   if &buftype != ''
     return
@@ -240,6 +251,9 @@ function! s:LocalVimRC()
 
   " clear command line
   redraw!
+
+  " make information persistent
+  call s:LocalVimRCWritePersistent()
 endfunction
 
 " Function: s:LocalVimRCCalcChecksum(filename) {{{2
@@ -273,6 +287,62 @@ function! s:LocalVimRCCheckChecksum(filename)
   endif
 
   return l:return
+endfunction
+
+" Function: s:LocalVimRCReadPersistent() {{{2
+"
+" read decision variables from global variable
+"
+function! s:LocalVimRCReadPersistent()
+  if s:localvimrc_persistent == 1
+    if stridx(&viminfo, "!") >= 0
+      if exists("g:LOCALVIMRC_ANSWERS")
+        let s:localvimrc_answers = g:LOCALVIMRC_ANSWERS
+        call s:LocalVimRCDebug(3, "read answer persistent data: " . string(s:localvimrc_answers))
+      endif
+      if exists("g:LOCALVIMRC_CHECKSUMS")
+        let s:localvimrc_checksums = g:LOCALVIMRC_CHECKSUMS
+        call s:LocalVimRCDebug(3, "read checksum persistent data: " . string(s:localvimrc_checksums))
+      endif
+    else
+      call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence")
+    endif
+  endif
+endfunction
+
+" Function: s:LocalVimRCWritePersistent() {{{2
+"
+" write decision variables to global variable to make them persistent
+"
+function! s:LocalVimRCWritePersistent()
+  if s:localvimrc_persistent == 1
+    if stridx(&viminfo, "!") >= 0
+      let g:LOCALVIMRC_ANSWERS = s:localvimrc_answers
+      let g:LOCALVIMRC_CHECKSUMS = s:localvimrc_checksums
+      call s:LocalVimRCDebug(3, "decisions made persistent")
+    else
+      call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence")
+      call s:LocalVimRCError("viminfo setting has no '!' flag, no persistence")
+    endif
+  else
+    if exists("g:LOCALVIMRC_ANSWERS")
+      unlet g:LOCALVIMRC_ANSWERS
+      call s:LocalVimRCDebug(3, "deleted answer persistent data")
+    endif
+    if exists("g:LOCALVIMRC_CHECKSUMS")
+      unlet g:LOCALVIMRC_CHECKSUMS
+      call s:LocalVimRCDebug(3, "deleted checksum persistent data")
+    endif
+
+  endif
+endfunction
+
+" Function: s:LocalVimRCError(text) {{{2
+"
+" output error message
+"
+function! s:LocalVimRCError(text)
+  echohl ErrorMsg | echo "localvimrc: " . a:text | echohl None
 endfunction
 
 " Function: s:LocalVimRCDebug(level, text) {{{2
