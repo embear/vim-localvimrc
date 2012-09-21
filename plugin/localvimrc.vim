@@ -226,7 +226,7 @@ function! s:LocalVimRC()
 
       " should this rc file be loaded?
       if (l:rcfile_load == "yes")
-        let l:command = ""
+        let l:command = "silent "
 
         " add 'sandbox' if requested
         if (s:localvimrc_sandbox != 0)
