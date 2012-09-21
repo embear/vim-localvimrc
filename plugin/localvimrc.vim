@@ -132,23 +132,23 @@ function! s:LocalVimRC()
   endif
   call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
 
-  " generate a list of all local vimrc files along path to root
-  let l:rcfiles = findfile(s:localvimrc_name, l:directory . ";", -1)
+  " generate a list of all local vimrc files with absolute file names along path to root
+  let l:absolute = {}
+  for l:rcfile in findfile(s:localvimrc_name, l:directory . ";", -1)
+    let l:absolute[resolve(fnamemodify(l:rcfile, ":p"))] = ""
+  endfor
+  let l:rcfiles = sort(keys(l:absolute))
   call s:LocalVimRCDebug(1, "found files: " . string(l:rcfiles))
 
   " shrink list of found files
-  if s:localvimrc_count == -1
-    let l:rcfiles = l:rcfiles[0:-1]
-  elseif s:localvimrc_count == 0
-    let l:rcfiles = []
-  else
-    let l:rcfiles = l:rcfiles[0:(s:localvimrc_count-1)]
+  if (s:localvimrc_count >= 0 && s:localvimrc_count < len(l:rcfiles))
+    call remove(l:rcfiles, 0, len(l:rcfiles) - s:localvimrc_count - 1)
   endif
   call s:LocalVimRCDebug(1, "candidate files: " . string(l:rcfiles))
 
   " source all found local vimrc files along path from root (reverse order)
   let l:answer = ""
-  for l:rcfile in reverse(l:rcfiles)
+  for l:rcfile in l:rcfiles
     call s:LocalVimRCDebug(2, "processing \"" . l:rcfile . "\"")
     let l:rcfile_load = "unknown"
 

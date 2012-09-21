@@ -149,6 +149,7 @@ CHANGELOG                                                 *localvimrc-changelog*
 
 dev    : XXXX-XX-XX
   - add possibility to make decisions persistent
+  - use full file path when storing decisions
 
 v2.0.0 : 2012-04-05
   - added g:localvimrc_whitelist and g:localvimrc_blacklist settings.
