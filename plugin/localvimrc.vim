@@ -118,7 +118,7 @@ function! s:LocalVimRC()
   call s:LocalVimRCReadPersistent()
 
   " only consider normal buffers (skip especially CommandT's GoToFile buffer)
-  if &buftype != ''
+  if (&buftype != "")
     return
   endif
 
@@ -280,7 +280,7 @@ function! s:LocalVimRCCheckChecksum(filename)
   if exists("s:localvimrc_checksums[l:file]")
     call s:LocalVimRCDebug(3, "checksum check -> ".l:file . " : " . l:checksum . " : " . s:localvimrc_checksums[l:file])
 
-    if s:localvimrc_checksums[l:file] == l:checksum
+    if (s:localvimrc_checksums[l:file] == l:checksum)
       let l:return = 1
     endif
 
@@ -294,7 +294,7 @@ endfunction
 " read decision variables from global variable
 "
 function! s:LocalVimRCReadPersistent()
-  if s:localvimrc_persistent == 1
+  if (s:localvimrc_persistent == 1)
     if stridx(&viminfo, "!") >= 0
       if exists("g:LOCALVIMRC_ANSWERS")
         let s:localvimrc_answers = g:LOCALVIMRC_ANSWERS
@@ -315,7 +315,7 @@ endfunction
 " write decision variables to global variable to make them persistent
 "
 function! s:LocalVimRCWritePersistent()
-  if s:localvimrc_persistent == 1
+  if (s:localvimrc_persistent == 1)
     if stridx(&viminfo, "!") >= 0
       let g:LOCALVIMRC_ANSWERS = s:localvimrc_answers
       let g:LOCALVIMRC_CHECKSUMS = s:localvimrc_checksums
