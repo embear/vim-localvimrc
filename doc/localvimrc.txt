@@ -106,6 +106,7 @@ CREDITS                                                     *localvimrc-credits*
 
 - Simon Howard for his hint about "sandbox"
 - Mark Weber for the idea of using checksums
+- Daniel Hahler for various patches
 
 ==============================================================================
 CHANGELOG                                                 *localvimrc-changelog*
