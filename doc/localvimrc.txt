@@ -1,8 +1,9 @@
-*localvimrc.txt*             For Vim version 7.3       Last change: 2012 April 5
+*localvimrc.txt*             For Vim version 7.3  Last change: 2012 September 21
                           
 localvimrc                 Version 2.0.0                     *localvimrc* *lvimrc*
                           
 |localvimrc-description|     Description
+|localvimrc-commands|        Commands
 |localvimrc-settings|        Settings
 |localvimrc-contribute|      Contribute
 |localvimrc-credits|         Credits
@@ -24,6 +25,15 @@ previous loading.
 It is possible to define a whitelist and a blacklist of local vimrc files that
 are loaded or ignored unconditionally.
 
+
+==============================================================================
+COMMANDS                                                   *localvimrc-commands*
+
+------------------------------------------------------------------------------
+*LocalVimRCClear*
+
+Clear all stored decisions made in the past, when the plugin asked about
+sourcing a local vimrc file.
 
 ==============================================================================
 SETTINGS                                                   *localvimrc-settings*

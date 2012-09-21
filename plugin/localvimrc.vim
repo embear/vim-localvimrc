@@ -337,6 +337,29 @@ function! s:LocalVimRCWritePersistent()
   endif
 endfunction
 
+" Function: s:LocalVimRCClear() {{{2
+"
+" clear all stored data
+"
+function! s:LocalVimRCClear()
+  if exists("s:localvimrc_answers")
+    unlet s:localvimrc_answers
+    call s:LocalVimRCDebug(3, "deleted answer local data")
+  endif
+  if exists("s:localvimrc_checksums")
+    unlet s:localvimrc_checksums
+    call s:LocalVimRCDebug(3, "deleted checksum local data")
+  endif
+  if exists("g:LOCALVIMRC_ANSWERS")
+    unlet g:LOCALVIMRC_ANSWERS
+    call s:LocalVimRCDebug(3, "deleted answer persistent data")
+  endif
+  if exists("g:LOCALVIMRC_CHECKSUMS")
+    unlet g:LOCALVIMRC_CHECKSUMS
+    call s:LocalVimRCDebug(3, "deleted checksum persistent data")
+  endif
+endfunction
+
 " Function: s:LocalVimRCError(text) {{{2
 "
 " output error message
@@ -354,5 +377,8 @@ function! s:LocalVimRCDebug(level, text)
     echom "localvimrc: " . a:text
   endif
 endfunction
+
+" Section: Commands {{{1
+command! LocalVimRCClear call s:LocalVimRCClear()
 
 " vim600: foldmethod=marker foldlevel=0 :
