@@ -89,8 +89,10 @@ viminfo. Therefore it is required to include the |viminfo-!| flag in your
 viminfo setting.
 
 Value    Description~
-0        Don't store and restore decisions.
-1        Store and restore decisions.
+0        Don't store and restore any decisions.
+1        Store and restore decisions only if the answer was given in upper
+         case (Y/N/A).
+2        Store and restore all decisions.
 
 Default: 0
 

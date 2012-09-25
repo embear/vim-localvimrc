@@ -198,12 +198,19 @@ function! s:LocalVimRC()
             while (l:answer !~? '^[ynaq]$')
               if (s:localvimrc_persistent == 0)
                 let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit) "
-              else
+              elseif (s:localvimrc_persistent == 1)
                 let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit ; persistent [Y]es/[N]o/[A]ll) "
+              else
+                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit) "
               endif
               let l:answer = input(l:message)
               call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
             endwhile
+          endif
+
+          " make answer upper case if persistence is 2 ("force")
+          if (s:localvimrc_persistent == 2)
+            let l:answer = toupper(l:answer)
           endif
 
           " store y/n answers
