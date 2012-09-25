@@ -338,14 +338,19 @@ endfunction
 "
 function! s:LocalVimRCWritePersistent()
   if (s:localvimrc_persistent == 1)
+    " select only data relevant for persistence
     let l:persistent_answers = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
+    let l:persistent_checksums = {}
+    for l:rcfile in keys(l:persistent_answers)
+      let l:persistent_checksums[l:rcfile] = s:localvimrc_checksums[l:rcfile]
+    endfor
 
     " if there are answers to store and global variables are enabled for viminfo
     if (len(l:persistent_answers) > 0)
       if (stridx(&viminfo, "!") >= 0)
         let g:LOCALVIMRC_ANSWERS = l:persistent_answers
         call s:LocalVimRCDebug(3, "write answer persistent data: " . string(g:LOCALVIMRC_ANSWERS))
-        let g:LOCALVIMRC_CHECKSUMS = s:localvimrc_checksums
+        let g:LOCALVIMRC_CHECKSUMS = l:persistent_checksums
         call s:LocalVimRCDebug(3, "write checksum persistent data: " . string(g:LOCALVIMRC_CHECKSUMS))
       else
         call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence available")
