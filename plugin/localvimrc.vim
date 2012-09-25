@@ -179,7 +179,7 @@ function! s:LocalVimRC()
           call s:LocalVimRCDebug(2, "reuse previous answer \"" . s:localvimrc_answers[l:rcfile] . "\"")
 
           " check the answer
-          if (s:localvimrc_answers[l:rcfile] =~? '^[ya]$')
+          if (s:localvimrc_answers[l:rcfile] =~? '^y$')
             let l:rcfile_load = "yes"
           elseif (s:localvimrc_answers[l:rcfile] =~? '^n$')
             let l:rcfile_load = "no"
@@ -192,11 +192,15 @@ function! s:LocalVimRC()
       " ask if in interactive mode
       if (l:rcfile_load == "unknown")
         if (s:localvimrc_ask == 1)
-          if (l:answer != "a")
+          if (l:answer !~? "^a$")
             call s:LocalVimRCDebug(2, "need to ask")
             let l:answer = ""
             while (l:answer !~? '^[ynaq]$')
-              let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit localvimrc) "
+              if (s:localvimrc_persistent == 0)
+                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit) "
+              else
+                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit ; persistent [Y]es/[N]o/[A]ll) "
+              endif
               let l:answer = input(l:message)
               call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
             endwhile
@@ -207,8 +211,10 @@ function! s:LocalVimRC()
             let s:localvimrc_answers[l:rcfile] = l:answer
           elseif (l:answer =~? "^n$")
             let s:localvimrc_answers[l:rcfile] = l:answer
-          elseif (l:answer =~? "^a$")
+          elseif (l:answer =~# "^a$")
             let s:localvimrc_answers[l:rcfile] = "y"
+          elseif (l:answer =~# "^A$")
+            let s:localvimrc_answers[l:rcfile] = "Y"
           endif
 
           " check the answer
@@ -304,7 +310,10 @@ function! s:LocalVimRCReadPersistent()
   if (s:localvimrc_persistent == 1)
     if stridx(&viminfo, "!") >= 0
       if exists("g:LOCALVIMRC_ANSWERS")
-        let s:localvimrc_answers = g:LOCALVIMRC_ANSWERS
+        for l:rcfile in keys(g:LOCALVIMRC_ANSWERS)
+          " overwrite answers with persistent data
+          let s:localvimrc_answers[l:rcfile] = g:LOCALVIMRC_ANSWERS[l:rcfile]
+        endfor
         call s:LocalVimRCDebug(3, "read answer persistent data: " . string(s:localvimrc_answers))
       endif
       if exists("g:LOCALVIMRC_CHECKSUMS")
@@ -324,7 +333,7 @@ endfunction
 function! s:LocalVimRCWritePersistent()
   if (s:localvimrc_persistent == 1)
     if stridx(&viminfo, "!") >= 0
-      let g:LOCALVIMRC_ANSWERS = s:localvimrc_answers
+      let g:LOCALVIMRC_ANSWERS = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
       call s:LocalVimRCDebug(3, "write answer persistent data: " . string(g:LOCALVIMRC_ANSWERS))
       let g:LOCALVIMRC_CHECKSUMS = s:localvimrc_checksums
       call s:LocalVimRCDebug(3, "write checksum persistent data: " . string(g:LOCALVIMRC_CHECKSUMS))
