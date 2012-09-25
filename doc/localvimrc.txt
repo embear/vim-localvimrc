@@ -1,6 +1,6 @@
-*localvimrc.txt*             For Vim version 7.3  Last change: 2012 September 21
+*localvimrc.txt*             For Vim version 7.3  Last change: 2012 September 25
                           
-localvimrc                 Version 2.0.0                     *localvimrc* *lvimrc*
+localvimrc                 Version 2.1.0                     *localvimrc* *lvimrc*
                           
 |localvimrc-description|     Description
 |localvimrc-commands|        Commands
@@ -159,7 +159,7 @@ CREDITS                                                     *localvimrc-credits*
 ==============================================================================
 CHANGELOG                                                 *localvimrc-changelog*
 
-dev    : XXXX-XX-XX
+v2.1.0 : 2012-09-25
   - add possibility to make decisions persistent
   - use full file path when storing decisions
 
