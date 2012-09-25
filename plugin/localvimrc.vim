@@ -324,11 +324,10 @@ function! s:LocalVimRCReadPersistent()
         call s:LocalVimRCDebug(3, "read answer persistent data: " . string(s:localvimrc_answers))
       endif
       if exists("g:LOCALVIMRC_CHECKSUMS")
+        " overwrite checksums with persistent data
         let s:localvimrc_checksums = g:LOCALVIMRC_CHECKSUMS
         call s:LocalVimRCDebug(3, "read checksum persistent data: " . string(s:localvimrc_checksums))
       endif
-    else
-      call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence")
     endif
   endif
 endfunction
@@ -339,14 +338,19 @@ endfunction
 "
 function! s:LocalVimRCWritePersistent()
   if (s:localvimrc_persistent == 1)
-    if stridx(&viminfo, "!") >= 0
-      let g:LOCALVIMRC_ANSWERS = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
-      call s:LocalVimRCDebug(3, "write answer persistent data: " . string(g:LOCALVIMRC_ANSWERS))
-      let g:LOCALVIMRC_CHECKSUMS = s:localvimrc_checksums
-      call s:LocalVimRCDebug(3, "write checksum persistent data: " . string(g:LOCALVIMRC_CHECKSUMS))
-    else
-      call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence")
-      call s:LocalVimRCError("viminfo setting has no '!' flag, no persistence")
+    let l:persistent_answers = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
+
+    " if there are answers to store and global variables are enabled for viminfo
+    if (len(l:persistent_answers) > 0)
+      if (stridx(&viminfo, "!") >= 0)
+        let g:LOCALVIMRC_ANSWERS = l:persistent_answers
+        call s:LocalVimRCDebug(3, "write answer persistent data: " . string(g:LOCALVIMRC_ANSWERS))
+        let g:LOCALVIMRC_CHECKSUMS = s:localvimrc_checksums
+        call s:LocalVimRCDebug(3, "write checksum persistent data: " . string(g:LOCALVIMRC_CHECKSUMS))
+      else
+        call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence available")
+        call s:LocalVimRCError("viminfo setting has no '!' flag, no persistence available")
+      endif
     endif
   else
     if exists("g:LOCALVIMRC_ANSWERS")
