@@ -114,16 +114,20 @@ endif
 " source them in reverse order.
 "
 function! s:LocalVimRC()
+  " begin marker
+  call s:LocalVimRCDebug(1, "==================================================")
+
+  " print version
+  call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
+
   " read persistent information
   call s:LocalVimRCReadPersistent()
 
   " only consider normal buffers (skip especially CommandT's GoToFile buffer)
   if (&buftype != "")
+    call s:LocalVimRCDebug(1, "not a normal buffer, exiting")
     return
   endif
-
-  " print version
-  call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
 
   " directory of current file (correctly escaped)
   let l:directory = fnameescape(expand("%:p:h"))
@@ -254,6 +258,9 @@ function! s:LocalVimRC()
 
   " make information persistent
   call s:LocalVimRCWritePersistent()
+
+  " end marker
+  call s:LocalVimRCDebug(1, "==================================================")
 endfunction
 
 " Function: s:LocalVimRCCalcChecksum(filename) {{{2
@@ -276,7 +283,7 @@ function! s:LocalVimRCCheckChecksum(filename)
   let l:return = 0
   let l:file = fnameescape(a:filename)
   let l:checksum = getfsize(l:file) . getfperm(l:file) . getftime(l:file)
-
+  " overwrite answers with persistent data
   if exists("s:localvimrc_checksums[l:file]")
     call s:LocalVimRCDebug(3, "checksum check -> ".l:file . " : " . l:checksum . " : " . s:localvimrc_checksums[l:file])
 
@@ -318,8 +325,9 @@ function! s:LocalVimRCWritePersistent()
   if (s:localvimrc_persistent == 1)
     if stridx(&viminfo, "!") >= 0
       let g:LOCALVIMRC_ANSWERS = s:localvimrc_answers
+      call s:LocalVimRCDebug(3, "write answer persistent data: " . string(g:LOCALVIMRC_ANSWERS))
       let g:LOCALVIMRC_CHECKSUMS = s:localvimrc_checksums
-      call s:LocalVimRCDebug(3, "decisions made persistent")
+      call s:LocalVimRCDebug(3, "write checksum persistent data: " . string(g:LOCALVIMRC_CHECKSUMS))
     else
       call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence")
       call s:LocalVimRCError("viminfo setting has no '!' flag, no persistence")
