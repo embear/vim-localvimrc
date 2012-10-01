@@ -317,6 +317,12 @@ function! s:LocalVimRCReadPersistent()
   if (s:localvimrc_persistent == 1)
     if stridx(&viminfo, "!") >= 0
       if exists("g:LOCALVIMRC_ANSWERS")
+        " force g:LOCALVIMRC_ANSWERS to be a dictionary
+        if (type(g:LOCALVIMRC_ANSWERS) != type({}))
+          unlet g:LOCALVIMRC_ANSWERS
+          let g:LOCALVIMRC_ANSWERS = {}
+          call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_ANSWERS")
+        endif
         for l:rcfile in keys(g:LOCALVIMRC_ANSWERS)
           " overwrite answers with persistent data
           let s:localvimrc_answers[l:rcfile] = g:LOCALVIMRC_ANSWERS[l:rcfile]
@@ -324,6 +330,12 @@ function! s:LocalVimRCReadPersistent()
         call s:LocalVimRCDebug(3, "read answer persistent data: " . string(s:localvimrc_answers))
       endif
       if exists("g:LOCALVIMRC_CHECKSUMS")
+        " force g:LOCALVIMRC_CHECKSUMS to be a dictionary
+        if (type(g:LOCALVIMRC_CHECKSUMS) != type({}))
+          unlet g:LOCALVIMRC_CHECKSUMS
+          let g:LOCALVIMRC_CHECKSUMS = {}
+          call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_CHECKSUMS")
+        endif
         " overwrite checksums with persistent data
         let s:localvimrc_checksums = g:LOCALVIMRC_CHECKSUMS
         call s:LocalVimRCDebug(3, "read checksum persistent data: " . string(s:localvimrc_checksums))
