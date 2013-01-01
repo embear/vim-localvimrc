@@ -314,7 +314,7 @@ endfunction
 " read decision variables from global variable
 "
 function! s:LocalVimRCReadPersistent()
-  if (s:localvimrc_persistent == 1)
+  if (s:localvimrc_persistent >= 1)
     if stridx(&viminfo, "!") >= 0
       if exists("g:LOCALVIMRC_ANSWERS")
         " force g:LOCALVIMRC_ANSWERS to be a dictionary
@@ -349,7 +349,7 @@ endfunction
 " write decision variables to global variable to make them persistent
 "
 function! s:LocalVimRCWritePersistent()
-  if (s:localvimrc_persistent == 1)
+  if (s:localvimrc_persistent >= 1)
     " select only data relevant for persistence
     let l:persistent_answers = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
     let l:persistent_checksums = {}
