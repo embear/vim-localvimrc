@@ -102,7 +102,7 @@ if has("autocmd")
     autocmd!
 
     " call s:LocalVimRC() when creating ore reading any file
-    autocmd VimEnter,BufNewFile,BufRead * call s:LocalVimRC()
+    autocmd BufWinEnter * call s:LocalVimRC()
   augroup END
 endif
 
