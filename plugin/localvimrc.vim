@@ -24,7 +24,7 @@ endif
 let g:loaded_localvimrc = 2
 
 " check for correct vim version {{{2
-if version < 700
+if version < 702
   finish
 endif
 
