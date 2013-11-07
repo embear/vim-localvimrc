@@ -1,7 +1,7 @@
 *localvimrc.txt*             For Vim version 7.3  Last change: 2012 September 25
-                          
+
 localvimrc                 Version 2.1.0                     *localvimrc* *lvimrc*
-                          
+
 |localvimrc-description|     Description
 |localvimrc-commands|        Commands
 |localvimrc-settings|        Settings
@@ -13,9 +13,10 @@ localvimrc                 Version 2.1.0                     *localvimrc* *lvimr
 DESCRIPTION                                             *localvimrc-description*
 
 This plugin searches for local vimrc files in the file system tree of the
-currently opened file. By default it searches for all ".lvimrc" files from the
-file's directory up to the root directory and loads them in reverse order. The
-filename and amount of loaded files are customizable through global variables.
+currently opened file. It searches for all ".lvimrc" files from the directory
+of the file up to the root directory. By default those files are loaded in
+order from the root directory to the directory of the file. The filename and
+amount of loaded files are customizable through global variables.
 
 For security reasons it the plugin asks for confirmation before loading a
 local vimrc file and loads it using |:sandbox| command. The plugin asks once
@@ -49,6 +50,17 @@ to set them in your global vimrc.
 Filename of local vimrc files.
 
 Default: ".lvimrc"
+
+------------------------------------------------------------------------------
+*g:localvimrc_reverse*
+
+Reverse behavior of loading local vimrc files.
+
+Value    Description~
+0        Load files in order from root directory to directory of the file.
+1        Load files in order from directory of the file to root directory.
+
+Default: 0
 
 ------------------------------------------------------------------------------
 *g:localvimrc_count*

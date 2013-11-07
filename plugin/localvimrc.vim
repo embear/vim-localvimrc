@@ -35,6 +35,13 @@ else
   let s:localvimrc_name = g:localvimrc_name
 endif
 
+" define default "localvimrc_reverse" {{{2
+if (!exists("g:localvimrc_reverse"))
+  let s:localvimrc_reverse = 0
+else
+  let s:localvimrc_reverse = g:localvimrc_reverse
+endif
+
 " define default "localvimrc_count" {{{2
 if (!exists("g:localvimrc_count"))
   let s:localvimrc_count = -1
@@ -148,6 +155,12 @@ function! s:LocalVimRC()
   if (s:localvimrc_count >= 0 && s:localvimrc_count < len(l:rcfiles))
     call remove(l:rcfiles, 0, len(l:rcfiles) - s:localvimrc_count - 1)
   endif
+
+  " reverse order of found files if reverse loading is requested
+  if (s:localvimrc_reverse != 0)
+    call reverse(l:rcfiles)
+  endif
+
   call s:LocalVimRCDebug(1, "candidate files: " . string(l:rcfiles))
 
   " source all found local vimrc files along path from root (reverse order)
