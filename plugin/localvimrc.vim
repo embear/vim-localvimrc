@@ -166,6 +166,10 @@ function! s:LocalVimRC()
 
   call s:LocalVimRCDebug(1, "candidate files: " . string(l:rcfiles))
 
+  " store name and directory of file
+  let g:localvimrc_file = resolve(expand("<afile>"))
+  let g:localvimrc_file_dir = fnamemodify(g:localvimrc_file, ":h")
+
   " source all found local vimrc files along path from root (reverse order)
   let l:answer = ""
   for l:rcfile in l:rcfiles
@@ -259,6 +263,10 @@ function! s:LocalVimRC()
 
       " should this rc file be loaded?
       if (l:rcfile_load == "yes")
+        " store name and directory of script
+        let g:localvimrc_script = l:rcfile
+        let g:localvimrc_script_dir = fnamemodify(g:localvimrc_script, ":h")
+
         let l:command = "silent "
 
         " add 'sandbox' if requested
@@ -272,6 +280,9 @@ function! s:LocalVimRC()
         exec l:command
         call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
 
+        " remove global variables again
+        unlet g:localvimrc_script
+        unlet g:localvimrc_script_dir
       else
         call s:LocalVimRCDebug(1, "skipping " . l:rcfile)
       endif
@@ -281,6 +292,10 @@ function! s:LocalVimRC()
 
     endif
   endfor
+
+  " remove global variables again
+  unlet g:localvimrc_file
+  unlet g:localvimrc_file_dir
 
   " make information persistent
   call s:LocalVimRCWritePersistent()

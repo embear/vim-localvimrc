@@ -4,6 +4,7 @@ localvimrc                 Version 2.1.0                     *localvimrc* *lvimr
 
 |localvimrc-description|     Description
 |localvimrc-commands|        Commands
+|localvimrc-variables|       Variables
 |localvimrc-settings|        Settings
 |localvimrc-contribute|      Contribute
 |localvimrc-credits|         Credits
@@ -35,6 +36,36 @@ COMMANDS                                                   *localvimrc-commands*
 
 Clear all stored decisions made in the past, when the plugin asked about
 sourcing a local vimrc file.
+
+==============================================================================
+VARIABLES                                                 *localvimrc-variables*
+
+The plugin provides several convenience variables to make it easier to set up
+path dependent setting like for example makeprg. Adding the following lines to
+a local vimrc in the root directory of a project modify the behavior of
+|:make| to change into a build directory and call make there:
+
+  let &l:makeprg="cd ".g:localvimrc_script_dir."/build && make"
+
+------------------------------------------------------------------------------
+*g:localvimrc_file*
+
+Fully qualified file name of file that triggered loading the local vimrc file.
+
+------------------------------------------------------------------------------
+*g:localvimrc_file_dir*
+
+Fully qualified directory of file that triggered loading the local vimrc file.
+
+------------------------------------------------------------------------------
+*g:localvimrc_script*
+
+Fully qualified file name of the currently loaded local vimrc file.
+
+------------------------------------------------------------------------------
+*g:localvimrc_script_dir*
+
+Fully qualified directory of the currently loaded local vimrc file.
 
 ==============================================================================
 SETTINGS                                                   *localvimrc-settings*
