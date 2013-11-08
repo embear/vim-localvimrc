@@ -21,7 +21,7 @@
 if (exists("g:loaded_localvimrc") || &cp)
   finish
 endif
-let g:loaded_localvimrc = 2
+let g:loaded_localvimrc = 1
 
 " check for correct vim version {{{2
 if version < 702
@@ -29,6 +29,7 @@ if version < 702
 endif
 
 " define default "localvimrc_name" {{{2
+" copy to script local variable to prevent .lvimrc modifying the name option.
 if (!exists("g:localvimrc_name"))
   let s:localvimrc_name = ".lvimrc"
 else
@@ -36,6 +37,8 @@ else
 endif
 
 " define default "localvimrc_reverse" {{{2
+" copy to script local variable to prevent .lvimrc modifying the reverse
+" option.
 if (!exists("g:localvimrc_reverse"))
   let s:localvimrc_reverse = 0
 else
@@ -43,6 +46,7 @@ else
 endif
 
 " define default "localvimrc_count" {{{2
+" copy to script local variable to prevent .lvimrc modifying the count option.
 if (!exists("g:localvimrc_count"))
   let s:localvimrc_count = -1
 else
@@ -59,8 +63,7 @@ else
 endif
 
 " define default "localvimrc_ask" {{{2
-" copy to script local variable to prevent .lvimrc disabling the sandbox
-" again.
+" copy to script local variable to prevent .lvimrc modifying the ask option.
 if (!exists("g:localvimrc_ask"))
   let s:localvimrc_ask = 1
 else
