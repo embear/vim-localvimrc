@@ -1,6 +1,6 @@
-*localvimrc.txt*             For Vim version 7.3  Last change: 2012 September 25
+*localvimrc.txt*             For Vim version 7.4    Last change: 2013 November 9
 
-localvimrc                 Version 2.1.0                     *localvimrc* *lvimrc*
+localvimrc                 Version 2.2.0                     *localvimrc* *lvimrc*
 
 |localvimrc-description|     Description
 |localvimrc-commands|        Commands
@@ -190,7 +190,8 @@ To contact the author (Markus Braun), please email: markus.braun@krawel.de
 If you think this plugin could be improved, fork on GitHub and send a pull
 request or just tell me your ideas.
 
-GitHub: https://github.com/embear/vim-localvimrc
+Bitbucket: https://bitbucket.org/embear/localvimrc
+GitHub:    https://github.com/embear/vim-localvimrc
 
 ==============================================================================
 CREDITS                                                     *localvimrc-credits*
@@ -201,6 +202,14 @@ CREDITS                                                     *localvimrc-credits*
 
 ==============================================================================
 CHANGELOG                                                 *localvimrc-changelog*
+
+v2.2.0 : 2013-11-09
+  - remove redraw calls for better performance and fixing a bug on windows.
+  - load local vimrc on event BufWinEnter to fix a bug with window local
+    settings.
+  - add g:localvimrc_reverse to change order of sourcing local vimrc files.
+  - add convenience variables g:localvimrc_file, g:localvimrc_file_dir,
+    g:localvimrc_script and g:localvimrc_script_dir.
 
 v2.1.0 : 2012-09-25
   - add possibility to make decisions persistent
