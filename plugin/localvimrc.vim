@@ -134,6 +134,7 @@ function! s:LocalVimRC()
   call s:LocalVimRCReadPersistent()
 
   " only consider normal buffers (skip especially CommandT's GoToFile buffer)
+  " NOTE: in general the buftype is not set for new buffers (BufWinEnter),
   if (&buftype != "")
     call s:LocalVimRCDebug(1, "not a normal buffer, exiting")
     return
@@ -223,8 +224,13 @@ function! s:LocalVimRC()
               else
                 let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit) "
               endif
-              let l:answer = input(l:message)
+              let l:answer = inputdialog(l:message)
               call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
+
+              if l:answer == ''
+                call s:LocalVimRCDebug(2, "Aborting on empty answer.")
+                let l:answer = 'q'
+              endif
             endwhile
           endif
 
