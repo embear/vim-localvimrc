@@ -388,7 +388,12 @@ function! s:LocalVimRCWritePersistent()
     let l:persistent_answers = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
     let l:persistent_checksums = {}
     for l:rcfile in keys(l:persistent_answers)
-      let l:persistent_checksums[l:rcfile] = s:localvimrc_checksums[l:rcfile]
+      " NOTE: might happen after "q"
+      try
+        let l:persistent_checksums[l:rcfile] = s:localvimrc_checksums[l:rcfile]
+		  catch /^Vim\%((\a\+)\)\=:E715/	" catch error E716: Key not present in Dictionary
+      endtry
+
     endfor
 
     " if there are answers to store and global variables are enabled for viminfo
