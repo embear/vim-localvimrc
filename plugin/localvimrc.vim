@@ -351,9 +351,11 @@ function! s:LocalVimRCReadPersistent()
           let g:LOCALVIMRC_ANSWERS = {}
           call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_ANSWERS")
         endif
+	" Get missing answers from persistent data.
         for l:rcfile in keys(g:LOCALVIMRC_ANSWERS)
-          " overwrite answers with persistent data
-          let s:localvimrc_answers[l:rcfile] = g:LOCALVIMRC_ANSWERS[l:rcfile]
+	  if ! exists('s:localvimrc_ansers[l:rcfile]')
+	    let s:localvimrc_answers[l:rcfile] = g:LOCALVIMRC_ANSWERS[l:rcfile]
+	  endif
         endfor
         call s:LocalVimRCDebug(3, "read answer persistent data: " . string(s:localvimrc_answers))
       endif
@@ -364,8 +366,12 @@ function! s:LocalVimRCReadPersistent()
           let g:LOCALVIMRC_CHECKSUMS = {}
           call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_CHECKSUMS")
         endif
-        " overwrite checksums with persistent data
-        let s:localvimrc_checksums = g:LOCALVIMRC_CHECKSUMS
+	" Get missing checksums from persistent data.
+        for l:rcfile in keys(g:LOCALVIMRC_CHECKSUMS)
+	  if ! exists('s:localvimrc_checksums[l:rcfile]')
+	    let s:localvimrc_checksums[l:rcfile] = g:LOCALVIMRC_CHECKSUMS[l:rcfile]
+	  endif
+        endfor
         call s:LocalVimRCDebug(3, "read checksum persistent data: " . string(s:localvimrc_checksums))
       endif
     endif
@@ -382,7 +388,12 @@ function! s:LocalVimRCWritePersistent()
     let l:persistent_answers = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
     let l:persistent_checksums = {}
     for l:rcfile in keys(l:persistent_answers)
-      let l:persistent_checksums[l:rcfile] = s:localvimrc_checksums[l:rcfile]
+      " NOTE: might happen after "q"
+      try
+        let l:persistent_checksums[l:rcfile] = s:localvimrc_checksums[l:rcfile]
+		  catch /^Vim\%((\a\+)\)\=:E715/	" catch error E716: Key not present in Dictionary
+      endtry
+
     endfor
 
     " if there are answers to store and global variables are enabled for viminfo
