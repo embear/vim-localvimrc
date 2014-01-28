@@ -127,9 +127,8 @@ Default: 1
 *g:localvimrc_persistent*
 
 Make the decisions given when asked before sourcing local vimrc files
-persistent over multiple vim runs. This is done by storing the decisions in
-viminfo. Therefore it is required to include the |viminfo-!| flag in your
-viminfo setting.
+persistent over multiple vim runs and instances. The decisions are written to
+the file defined by and |g:localvimrc_persistence_file|.
 
 Value    Description~
 0        Don't store and restore any decisions.
@@ -138,6 +137,14 @@ Value    Description~
 2        Store and restore all decisions.
 
 Default: 0
+
+------------------------------------------------------------------------------
+*g:localvimrc_persistence_file*
+
+Filename used for storing persistent decisions made when asked before sourcing
+local vimrc files.
+
+Default: "$HOME/localvimrc_persistent"
 
 ------------------------------------------------------------------------------
 *g:localvimrc_whitelist*

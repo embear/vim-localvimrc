@@ -86,12 +86,6 @@ else
   let s:localvimrc_blacklist = g:localvimrc_blacklist
 endif
 
-" initialize answer dictionary {{{2
-let s:localvimrc_answers = {}
-
-" initialize checksum dictionary {{{2
-let s:localvimrc_checksums = {}
-
 " define default "localvimrc_persistent" {{{2
 " make decisions persistent over multiple vim runs
 if (!exists("g:localvimrc_persistent"))
@@ -100,11 +94,41 @@ else
   let s:localvimrc_persistent = g:localvimrc_persistent
 endif
 
+" define default "localvimrc_persistence_file" {{{2
+" file where to store persistence information
+if (!exists("g:localvimrc_persistence_file"))
+  let s:localvimrc_persistence_file = expand('$HOME')."/localvimrc_persistent"
+else
+  let s:localvimrc_persistence_file = g:localvimrc_persistence_file
+endif
+
 " define default "localvimrc_debug" {{{2
 if (!exists("g:localvimrc_debug"))
   let g:localvimrc_debug = 0
 endif
 
+" initialize answer dictionary {{{2
+let s:localvimrc_answers = {}
+
+" initialize checksum dictionary {{{2
+let s:localvimrc_checksums = {}
+
+" initialize persistence file checksum {{{2
+let s:localvimrc_persistence_file_checksum = ""
+
+" initialize persistent answers {{{2
+let s:localvimrc_persistent_answers = {}
+
+" initialize persistent checksums {{{2
+let s:localvimrc_persistent_checksums = {}
+
+" remove old persistence data {{{2
+if exists("g:LOCALVIMRC_ANSWERS")
+  unlet g:LOCALVIMRC_ANSWERS
+endif
+if exists("g:LOCALVIMRC_CHECKSUMS")
+  unlet g:LOCALVIMRC_CHECKSUMS
+endif
 " Section: Autocmd setup {{{1
 
 if has("autocmd")
@@ -349,48 +373,55 @@ endfunction
 
 " Function: s:LocalVimRCReadPersistent() {{{2
 "
-" read decision variables from global variable
+" read decision variables from persistence file
 "
 function! s:LocalVimRCReadPersistent()
   if (s:localvimrc_persistent >= 1)
-    if stridx(&viminfo, "!") >= 0
-      if exists("g:LOCALVIMRC_ANSWERS")
-        " force g:LOCALVIMRC_ANSWERS to be a dictionary
-        if (type(g:LOCALVIMRC_ANSWERS) != type({}))
-          unlet g:LOCALVIMRC_ANSWERS
-          let g:LOCALVIMRC_ANSWERS = {}
-          call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_ANSWERS")
-        endif
-        " get missing answers from persistent data.
-        for l:rcfile in keys(g:LOCALVIMRC_ANSWERS)
-          if !exists('s:localvimrc_ansers[l:rcfile]')
-            let s:localvimrc_answers[l:rcfile] = g:LOCALVIMRC_ANSWERS[l:rcfile]
+    " check if persistence file is readable
+    if filereadable(s:localvimrc_persistence_file)
+
+      " check if reading is needed
+      let l:checksum = getfsize(s:localvimrc_persistence_file) . getfperm(s:localvimrc_persistence_file) . getftime(s:localvimrc_persistence_file)
+      if l:checksum != s:localvimrc_persistence_file_checksum
+
+        " read persistence file
+        let l:serialized = readfile(s:localvimrc_persistence_file)
+        call s:LocalVimRCDebug(3, "read persistent data: " . string(l:serialized))
+
+        " deserialize stored persistence information
+        for l:line in l:serialized
+          let l:columns = split(l:line, '[^\\]\zs|')
+          if len(l:columns) != 3
+            call s:LocalVimRCDebug(1, "error in persistence file")
+            call s:LocalVimRCError("error in persistence file")
+          else
+            let [l:type, l:key, l:value] = l:columns
+            let l:key = substitute(l:key, '\\|', '|', "g")
+            let l:value = substitute(l:value, '\\|', '|', "g")
+            if l:type == "A"
+              " merge persistent answers
+              let s:localvimrc_answers[l:key] = l:value
+            elseif l:type == "C"
+              " merge persistent checksums
+              let s:localvimrc_checksums[l:key] = l:value
+            else
+              call s:LocalVimRCDebug(1, "error in persistence file")
+              call s:LocalVimRCError("error in persistence file")
+            endif
           endif
         endfor
-        call s:LocalVimRCDebug(3, "read answer persistent data: " . string(s:localvimrc_answers))
+      else
+        call s:LocalVimRCDebug(3, "persistence file did not change")
       endif
-      if exists("g:LOCALVIMRC_CHECKSUMS")
-        " force g:LOCALVIMRC_CHECKSUMS to be a dictionary
-        if (type(g:LOCALVIMRC_CHECKSUMS) != type({}))
-          unlet g:LOCALVIMRC_CHECKSUMS
-          let g:LOCALVIMRC_CHECKSUMS = {}
-          call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_CHECKSUMS")
-        endif
-        " get missing checksums from persistent data.
-        for l:rcfile in keys(g:LOCALVIMRC_CHECKSUMS)
-          if !exists('s:localvimrc_checksums[l:rcfile]')
-            let s:localvimrc_checksums[l:rcfile] = g:LOCALVIMRC_CHECKSUMS[l:rcfile]
-          endif
-        endfor
-        call s:LocalVimRCDebug(3, "read checksum persistent data: " . string(s:localvimrc_checksums))
-      endif
+    else
+      call s:LocalVimRCDebug(1, "unable to read persistence file '".s:localvimrc_persistence_file."'")
     endif
   endif
 endfunction
 
 " Function: s:LocalVimRCWritePersistent() {{{2
 "
-" write decision variables to global variable to make them persistent
+" write decision variables to persistence file
 "
 function! s:LocalVimRCWritePersistent()
   if (s:localvimrc_persistent >= 1)
@@ -405,27 +436,38 @@ function! s:LocalVimRCWritePersistent()
 
     " if there are answers to store and global variables are enabled for viminfo
     if (len(l:persistent_answers) > 0)
-      if (stridx(&viminfo, "!") >= 0)
-        let g:LOCALVIMRC_ANSWERS = l:persistent_answers
-        call s:LocalVimRCDebug(3, "write answer persistent data: " . string(g:LOCALVIMRC_ANSWERS))
-        let g:LOCALVIMRC_CHECKSUMS = l:persistent_checksums
-        call s:LocalVimRCDebug(3, "write checksum persistent data: " . string(g:LOCALVIMRC_CHECKSUMS))
-      else
-        call s:LocalVimRCDebug(3, "viminfo setting has no '!' flag, no persistence available")
-        call s:LocalVimRCError("viminfo setting has no '!' flag, no persistence available")
+      if l:persistent_answers != s:localvimrc_persistent_answers &&
+            \ l:persistent_checksums != s:localvimrc_persistent_checksums
+        " check if persistence file is writable
+        if filereadable(s:localvimrc_persistence_file) && filewritable(s:localvimrc_persistence_file) ||
+              \ !filereadable(s:localvimrc_persistence_file) && filewritable(fnamemodify(s:localvimrc_persistence_file, ":h"))
+          let l:serialized = [ ]
+          for [ l:key, l:value ] in items(l:persistent_answers)
+            call add(l:serialized, "A|".escape(l:key, '|')."|".escape(l:value, '|'))
+          endfor
+          for [ l:key, l:value ] in items(l:persistent_checksums)
+            call add(l:serialized, "C|".escape(l:key, '|')."|".escape(l:value, '|'))
+          endfor
+
+          call s:LocalVimRCDebug(3, "write persistent data: " . string(l:serialized))
+          call writefile(l:serialized, s:localvimrc_persistence_file)
+        else
+          call s:LocalVimRCDebug(1, "unable to write persistence file '".s:localvimrc_persistence_file."'")
+        endif
+
+        " store persistence file checksum
+        let s:localvimrc_persistence_file_checksum = getfsize(s:localvimrc_persistence_file) . getfperm(s:localvimrc_persistence_file) . getftime(s:localvimrc_persistence_file)
       endif
+      let s:localvimrc_persistent_answers   = l:persistent_answers
+      let s:localvimrc_persistent_checksums = l:persistent_checksums
     endif
   else
-    if exists("g:LOCALVIMRC_ANSWERS")
-      unlet g:LOCALVIMRC_ANSWERS
-      call s:LocalVimRCDebug(3, "deleted answer persistent data")
+    " delete persistence file
+    if filewritable(s:localvimrc_persistence_file)
+      call delete(s:localvimrc_persistence_file)
     endif
-    if exists("g:LOCALVIMRC_CHECKSUMS")
-      unlet g:LOCALVIMRC_CHECKSUMS
-      call s:LocalVimRCDebug(3, "deleted checksum persistent data")
-    endif
-
   endif
+
 endfunction
 
 " Function: s:LocalVimRCClear() {{{2
@@ -441,13 +483,10 @@ function! s:LocalVimRCClear()
     unlet s:localvimrc_checksums
     call s:LocalVimRCDebug(3, "deleted checksum local data")
   endif
-  if exists("g:LOCALVIMRC_ANSWERS")
-    unlet g:LOCALVIMRC_ANSWERS
-    call s:LocalVimRCDebug(3, "deleted answer persistent data")
-  endif
-  if exists("g:LOCALVIMRC_CHECKSUMS")
-    unlet g:LOCALVIMRC_CHECKSUMS
-    call s:LocalVimRCDebug(3, "deleted checksum persistent data")
+  " delete persistence file
+  if filewritable(s:localvimrc_persistence_file)
+    call delete(s:localvimrc_persistence_file)
+    call s:LocalVimRCDebug(3, "deleted persistence file")
   endif
 endfunction
 
