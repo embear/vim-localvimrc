@@ -225,12 +225,15 @@ function! s:LocalVimRC()
               else
                 let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit) "
               endif
-              let l:answer = inputdialog(l:message)
+
+              " turn off possible previous :silent command to force this
+              " message to be printed
+              unsilent let l:answer = inputdialog(l:message)
               call s:LocalVimRCDebug(2, "answer is \"" . l:answer . "\"")
 
-              if l:answer == ''
-                call s:LocalVimRCDebug(2, "Aborting on empty answer.")
-                let l:answer = 'q'
+              if empty(l:answer)
+                call s:LocalVimRCDebug(2, "aborting on empty answer")
+                let l:answer = "q"
               endif
             endwhile
           endif
