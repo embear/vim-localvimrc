@@ -351,11 +351,11 @@ function! s:LocalVimRCReadPersistent()
           let g:LOCALVIMRC_ANSWERS = {}
           call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_ANSWERS")
         endif
-	" Get missing answers from persistent data.
+        " get missing answers from persistent data.
         for l:rcfile in keys(g:LOCALVIMRC_ANSWERS)
-	  if ! exists('s:localvimrc_ansers[l:rcfile]')
-	    let s:localvimrc_answers[l:rcfile] = g:LOCALVIMRC_ANSWERS[l:rcfile]
-	  endif
+          if !exists('s:localvimrc_ansers[l:rcfile]')
+            let s:localvimrc_answers[l:rcfile] = g:LOCALVIMRC_ANSWERS[l:rcfile]
+          endif
         endfor
         call s:LocalVimRCDebug(3, "read answer persistent data: " . string(s:localvimrc_answers))
       endif
@@ -366,11 +366,11 @@ function! s:LocalVimRCReadPersistent()
           let g:LOCALVIMRC_CHECKSUMS = {}
           call s:LocalVimRCDebug(3, "needed to reset g:LOCALVIMRC_CHECKSUMS")
         endif
-	" Get missing checksums from persistent data.
+        " get missing checksums from persistent data.
         for l:rcfile in keys(g:LOCALVIMRC_CHECKSUMS)
-	  if ! exists('s:localvimrc_checksums[l:rcfile]')
-	    let s:localvimrc_checksums[l:rcfile] = g:LOCALVIMRC_CHECKSUMS[l:rcfile]
-	  endif
+          if !exists('s:localvimrc_checksums[l:rcfile]')
+            let s:localvimrc_checksums[l:rcfile] = g:LOCALVIMRC_CHECKSUMS[l:rcfile]
+          endif
         endfor
         call s:LocalVimRCDebug(3, "read checksum persistent data: " . string(s:localvimrc_checksums))
       endif
