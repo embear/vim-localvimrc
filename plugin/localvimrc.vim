@@ -382,7 +382,9 @@ function! s:LocalVimRCWritePersistent()
     let l:persistent_answers = filter(copy(s:localvimrc_answers), 'v:val =~# "^[YN]$"')
     let l:persistent_checksums = {}
     for l:rcfile in keys(l:persistent_answers)
-      let l:persistent_checksums[l:rcfile] = s:localvimrc_checksums[l:rcfile]
+      if has_key(s:localvimrc_checksums, l:rcfile)
+        let l:persistent_checksums[l:rcfile] = s:localvimrc_checksums[l:rcfile]
+      endif
     endfor
 
     " if there are answers to store and global variables are enabled for viminfo
