@@ -116,13 +116,6 @@ let s:localvimrc_persistence_file_checksum = ""
 " initialize persistent data {{{2
 let s:localvimrc_persistent_data = {}
 
-" remove old persistence data {{{2
-if exists("g:LOCALVIMRC_ANSWERS")
-  unlet g:LOCALVIMRC_ANSWERS
-endif
-if exists("g:LOCALVIMRC_CHECKSUMS")
-  unlet g:LOCALVIMRC_CHECKSUMS
-endif
 " Section: Autocmd setup {{{1
 
 if has("autocmd")
@@ -449,6 +442,14 @@ function! s:LocalVimRCWritePersistent()
     if filewritable(s:localvimrc_persistence_file)
       call delete(s:localvimrc_persistence_file)
     endif
+  endif
+
+  " remove old persistence data {{{2
+  if exists("g:LOCALVIMRC_ANSWERS")
+    unlet g:LOCALVIMRC_ANSWERS
+  endif
+  if exists("g:LOCALVIMRC_CHECKSUMS")
+    unlet g:LOCALVIMRC_CHECKSUMS
   endif
 
 endfunction
