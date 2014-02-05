@@ -97,7 +97,7 @@ endif
 " define default "localvimrc_persistence_file" {{{2
 " file where to store persistence information
 if (!exists("g:localvimrc_persistence_file"))
-  let s:localvimrc_persistence_file = expand('$HOME') . "/localvimrc_persistent"
+  let s:localvimrc_persistence_file = expand('$HOME') . "/.localvimrc_persistent"
 else
   let s:localvimrc_persistence_file = g:localvimrc_persistence_file
 endif
