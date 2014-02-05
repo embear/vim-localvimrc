@@ -46,8 +46,10 @@ a local vimrc in the root directory of a project modify the behavior of
 |:make| to change into a build directory and call make there:
 
   let &l:makeprg="cd ".g:localvimrc_script_dir."/build && make"
-  
+
 NOTE: This is only possible if you disable sandbox mode.
+
+Other variables provide a way to prevent multiple execution of commands.
 
 ------------------------------------------------------------------------------
 *g:localvimrc_file*
@@ -68,6 +70,18 @@ Fully qualified file name of the currently loaded local vimrc file.
 *g:localvimrc_script_dir*
 
 Fully qualified directory of the currently loaded local vimrc file.
+
+------------------------------------------------------------------------------
+*g:localvimrc_sourced_once*
+
+Set to "1" if the currently loaded local vimrc file had already been loaded in
+this session. Set to "0" otherwise.
+
+------------------------------------------------------------------------------
+*g:localvimrc_sourced_once_for_file*
+
+Set to "1" if the currently loaded local vimrc file had already been loaded in
+this session for the currently edited file. Set to "0" otherwise.
 
 ==============================================================================
 SETTINGS                                                   *localvimrc-settings*
