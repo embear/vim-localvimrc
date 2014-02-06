@@ -1,6 +1,6 @@
-*localvimrc.txt*             For Vim version 7.4    Last change: 2013 November 9
+*localvimrc.txt*             For Vim version 7.4    Last change: 2014 February 6
 
-localvimrc                 Version 2.2.0                     *localvimrc* *lvimrc*
+localvimrc                 Version 2.3.0                     *localvimrc* *lvimrc*
 
 |localvimrc-description|     Description
 |localvimrc-commands|        Commands
@@ -243,6 +243,12 @@ CREDITS                                                     *localvimrc-credits*
 
 ==============================================================================
 CHANGELOG                                                 *localvimrc-changelog*
+
+v2.3.0 : 2014-02-06
+  - private persistence file to enable persistence over concurrent vim
+    instances.
+  - add convenience variables g:localvimrc_sourced_once and
+    g:localvimrc_sourced_once_for_file.
 
 v2.2.0 : 2013-11-09
   - remove redraw calls for better performance and fixing a bug on windows.
