@@ -36,6 +36,14 @@ else
   let s:localvimrc_name = g:localvimrc_name
 endif
 
+" define default "localvimrc_event" {{{2
+" copy to script local variable to prevent .lvimrc modifying the name option.
+if (!exists("g:localvimrc_event") || !(type(g:localvimrc_event) == type([])))
+  let s:localvimrc_event = [ "BufWinEnter" ]
+else
+  let s:localvimrc_event = g:localvimrc_event
+endif
+
 " define default "localvimrc_reverse" {{{2
 " copy to script local variable to prevent .lvimrc modifying the reverse
 " option.
@@ -133,8 +141,10 @@ if has("autocmd")
   augroup localvimrc
     autocmd!
 
-    " call s:LocalVimRC() when creating ore reading any file
-    autocmd BufWinEnter * call s:LocalVimRC()
+    for event in s:localvimrc_event
+      " call s:LocalVimRC() when creating ore reading any file
+      exec "autocmd ".event." * call s:LocalVimRC()"
+    endfor
   augroup END
 endif
 

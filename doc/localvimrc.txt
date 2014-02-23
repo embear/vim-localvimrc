@@ -116,6 +116,20 @@ Filename of local vimrc files.
 Default: ".lvimrc"
 
 ------------------------------------------------------------------------------
+*g:localvimrc_event*
+
+List of autocommand events that trigger local vimrc file loading.
+
+Default: [ "BufWinEnter" ]
+
+NOTE: BufWinEnter is the default to enable lines like
+
+        setlocal colorcolumn=+1
+
+      in the local vimrc file. Settings "local to window" need to be set for
+      every time a buffer is displayed in a window.
+
+------------------------------------------------------------------------------
 *g:localvimrc_reverse*
 
 Reverse behavior of loading local vimrc files.
