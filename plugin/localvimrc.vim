@@ -216,6 +216,9 @@ function! s:LocalVimRC()
       endif
       call s:LocalVimRCDebug(3, "stored information: answer = '" . l:stored_answer . "' checksum = '" . l:stored_checksum . "'")
 
+      " check if checksum is the same
+      let l:checksum_is_same = s:LocalVimRCCheckChecksum(l:rcfile, l:stored_checksum)
+
       " check if whitelisted
       if (l:rcfile_load == "unknown")
         if (match(l:rcfile, s:localvimrc_whitelist) != -1)
@@ -234,7 +237,7 @@ function! s:LocalVimRC()
 
       " check if an answer has been given for the same file
       if !empty(l:stored_answer)
-        if (s:LocalVimRCCheckChecksum(l:rcfile, l:stored_checksum) == 1)
+        if (l:checksum_is_same)
           call s:LocalVimRCDebug(2, "reuse previous answer \"" . l:stored_answer . "\"")
 
           " check the answer
@@ -319,6 +322,14 @@ function! s:LocalVimRC()
         let g:localvimrc_script = l:rcfile
         let g:localvimrc_script_dir = fnamemodify(g:localvimrc_script, ":h")
         call s:LocalVimRCDebug(3, "g:localvimrc_script = " . g:localvimrc_script . ", g:localvimrc_script_dir = " . g:localvimrc_script_dir)
+
+        " reset if checksum changed
+        if (!l:checksum_is_same)
+          if has_key(s:localvimrc_sourced, l:rcfile)
+            unlet s:localvimrc_sourced[l:rcfile]
+            call s:LocalVimRCDebug(2, "resetting 'sourced' information")
+          endif
+        endif
 
         " detect if this local vimrc file had been loaded
         let g:localvimrc_sourced_once = 0
