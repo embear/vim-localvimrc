@@ -313,10 +313,12 @@ function! s:LocalVimRC()
         " store name and directory of file
         let g:localvimrc_file = resolve(expand("<afile>"))
         let g:localvimrc_file_dir = fnamemodify(g:localvimrc_file, ":h")
+        call s:LocalVimRCDebug(3, "g:localvimrc_file = " . g:localvimrc_file . ", g:localvimrc_file_dir = " . g:localvimrc_file_dir)
 
         " store name and directory of script
         let g:localvimrc_script = l:rcfile
         let g:localvimrc_script_dir = fnamemodify(g:localvimrc_script, ":h")
+        call s:LocalVimRCDebug(3, "g:localvimrc_script = " . g:localvimrc_script . ", g:localvimrc_script_dir = " . g:localvimrc_script_dir)
 
         " detect if this local vimrc file had been loaded
         let g:localvimrc_sourced_once = 0
@@ -331,6 +333,7 @@ function! s:LocalVimRC()
         else
           let s:localvimrc_sourced[l:rcfile] = [ g:localvimrc_file ]
         endif
+        call s:LocalVimRCDebug(3, "g:localvimrc_sourced_once = " . g:localvimrc_sourced_once . ", g:localvimrc_sourced_once_for_file = " . g:localvimrc_sourced_once_for_file)
 
         " initialize command
         let l:command = "silent "
