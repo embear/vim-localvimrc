@@ -314,7 +314,7 @@ function! s:LocalVimRC()
       " should this rc file be loaded?
       if (l:rcfile_load == "yes")
         " store name and directory of file
-        let g:localvimrc_file = resolve(expand("<afile>"))
+        let g:localvimrc_file = resolve(expand("<afile>:p"))
         let g:localvimrc_file_dir = fnamemodify(g:localvimrc_file, ":h")
         call s:LocalVimRCDebug(3, "g:localvimrc_file = " . g:localvimrc_file . ", g:localvimrc_file_dir = " . g:localvimrc_file_dir)
 
