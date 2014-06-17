@@ -494,7 +494,7 @@ function! s:LocalVimRCWritePersistent()
     endif
   endif
 
-  " remove old persistence data {{{2
+  " remove old persistence data
   if exists("g:LOCALVIMRC_ANSWERS")
     unlet g:LOCALVIMRC_ANSWERS
   endif
