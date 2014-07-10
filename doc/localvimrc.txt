@@ -264,7 +264,8 @@ CREDITS                                                     *localvimrc-credits*
 CHANGELOG                                                 *localvimrc-changelog*
 
 vA.B.C : XXXX-YY-ZZ
-  - make it possible to supply a list of local vimrc filenames
+  - add setting for autocommand events that trigger local vimrc file loading.
+  - make it possible to supply a list of local vimrc filenames.
 
 v2.3.0 : 2014-02-06
   - private persistence file to enable persistence over concurrent vim
