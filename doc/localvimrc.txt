@@ -111,9 +111,13 @@ to set them in your global vimrc.
 ------------------------------------------------------------------------------
 *g:localvimrc_name*
 
-Filename of local vimrc files.
+List of filenames of local vimrc files. The given name can include a directory
+name such as ".config/localvimrc".
 
-Default: ".lvimrc"
+Previous versions of localvimrc only supported a single file as string. This
+is still supported for backward compatibility.
+
+Default: [ ".lvimrc" ]
 
 ------------------------------------------------------------------------------
 *g:localvimrc_event*
@@ -254,9 +258,13 @@ CREDITS                                                     *localvimrc-credits*
 - Simon Howard for his hint about "sandbox"
 - Mark Weber for the idea of using checksums
 - Daniel Hahler for various patches
+- Justin M. Keyes for ideas to improve this plugin
 
 ==============================================================================
 CHANGELOG                                                 *localvimrc-changelog*
+
+vA.B.C : XXXX-YY-ZZ
+  - make it possible to supply a list of local vimrc filenames
 
 v2.3.0 : 2014-02-06
   - private persistence file to enable persistence over concurrent vim

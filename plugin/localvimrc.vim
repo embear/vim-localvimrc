@@ -31,9 +31,13 @@ endif
 " define default "localvimrc_name" {{{2
 " copy to script local variable to prevent .lvimrc modifying the name option.
 if (!exists("g:localvimrc_name"))
-  let s:localvimrc_name = ".lvimrc"
+  let s:localvimrc_name = [ ".lvimrc" ]
 else
-  let s:localvimrc_name = g:localvimrc_name
+  if type(g:localvimrc_name) == type("")
+    let s:localvimrc_name = [ g:localvimrc_name ]
+  elseif type(g:localvimrc_name) == type([])
+    let s:localvimrc_name = g:localvimrc_name
+  endif
 endif
 
 " define default "localvimrc_event" {{{2
@@ -182,8 +186,10 @@ function! s:LocalVimRC()
 
   " generate a list of all local vimrc files with absolute file names along path to root
   let l:absolute = {}
-  for l:rcfile in findfile(s:localvimrc_name, l:directory . ";", -1)
-    let l:absolute[resolve(fnamemodify(l:rcfile, ":p"))] = ""
+  for l:rcname in s:localvimrc_name
+    for l:rcfile in findfile(l:rcname, l:directory . ";", -1)
+      let l:absolute[resolve(fnamemodify(l:rcfile, ":p"))] = ""
+    endfor
   endfor
   let l:rcfiles = sort(keys(l:absolute))
   call s:LocalVimRCDebug(1, "found files: " . string(l:rcfiles))
