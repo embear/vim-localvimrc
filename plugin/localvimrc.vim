@@ -236,6 +236,15 @@ function! s:LocalVimRC()
       " check if checksum is the same
       let l:checksum_is_same = s:LocalVimRCCheckChecksum(l:rcfile, l:stored_checksum)
 
+      " reset answers if checksum changed
+      if (!l:checksum_is_same)
+        call s:LocalVimRCDebug(2, "checksum mismatch, no answer reuse")
+        let l:stored_answer = ""
+        let l:stored_sandbox_answer = ""
+      else
+        call s:LocalVimRCDebug(2, "reuse previous answer = '" . l:stored_answer . "' sandbox answer = '" . l:stored_sandbox_answer . "'")
+      endif
+
       " check if whitelisted
       if (l:rcfile_load == "unknown")
         if (match(l:rcfile, s:localvimrc_whitelist) != -1)
@@ -254,17 +263,11 @@ function! s:LocalVimRC()
 
       " check if an answer has been given for the same file
       if !empty(l:stored_answer)
-        if (l:checksum_is_same)
-          call s:LocalVimRCDebug(2, "reuse previous answer \"" . l:stored_answer . "\"")
-
-          " check the answer
-          if (l:stored_answer =~? '^y$')
-            let l:rcfile_load = "yes"
-          elseif (l:stored_answer =~? '^n$')
-            let l:rcfile_load = "no"
-          endif
-        else
-          call s:LocalVimRCDebug(2, "checksum mismatch, no answer reuse")
+        " check the answer
+        if (l:stored_answer =~? '^y$')
+          let l:rcfile_load = "yes"
+        elseif (l:stored_answer =~? '^n$')
+          let l:rcfile_load = "no"
         endif
       endif
 
