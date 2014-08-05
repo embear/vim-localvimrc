@@ -31,7 +31,7 @@ VARIABLES
 
 The plugin provides several convenience variables to make it easier to set up path dependent setting like for example makeprg. Adding the following lines to a local vimrc in the root directory of a project modify the behavior of `:make` to change into a build directory and call make there:
 
-```language-viml
+```language-VimL
 let &l:makeprg="cd ".g:localvimrc_script_dir."/build && make"
 ```
 
@@ -39,7 +39,7 @@ let &l:makeprg="cd ".g:localvimrc_script_dir."/build && make"
 
 Other variables provide a way to prevent multiple execution of commands. They can be used to implement guards:
 
-```language-viml
+```language-VimL
 " do stuff you want to do on every buffer enter event
 
 " guard to end loading if it has been loaded for the currently edited file
@@ -93,7 +93,7 @@ SETTINGS
 
 Use:
 
-```language-viml
+```language-VimL
 let g:option_name=option_value
 ```
 
@@ -117,7 +117,7 @@ Default: `[ "BufWinEnter" ]`
 
 > NOTE: BufWinEnter is the default to enable lines like
 >
-> ```language-viml
+> ```language-VimL
 > setlocal colorcolumn=+1
 > ```
 >
@@ -192,7 +192,7 @@ See `regular-expression` for patterns that are accepted.
 
 Example:
 
-```language-viml
+```language-VimL
 " whitelist all local vimrc files in users project foo and bar
 let g:localvimrc_whitelist='/home/user/projects/\(foo\|bar\)/.*'
 ```
@@ -210,7 +210,7 @@ See `regular-expression` for patterns that are accepted.
 
 Example:
 
-```language-viml
+```language-VimL
 " blacklist all local vimrc files in shared project directory
 let g:localvimrc_whitelist='/share/projects/.*'
 ```
