@@ -232,8 +232,8 @@ To contact the author (Markus Braun), please email: markus.braun@krawel.de
 
 If you think this plugin could be improved, fork on GitHub and send a pull request or just tell me your ideas.
 
-Bitbucket: https://bitbucket.org/embear/localvimrc
-GitHub:    https://github.com/embear/vim-localvimrc
+* Bitbucket: https://bitbucket.org/embear/localvimrc
+* GitHub: https://github.com/embear/vim-localvimrc
 
 <a name="localvimrc-credits"></a>
 CREDITS
