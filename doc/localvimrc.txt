@@ -296,7 +296,7 @@ vA.B.C : XXXX-YY-ZZ
 - ask user when sourcing local vimrc fails and |g:localvimrc_sandbox| and
   |g:localvimrc_ask| is set whether the file should be sourced without
   sandbox.
-- don't loose persistence file on full partitions.
+- don't lose persistence file on full partitions.
 
 v2.3.0 : 2014-02-06
 

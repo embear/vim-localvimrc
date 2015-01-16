@@ -243,7 +243,7 @@ vA.B.C : XXXX-YY-ZZ
   - add setting for autocommand events that trigger local vimrc file loading.
   - make it possible to supply a list of local vimrc filenames.
   - ask user when sourcing local vimrc fails and |g:localvimrc_sandbox| and |g:localvimrc_ask| is set whether the file should be sourced without sandbox.
-  - don't loose persistence file on full partitions.
+  - don't lose persistence file on full partitions.
 
 v2.3.0 : 2014-02-06
 
