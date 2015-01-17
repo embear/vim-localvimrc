@@ -584,14 +584,8 @@ function! s:LocalVimRCWritePersistent()
 
           call s:LocalVimRCDebug(3, "write persistent data: " . string(l:serialized))
 
-          " first write temporary file to avoid lost persistence information
-          " on write errors if partition is full
-          let l:tempname = s:localvimrc_persistence_file . "_TEMP"
-          if (writefile(l:serialized, l:tempname) == 0)
-            " writing succeeded so move file to final destination
-            call rename(l:tempname, s:localvimrc_persistence_file)
-          else
-            call s:LocalVimRCError("error while writing persistence file")
+          if (writefile(l:serialized, s:localvimrc_persistence_file) != 0)
+            call s:LocalVimRCError("error while writing persistence file!")
           endif
         else
           call s:LocalVimRCError("unable to write persistence file '" . s:localvimrc_persistence_file . "'")
