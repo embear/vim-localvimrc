@@ -594,7 +594,7 @@ function! s:LocalVimRCWritePersistent()
             call s:LocalVimRCError("error while writing persistence file")
           endif
         else
-          call s:LocalVimRCDebug(1, "unable to write persistence file '" . s:localvimrc_persistence_file . "'")
+          call s:LocalVimRCError("unable to write persistence file '" . s:localvimrc_persistence_file . "'")
         endif
 
         " store persistence file checksum
@@ -644,7 +644,7 @@ endfunction
 " output error message
 "
 function! s:LocalVimRCError(text)
-  echohl ErrorMsg | echo "localvimrc: " . a:text | echohl None
+  echohl ErrorMsg | echom "localvimrc: " . a:text | echohl None
 endfunction
 
 " Function: s:LocalVimRCDebug(level, text) {{{2
