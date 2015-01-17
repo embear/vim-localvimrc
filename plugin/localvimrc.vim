@@ -594,7 +594,7 @@ function! s:LocalVimRCWritePersistent()
             call s:LocalVimRCError("error while writing persistence file")
           endif
         else
-          call s:LocalVimRCDebug(1, "unable to write persistence file '" . s:localvimrc_persistence_file . "'")
+          call s:LocalVimRCError("unable to write persistence file '" . s:localvimrc_persistence_file . "'")
         endif
 
         " store persistence file checksum
