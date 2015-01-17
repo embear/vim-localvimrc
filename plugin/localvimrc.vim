@@ -644,7 +644,7 @@ endfunction
 " output error message
 "
 function! s:LocalVimRCError(text)
-  echohl ErrorMsg | echo "localvimrc: " . a:text | echohl None
+  echohl ErrorMsg | echom "localvimrc: " . a:text | echohl None
 endfunction
 
 " Function: s:LocalVimRCDebug(level, text) {{{2
