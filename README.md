@@ -26,9 +26,12 @@ sourcing a local vimrc file.
 ## Variables
 
 The plugin provides several convenience variables to make it easier to set up
-path dependent setting like for example makeprg. Adding the following lines to
-a local vimrc in the root directory of a project modify the behavior of
-|:make| to change into a build directory and call make there:
+path dependent setting like for example makeprg. These variables are only
+available inside your local vimrc file because they are only unambiguous there.
+
+Adding the following lines to a local vimrc in the root directory of a project
+modify the behavior of |:make| to change into a build directory and call make
+there:
 
 ``` {.vim}
 let &l:makeprg="cd ".g:localvimrc_script_dir."/build && make"
