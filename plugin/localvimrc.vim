@@ -367,7 +367,7 @@ function! s:LocalVimRC()
         call s:LocalVimRCDebug(3, "g:localvimrc_sourced_once = " . g:localvimrc_sourced_once . ", g:localvimrc_sourced_once_for_file = " . g:localvimrc_sourced_once_for_file)
 
         " generate command
-        let l:command = "silent source " . fnameescape(l:rcfile)
+        let l:command = "source " . fnameescape(l:rcfile)
 
         " add 'sandbox' if requested
         if (s:localvimrc_sandbox != 0)
