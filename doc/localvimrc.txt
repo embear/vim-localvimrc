@@ -5,7 +5,8 @@ Contents ~
 
  1. Introduction                                      |localvimrc-introduction|
  2. Commands                                              |localvimrc-commands|
-  1. The |LocalVimRCClear| command
+  1. The |LocalVimRC| command
+  2. The |LocalVimRCClear| command
  3. Variables                                            |localvimrc-variables|
   1. The |g:localvimrc_file| setting
   2. The |g:localvimrc_file_dir| setting
@@ -53,6 +54,11 @@ The plugin can be found on Bitbucket [1], GitHub [2] and VIM online [3].
 ===============================================================================
                                                           *localvimrc-commands*
 Commands ~
+
+-------------------------------------------------------------------------------
+The *LocalVimRC* command
+
+Resource all local vimrc files for the current buffer.
 
 -------------------------------------------------------------------------------
 The *LocalVimRCClear* command

@@ -663,6 +663,7 @@ function! s:LocalVimRCDebug(level, text)
 endfunction
 
 " Section: Commands {{{1
+command! LocalVimRC      call s:LocalVimRC()
 command! LocalVimRCClear call s:LocalVimRCClear()
 
 " vim600: foldmethod=marker foldlevel=0 :

@@ -18,6 +18,10 @@ The plugin can be found on [Bitbucket], [GitHub] and [VIM online].
 
 ## Commands
 
+### The `LocalVimRC` command
+
+Resource all local vimrc files for the current buffer.
+
 ### The `LocalVimRCClear` command
 
 Clear all stored decisions made in the past, when the plugin asked about
