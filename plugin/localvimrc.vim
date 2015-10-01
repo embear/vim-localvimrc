@@ -146,7 +146,7 @@ if has("autocmd")
     autocmd!
 
     for event in s:localvimrc_event
-      " call s:LocalVimRC() when creating ore reading any file
+      " call s:LocalVimRC() when creating or reading any file
       exec "autocmd ".event." * call s:LocalVimRC()"
     endfor
   augroup END
