@@ -584,19 +584,27 @@ function! s:LocalVimRCWritePersistent()
 
           call s:LocalVimRCDebug(3, "write persistent data: " . string(l:serialized))
 
-          " first write backup file to avoid lost persistence information
-          " on write errors if partition is full. Done this way because
-          " write/rename approach causes permission problems with sudo.
-          let l:backup_name = s:localvimrc_persistence_file . "~"
-          let l:backup_content = readfile(s:localvimrc_persistence_file, "b")
-          if (writefile(l:backup_content, l:backup_name, "b") == 0)
-            if (writefile(l:serialized, s:localvimrc_persistence_file) == 0)
-              call delete(l:backup_name)
+          " check if there is a exising persistence file
+          if filereadable(s:localvimrc_persistence_file)
+            " first write backup file to avoid lost persistence information
+            " on write errors if partition is full. Done this way because
+            " write/rename approach causes permission problems with sudo.
+            let l:backup_name = s:localvimrc_persistence_file . "~"
+            let l:backup_content = readfile(s:localvimrc_persistence_file, "b")
+            if writefile(l:backup_content, l:backup_name, "b") == 0
+              if writefile(l:serialized, s:localvimrc_persistence_file) == 0
+                call delete(l:backup_name)
+              else
+                call s:LocalVimRCError("error while writing persistence file, backup stored in '" . l:backup_name . "'")
+              endif
             else
-              call s:LocalVimRCError("error while writing persistence file, backup stored in '" . l:backup_name . "'")
+              call s:LocalVimRCError("unable to write persistence file backup '" . l:backup_name . "'")
             endif
           else
-            call s:LocalVimRCError("unable to write persistence file backup '" . l:backup_name . "'")
+            " there is no persistence file to backup, just write new one
+            if writefile(l:serialized, s:localvimrc_persistence_file) != 0
+              call s:LocalVimRCError("unable to write persistence file '" . s:localvimrc_persistence_file . "'")
+            endif
           endif
         else
           call s:LocalVimRCError("unable to write persistence file '" . s:localvimrc_persistence_file . "'")
