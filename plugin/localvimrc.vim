@@ -472,11 +472,10 @@ endfunction
 "
 " calculate checksum and store it in dictionary
 "
-function! s:LocalVimRCCalcChecksum(filename)
-  let l:file = fnameescape(a:filename)
-  let l:checksum = getfsize(l:file) . getfperm(l:file) . getftime(l:file)
+function! s:LocalVimRCCalcChecksum(file)
+  let l:checksum = getfsize(a:file) . getfperm(a:file) . getftime(a:file)
 
-  call s:LocalVimRCDebug(3, "checksum calc -> " . l:file . " : " . l:checksum)
+  call s:LocalVimRCDebug(3, "checksum calc -> " . fnameescape(a:file) . " : " . l:checksum)
 
   return l:checksum
 endfunction
@@ -485,10 +484,9 @@ endfunction
 "
 " Check checksum in dictionary. Return "0" if it does not exist, "1" otherwise
 "
-function! s:LocalVimRCCheckChecksum(filename, checksum)
+function! s:LocalVimRCCheckChecksum(file, checksum)
   let l:return = 0
-  let l:file = fnameescape(a:filename)
-  let l:checksum = s:LocalVimRCCalcChecksum(l:file)
+  let l:checksum = s:LocalVimRCCalcChecksum(a:file)
 
   if (a:checksum == l:checksum)
     let l:return = 1
