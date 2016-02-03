@@ -70,23 +70,23 @@ endif
 " do stuff you want to do only once for a running vim instance
 ```
 
-### The `g:localvimrc_file` setting
+### The `g:localvimrc_file` variable
 
 Fully qualified file name of file that triggered loading the local vimrc file.
 
-### The `g:localvimrc_file_dir` setting
+### The `g:localvimrc_file_dir` variable
 
 Fully qualified directory of file that triggered loading the local vimrc file.
 
-### The `g:localvimrc_script` setting
+### The `g:localvimrc_script` variable
 
 Fully qualified file name of the currently loaded local vimrc file.
 
-### The `g:localvimrc_script_dir` setting
+### The `g:localvimrc_script_dir` variable
 
 Fully qualified directory of the currently loaded local vimrc file.
 
-### The `g:localvimrc_sourced_once` setting
+### The `g:localvimrc_sourced_once` variable
 
 Set to `1` if the currently loaded local vimrc file had already been loaded in
 this session. Set to `0` otherwise.

@@ -8,11 +8,11 @@ Contents ~
   1. The |LocalVimRC| command
   2. The |LocalVimRCClear| command
  3. Variables                                            |localvimrc-variables|
-  1. The |g:localvimrc_file| setting
-  2. The |g:localvimrc_file_dir| setting
-  3. The |g:localvimrc_script| setting
-  4. The |g:localvimrc_script_dir| setting
-  5. The |g:localvimrc_sourced_once| setting
+  1. The |g:localvimrc_file| variable
+  2. The |g:localvimrc_file_dir| variable
+  3. The |g:localvimrc_script| variable
+  4. The |g:localvimrc_script_dir| variable
+  5. The |g:localvimrc_sourced_once| variable
   6. The |g:localvimrc_sourced_once_for_file| setting
  4. Settings                                              |localvimrc-settings|
   1. The |g:localvimrc_name| setting
@@ -104,27 +104,27 @@ can be used to implement guards:
   " do stuff you want to do only once for a running vim instance
 <
 -------------------------------------------------------------------------------
-The *g:localvimrc_file* setting
+The *g:localvimrc_file* variable
 
 Fully qualified file name of file that triggered loading the local vimrc file.
 
 -------------------------------------------------------------------------------
-The *g:localvimrc_file_dir* setting
+The *g:localvimrc_file_dir* variable
 
 Fully qualified directory of file that triggered loading the local vimrc file.
 
 -------------------------------------------------------------------------------
-The *g:localvimrc_script* setting
+The *g:localvimrc_script* variable
 
 Fully qualified file name of the currently loaded local vimrc file.
 
 -------------------------------------------------------------------------------
-The *g:localvimrc_script_dir* setting
+The *g:localvimrc_script_dir* variable
 
 Fully qualified directory of the currently loaded local vimrc file.
 
 -------------------------------------------------------------------------------
-The *g:localvimrc_sourced_once* setting
+The *g:localvimrc_sourced_once* variable
 
 Set to '1' if the currently loaded local vimrc file had already been loaded in
 this session. Set to '0' otherwise.
