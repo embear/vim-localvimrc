@@ -185,13 +185,12 @@ function! s:LocalVimRC()
   call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
 
   " generate a list of all local vimrc files with absolute file names along path to root
-  let l:absolute = {}
+  let l:rcfiles = []
   for l:rcname in s:localvimrc_name
     for l:rcfile in findfile(l:rcname, l:directory . ";", -1)
-      let l:absolute[resolve(fnamemodify(l:rcfile, ":p"))] = ""
+      call insert(l:rcfiles, resolve(fnamemodify(l:rcfile, ":p")))
     endfor
   endfor
-  let l:rcfiles = sort(keys(l:absolute))
   call s:LocalVimRCDebug(1, "found files: " . string(l:rcfiles))
 
   " shrink list of found files
