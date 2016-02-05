@@ -245,12 +245,13 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
-vA.B.C : XXXX-YY-ZZ
+v2.4.0 : 2016-02-05
 
-  - add setting for autocommand events that trigger local vimrc file loading.
-  - make it possible to supply a list of local vimrc filenames.
+  - add setting |g:localvimrc_event| which defines the autocommand events that trigger local vimrc file loading.
+  - make it possible to supply a list of local vimrc filenames in |g:localvimrc_name|
   - ask user when sourcing local vimrc fails and |g:localvimrc_sandbox| and |g:localvimrc_ask| is set whether the file should be sourced without sandbox.
   - don't lose persistence file on full partitions.
+  - fix a bug where local vimrc files are sourced in wrong order when some of them are symlinks to a different directory.
 
 v2.3.0 : 2014-02-06
 
