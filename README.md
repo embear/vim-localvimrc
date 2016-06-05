@@ -218,7 +218,7 @@ Example:
 
 ``` {.vim}
 " blacklist all local vimrc files in shared project directory
-let g:localvimrc_whitelist='/share/projects/.*'
+let g:localvimrc_blacklist='/share/projects/.*'
 ```
 
   - Default: No blacklist
