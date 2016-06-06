@@ -200,6 +200,8 @@ Example:
 ``` {.vim}
 " whitelist all local vimrc files in users project foo and bar
 let g:localvimrc_whitelist='/home/user/projects/\(foo\|bar\)/.*'
+" you can also use lists of patterns
+let g:localvimrc_whitelist=['/home/user/project1/', '/opt/project2/', '/usr/local/projects/vim-[^/]*/']
 ```
 
   - Default: No whitelist
@@ -219,6 +221,8 @@ Example:
 ``` {.vim}
 " blacklist all local vimrc files in shared project directory
 let g:localvimrc_blacklist='/share/projects/.*'
+" you can also use lists of patterns
+let g:localvimrc_whitelist=['/share/projects/.*', '/usr/share/other-projects/.*']
 ```
 
   - Default: No blacklist
