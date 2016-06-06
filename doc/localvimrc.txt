@@ -247,6 +247,9 @@ Example:
 >
   " whitelist all local vimrc files in users project foo and bar
   let g:localvimrc_whitelist='/home/user/projects/\(foo\|bar\)/.*'
+  
+  " whitelist can also use lists of patterns
+  let g:localvimrc_whitelist=['/home/user/project1/', '/opt/project2/', '/usr/local/projects/vim-[^/]*/']
 <
 - Default: No whitelist
 
@@ -264,7 +267,10 @@ See |regular-expression| for patterns that are accepted.
 Example:
 >
   " blacklist all local vimrc files in shared project directory
-  let g:localvimrc_whitelist='/share/projects/.*'
+  let g:localvimrc_blacklist='/share/projects/.*'
+  
+  " blacklist can also use lists of patterns
+  let g:localvimrc_whitelist=['/share/projects/.*', '/usr/share/other-projects/.*']
 <
 - Default: No blacklist
 
@@ -293,24 +299,30 @@ Credits ~
 - Mark Weber for the idea of using checksums
 - Daniel Hahler for various patches
 - Justin M. Keyes for ideas to improve this plugin
+- Lars Winderling for whitelist/blacklist patch
 
 ===============================================================================
                                                          *localvimrc-changelog*
 Changelog ~
+
+vX.X.X : XXXX-XX-XX
+
+- |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally
+  a list of regular expressions.
 
 v2.4.0 : 2016-02-05
 
 - add setting |g:localvimrc_event| which defines the autocommand events that
   trigger local vimrc file loading.
 
+- don't lose persistence file on full partitions.
+
 - make it possible to supply a list of local vimrc filenames in
-  |g:localvimrc_name|
+  |g:localvimrc_name|.
 
 - ask user when sourcing local vimrc fails and |g:localvimrc_sandbox| and
   |g:localvimrc_ask| is set whether the file should be sourced without
   sandbox.
-
-- don't lose persistence file on full partitions.
 
 - fix a bug where local vimrc files are sourced in wrong order when some of
   them are symlinks to a different directory.
@@ -334,8 +346,8 @@ v2.2.0 : 2013-11-09
 
 v2.1.0 : 2012-09-25
 
-- add possibility to make decisions persistent
-- use full file path when storing decisions
+- add possibility to make decisions persistent.
+- use full file path when storing decisions.
 
 v2.0.0 : 2012-04-05
 

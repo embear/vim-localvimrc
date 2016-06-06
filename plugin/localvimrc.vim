@@ -85,10 +85,10 @@ endif
 " define default "localvimrc_whitelist" {{{2
 " copy to script local variable to prevent .lvimrc modifying the whitelist.
 if (!exists("g:localvimrc_whitelist"))
-  let s:localvimrc_whitelist = ["^$"] " This never matches a file
+  let s:localvimrc_whitelist = [ "^$" ] " this never matches a file
 else
   if type(g:localvimrc_whitelist) == type("")
-    let s:localvimrc_whitelist = [g:localvimrc_whitelist]
+    let s:localvimrc_whitelist = [ g:localvimrc_whitelist ]
   else
     let s:localvimrc_whitelist = g:localvimrc_whitelist
   endif
@@ -97,10 +97,10 @@ endif
 " define default "localvimrc_blacklist" {{{2
 " copy to script local variable to prevent .lvimrc modifying the blacklist.
 if (!exists("g:localvimrc_blacklist"))
-  let s:localvimrc_blacklist = ["^$"] " This never matches a file
+  let s:localvimrc_blacklist = [ "^$" ] " this never matches a file
 else
   if type(g:localvimrc_blacklist) == type("")
-    let s:localvimrc_blacklist = [g:localvimrc_blacklist]
+    let s:localvimrc_blacklist = [ g:localvimrc_blacklist ]
   else
     let s:localvimrc_blacklist = g:localvimrc_blacklist
   endif
@@ -159,15 +159,6 @@ if has("autocmd")
     endfor
   augroup END
 endif
-
-function! s:MatchAny(str, patterns)
-  for pattern in a:patterns
-    if match(a:str, pattern) > -1
-      return 1
-    endif
-  endfor
-  return 0
-endfunc
 
 " Section: Functions {{{1
 
@@ -263,7 +254,7 @@ function! s:LocalVimRC()
 
       " check if whitelisted
       if (l:rcfile_load == "unknown")
-        if s:MatchAny(l:rcfile, s:localvimrc_whitelist)
+        if s:LocalVimRCMatchAny(l:rcfile, s:localvimrc_whitelist)
           call s:LocalVimRCDebug(2, l:rcfile . " is whitelisted")
           let l:rcfile_load = "yes"
         endif
@@ -271,7 +262,7 @@ function! s:LocalVimRC()
 
       " check if blacklisted
       if (l:rcfile_load == "unknown")
-        if s:MatchAny(l:rcfile, s:localvimrc_blacklist)
+        if s:LocalVimRCMatchAny(l:rcfile, s:localvimrc_blacklist)
           call s:LocalVimRCDebug(2, l:rcfile . " is blacklisted")
           let l:rcfile_load = "no"
         endif
@@ -482,6 +473,21 @@ function! s:LocalVimRC()
 
   " end marker
   call s:LocalVimRCDebug(1, "==================================================")
+endfunction
+
+" Function: s:LocalVimRCMatchAny(str, patterns) {{{2
+"
+" check if any of the regular expressions given in the list patterns matches the
+" string. If there is a match, return value is "1". If there is no match,
+" return value is "0".
+"
+function! s:LocalVimRCMatchAny(str, patterns)
+  for l:pattern in a:patterns
+    if (match(a:str, l:pattern) != -1)
+      return 1
+    endif
+  endfor
+  return 0
 endfunction
 
 " Function: s:LocalVimRCCalcChecksum(filename) {{{2

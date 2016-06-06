@@ -200,7 +200,8 @@ Example:
 ``` {.vim}
 " whitelist all local vimrc files in users project foo and bar
 let g:localvimrc_whitelist='/home/user/projects/\(foo\|bar\)/.*'
-" you can also use lists of patterns
+
+" whitelist can also use lists of patterns
 let g:localvimrc_whitelist=['/home/user/project1/', '/opt/project2/', '/usr/local/projects/vim-[^/]*/']
 ```
 
@@ -221,7 +222,8 @@ Example:
 ``` {.vim}
 " blacklist all local vimrc files in shared project directory
 let g:localvimrc_blacklist='/share/projects/.*'
-" you can also use lists of patterns
+
+" blacklist can also use lists of patterns
 let g:localvimrc_whitelist=['/share/projects/.*', '/usr/share/other-projects/.*']
 ```
 
@@ -246,8 +248,13 @@ send a pull request or just tell me your ideas.
 - Mark Weber for the idea of using checksums
 - Daniel Hahler for various patches
 - Justin M. Keyes for ideas to improve this plugin
+- Lars Winderling for whitelist/blacklist patch
 
 ## Changelog
+
+vX.X.X : XXXX-XX-XX
+
+  - |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally a list of regular expressions.
 
 v2.4.0 : 2016-02-05
 
@@ -271,8 +278,8 @@ v2.2.0 : 2013-11-09
 
 v2.1.0 : 2012-09-25
 
-  - add possibility to make decisions persistent
-  - use full file path when storing decisions
+  - add possibility to make decisions persistent.
+  - use full file path when storing decisions.
 
 v2.0.0 : 2012-04-05
 
