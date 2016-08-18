@@ -38,7 +38,7 @@ modify the behavior of |:make| to change into a build directory and call make
 there:
 
 ``` {.vim}
-let &l:makeprg="cd ".g:localvimrc_script_dir."/build && make"
+let &l:makeprg="cd ".g:localvimrc_script_dir_unresolved."/build && make"
 ```
 
 ------------------------------------------------------------
@@ -80,11 +80,23 @@ Fully qualified directory of file that triggered loading the local vimrc file.
 
 ### The `g:localvimrc_script` variable
 
-Fully qualified file name of the currently loaded local vimrc file.
+Fully qualified and resolved file name of the currently loaded local vimrc
+file.
 
 ### The `g:localvimrc_script_dir` variable
 
-Fully qualified directory of the currently loaded local vimrc file.
+Fully qualified and resolved directory of the currently loaded local vimrc
+file.
+
+### The `g:localvimrc_script_unresolved` variable
+
+Fully qualified but unresolved file name of the currently loaded local vimrc
+file.
+
+### The `g:localvimrc_script_dir_unresolved` variable
+
+Fully qualified but unresolved directory of the currently loaded local vimrc
+file.
 
 ### The `g:localvimrc_sourced_once` variable
 
@@ -255,6 +267,7 @@ send a pull request or just tell me your ideas.
 vX.X.X : XXXX-XX-XX
 
   - |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally a list of regular expressions.
+  - add convenience variables |g:localvimrc_script_unresolved| and |g:localvimrc_script_dir_unresolved|.
 
 v2.4.0 : 2016-02-05
 

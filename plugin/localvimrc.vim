@@ -196,7 +196,9 @@ function! s:LocalVimRC()
   let l:rcfiles = []
   for l:rcname in s:localvimrc_name
     for l:rcfile in findfile(l:rcname, l:directory . ";", -1)
-      call insert(l:rcfiles, resolve(fnamemodify(l:rcfile, ":p")))
+      let l:rcfile_unresolved = fnamemodify(l:rcfile, ":p")
+      let l:rcfile_resolved = resolve(l:rcfile_unresolved)
+      call insert(l:rcfiles, { "resolved": l:rcfile_resolved, "unresolved": l:rcfile_unresolved } )
     endfor
   endfor
   call s:LocalVimRCDebug(1, "found files: " . string(l:rcfiles))
@@ -216,8 +218,12 @@ function! s:LocalVimRC()
   " source all found local vimrc files along path from root (reverse order)
   let l:answer = ""
   let l:sandbox_answer = ""
-  for l:rcfile in l:rcfiles
+  for l:rcfile_dict in l:rcfiles
+    " get values from dictionary
+    let l:rcfile = l:rcfile_dict["resolved"]
+    let l:rcfile_unresolved = l:rcfile_dict["unresolved"]
     call s:LocalVimRCDebug(2, "processing \"" . l:rcfile . "\"")
+
     let l:rcfile_load = "unknown"
 
     if filereadable(l:rcfile)
@@ -350,6 +356,11 @@ function! s:LocalVimRC()
         let g:localvimrc_script_dir = fnamemodify(g:localvimrc_script, ":h")
         call s:LocalVimRCDebug(3, "g:localvimrc_script = " . g:localvimrc_script . ", g:localvimrc_script_dir = " . g:localvimrc_script_dir)
 
+        " store name and directory of unresolved script
+        let g:localvimrc_script_unresolved = l:rcfile_unresolved
+        let g:localvimrc_script_dir_unresolved = fnamemodify(g:localvimrc_script_unresolved, ":h")
+        call s:LocalVimRCDebug(3, "g:localvimrc_script_unresolved = " . g:localvimrc_script_unresolved . ", g:localvimrc_script_dir_unresolved = " . g:localvimrc_script_dir_unresolved)
+
         " reset if checksum changed
         if (!l:checksum_is_same)
           if has_key(s:localvimrc_sourced, l:rcfile)
@@ -454,6 +465,8 @@ function! s:LocalVimRC()
         unlet g:localvimrc_file_dir
         unlet g:localvimrc_script
         unlet g:localvimrc_script_dir
+        unlet g:localvimrc_script_unresolved
+        unlet g:localvimrc_script_dir_unresolved
         unlet g:localvimrc_sourced_once
         unlet g:localvimrc_sourced_once_for_file
       else
