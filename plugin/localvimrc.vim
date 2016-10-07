@@ -290,13 +290,14 @@ function! s:LocalVimRC()
           if (l:answer !~? "^a$")
             call s:LocalVimRCDebug(2, "need to ask")
             let l:answer = ""
+            let l:message = ""
             while (l:answer !~? '^[ynaq]$')
               if (s:localvimrc_persistent == 0)
-                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit) "
+                let l:message .= "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[s]how/[q]uit) "
               elseif (s:localvimrc_persistent == 1)
-                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit ; persistent [Y]es/[N]o/[A]ll) "
+                let l:message .= "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[s]how/[q]uit ; persistent [Y]es/[N]o/[A]ll) "
               else
-                let l:message = "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[q]uit) "
+                let l:message .= "localvimrc: source " . l:rcfile . "? ([y]es/[n]o/[a]ll/[s]how/[q]uit) "
               endif
 
               " turn off possible previous :silent command to force this
@@ -307,6 +308,21 @@ function! s:LocalVimRC()
               if empty(l:answer)
                 call s:LocalVimRCDebug(2, "aborting on empty answer")
                 let l:answer = "q"
+              endif
+
+              " add the content of the file for repeating the question
+              let l:message = ""
+              if (l:answer =~? "^s$")
+                let l:message .= "localvimrc: >>>>>>>> start content of " . l:rcfile . "\n"
+                let l:content_max = 10
+                let l:content = readfile(l:rcfile, "", l:content_max + 1)
+                for l:line in l:content
+                  let l:message .= "localvimrc: " . l:line . "\n"
+                endfor
+                if len(l:content) > l:content_max
+                  let l:message .= "localvimrc: ======== TRUNCATED AFTER " . l:content_max . " LINES!\n"
+                endif
+                let l:message .= "localvimrc: <<<<<<<< end  content of " . l:rcfile . "\n"
               endif
             endwhile
           endif

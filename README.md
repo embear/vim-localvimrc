@@ -268,6 +268,7 @@ vX.X.X : XXXX-XX-XX
 
   - |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally a list of regular expressions.
   - add convenience variables |g:localvimrc_script_unresolved| and |g:localvimrc_script_dir_unresolved|.
+  - add ability to view local vimrc before sourcing when |g:localvimrc_ask| is enabled.
 
 v2.4.0 : 2016-02-05
 

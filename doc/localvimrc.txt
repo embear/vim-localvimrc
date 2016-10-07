@@ -329,6 +329,9 @@ vX.X.X : XXXX-XX-XX
 - add convenience variables |g:localvimrc_script_unresolved| and
   |g:localvimrc_script_dir_unresolved|.
 
+- add ability to view local vimrc before sourcing when |g:localvimrc_ask| is
+  enabled.
+
 v2.4.0 : 2016-02-05
 
 - add setting |g:localvimrc_event| which defines the autocommand events that
