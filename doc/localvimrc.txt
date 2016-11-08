@@ -286,7 +286,7 @@ Example:
   let g:localvimrc_blacklist='/share/projects/.*'
   
   " blacklist can also use lists of patterns
-  let g:localvimrc_whitelist=['/share/projects/.*', '/usr/share/other-projects/.*']
+  let g:localvimrc_blacklist=['/share/projects/.*', '/usr/share/other-projects/.*']
 <
 - Default: No blacklist
 
