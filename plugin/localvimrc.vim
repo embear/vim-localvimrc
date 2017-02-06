@@ -126,6 +126,14 @@ else
   let s:localvimrc_persistence_file = g:localvimrc_persistence_file
 endif
 
+" define default "localvimrc_autocmd" {{{2
+" enable emitting of autocommands before and after sourcing a .lvimrc file
+if (!exists("g:localvimrc_autocmd"))
+  let s:localvimrc_autocmd = 1
+else
+  let s:localvimrc_autocmd = g:localvimrc_autocmd
+endif
+
 " define default "localvimrc_debug" {{{2
 if (!exists("g:localvimrc_debug"))
   let g:localvimrc_debug = 0
@@ -471,10 +479,22 @@ function! s:LocalVimRC()
             endif
           endtry
         else
+          " emit an autocommands before sourcing
+          if (s:localvimrc_autocmd == 1)
+            silent doautocmd User LocalVimRCPre
+            call s:LocalVimRCDebug(1, "pre sourcing autocommand emitted")
+          endif
+
           " execute the command
           exec l:command
           call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
-          silent doautocmd User LocalVimRCSourced
+
+          " emit an autocommands after sourcing
+          if (s:localvimrc_autocmd == 1)
+            silent doautocmd User LocalVimRCPost
+            silent doautocmd User LocalVimRC
+            call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
+          endif
         endif
 
         " remove global variables again

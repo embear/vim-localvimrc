@@ -27,11 +27,15 @@ Contents ~
   8. The |g:localvimrc_persistence_file| setting
   9. The |g:localvimrc_whitelist| setting
   10. The |g:localvimrc_blacklist| setting
-  11. The |g:localvimrc_debug| setting
- 5. Contribute                                          |localvimrc-contribute|
- 6. Credits                                                |localvimrc-credits|
- 7. Changelog                                            |localvimrc-changelog|
- 8. References                                          |localvimrc-references|
+  11. The |g:localvimrc_autocmd| setting
+  12. The |g:localvimrc_debug| setting
+ 5. Autocommands                                      |localvimrc-autocommands|
+  1. The |LocalVimRCPre| autocommand
+  2. The |LocalVimRC| and |LocalVimRCPost| autocommand
+ 6. Contribute                                          |localvimrc-contribute|
+ 7. Credits                                                |localvimrc-credits|
+ 8. Changelog                                            |localvimrc-changelog|
+ 9. References                                          |localvimrc-references|
 
 ===============================================================================
                                                       *localvimrc-introduction*
@@ -291,11 +295,36 @@ Example:
 - Default: No blacklist
 
 -------------------------------------------------------------------------------
+The *g:localvimrc_autocmd* setting
+
+Emit autocommands |LocalVimRCPre| before and |LocalVimRC| and |LocalVimRCPost|
+after sourcing every local vimrc file.
+
+- Default: '1'
+
+-------------------------------------------------------------------------------
 The *g:localvimrc_debug* setting
 
 Debug level for this script.
 
 - Default: '0'
+
+===============================================================================
+                                                      *localvimrc-autocommands*
+Autocommands ~
+
+If enabled localvimrc emits autocommands before and after sourcing an local
+vimrc file.
+
+-------------------------------------------------------------------------------
+The *LocalVimRCPre* autocommand
+
+This autocommand is emitted right before sourcing each local vimrc file.
+
+-------------------------------------------------------------------------------
+The LocalVimRC and *LocalVimRCPost* autocommand
+
+These autocommands are emitted right after sourcing each local vimrc file.
 
 ===============================================================================
                                                         *localvimrc-contribute*
@@ -316,6 +345,7 @@ Credits ~
 - Daniel Hahler for various patches
 - Justin M. Keyes for ideas to improve this plugin
 - Lars Winderling for whitelist/blacklist patch
+- Michon van Dooren for autocommands patch
 
 ===============================================================================
                                                          *localvimrc-changelog*
@@ -331,6 +361,8 @@ vX.X.X : XXXX-XX-XX
 
 - add ability to view local vimrc before sourcing when |g:localvimrc_ask| is
   enabled.
+
+- emit autocommands before and after sourcing files.
 
 v2.4.0 : 2016-02-05
 

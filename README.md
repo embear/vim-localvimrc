@@ -241,11 +241,30 @@ let g:localvimrc_blacklist=['/share/projects/.*', '/usr/share/other-projects/.*'
 
   - Default: No blacklist
 
+### The `g:localvimrc_autocmd` setting
+
+Emit autocommands |LocalVimRCPre| before and |LocalVimRC| and |LocalVimRCPost|
+after sourcing every local vimrc file.
+
+  - Default: `1`
+
 ### The `g:localvimrc_debug` setting
 
 Debug level for this script.
 
   - Default: `0`
+
+## Autocommands
+
+If enabled localvimrc emits autocommands before and after sourcing an local vimrc file.
+
+### The `LocalVimRCPre` autocommand
+
+This autocommand is emitted right before sourcing each local vimrc file.
+
+### The `LocalVimRC` and `LocalVimRCPost` autocommand
+
+These autocommands are emitted right after sourcing each local vimrc file.
 
 ## Contribute
 
@@ -261,6 +280,7 @@ send a pull request or just tell me your ideas.
 - Daniel Hahler for various patches
 - Justin M. Keyes for ideas to improve this plugin
 - Lars Winderling for whitelist/blacklist patch
+- Michon van Dooren for autocommands patch
 
 ## Changelog
 
@@ -269,6 +289,7 @@ vX.X.X : XXXX-XX-XX
   - |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally a list of regular expressions.
   - add convenience variables |g:localvimrc_script_unresolved| and |g:localvimrc_script_dir_unresolved|.
   - add ability to view local vimrc before sourcing when |g:localvimrc_ask| is enabled.
+  - emit autocommands before and after sourcing files.
 
 v2.4.0 : 2016-02-05
 
