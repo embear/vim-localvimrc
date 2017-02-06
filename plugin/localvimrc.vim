@@ -474,6 +474,7 @@ function! s:LocalVimRC()
           " execute the command
           exec l:command
           call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
+          silent doautocmd User LocalVimRCSourced
         endif
 
         " remove global variables again
