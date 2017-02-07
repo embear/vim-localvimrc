@@ -492,7 +492,6 @@ function! s:LocalVimRC()
           " emit an autocommands after sourcing
           if (s:localvimrc_autocmd == 1)
             silent doautocmd User LocalVimRCPost
-            silent doautocmd User LocalVimRC
             call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
           endif
         endif

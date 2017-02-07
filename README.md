@@ -243,8 +243,8 @@ let g:localvimrc_blacklist=['/share/projects/.*', '/usr/share/other-projects/.*'
 
 ### The `g:localvimrc_autocmd` setting
 
-Emit autocommands |LocalVimRCPre| before and |LocalVimRC| and |LocalVimRCPost|
-after sourcing every local vimrc file.
+Emit autocommands |LocalVimRCPre| before and |LocalVimRCPost| after sourcing
+every local vimrc file.
 
   - Default: `1`
 
@@ -262,9 +262,9 @@ If enabled localvimrc emits autocommands before and after sourcing an local vimr
 
 This autocommand is emitted right before sourcing each local vimrc file.
 
-### The `LocalVimRC` and `LocalVimRCPost` autocommand
+### The `LocalVimRCPost` autocommand
 
-These autocommands are emitted right after sourcing each local vimrc file.
+This autocommands is emitted right after sourcing each local vimrc file.
 
 ## Contribute
 

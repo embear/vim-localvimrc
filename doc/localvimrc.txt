@@ -31,7 +31,7 @@ Contents ~
   12. The |g:localvimrc_debug| setting
  5. Autocommands                                      |localvimrc-autocommands|
   1. The |LocalVimRCPre| autocommand
-  2. The |LocalVimRC| and |LocalVimRCPost| autocommand
+  2. The |LocalVimRCPost| autocommand
  6. Contribute                                          |localvimrc-contribute|
  7. Credits                                                |localvimrc-credits|
  8. Changelog                                            |localvimrc-changelog|
@@ -297,8 +297,8 @@ Example:
 -------------------------------------------------------------------------------
 The *g:localvimrc_autocmd* setting
 
-Emit autocommands |LocalVimRCPre| before and |LocalVimRC| and |LocalVimRCPost|
-after sourcing every local vimrc file.
+Emit autocommands |LocalVimRCPre| before and |LocalVimRCPost| after sourcing
+every local vimrc file.
 
 - Default: '1'
 
@@ -322,9 +322,9 @@ The *LocalVimRCPre* autocommand
 This autocommand is emitted right before sourcing each local vimrc file.
 
 -------------------------------------------------------------------------------
-The LocalVimRC and *LocalVimRCPost* autocommand
+The *LocalVimRCPost* autocommand
 
-These autocommands are emitted right after sourcing each local vimrc file.
+This autocommands is emitted right after sourcing each local vimrc file.
 
 ===============================================================================
                                                         *localvimrc-contribute*
