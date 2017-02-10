@@ -139,6 +139,11 @@ if (!exists("g:localvimrc_debug"))
   let g:localvimrc_debug = 0
 endif
 
+" define default "localvimrc_disable_upward_search" {{{2
+if (!exists("g:localvimrc_disable_upward_search"))
+  let g:localvimrc_disable_upward_search = 0
+endif
+
 " initialize data dictionary {{{2
 " key: localvimrc file
 " value: [ answer, sandbox_answer, checksum ]
@@ -200,10 +205,17 @@ function! s:LocalVimRC()
   endif
   call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
 
+  " should Vim search upward?
+  let l:searchDirection = ";" " upward search
+  if (g:localvimrc_disable_upward_search == 1)
+      let l:searchDirection = "" " only current directory
+      call s:LocalVimRCDebug(2, "Upward search is disabled")
+  endif
+
   " generate a list of all local vimrc files with absolute file names along path to root
   let l:rcfiles = []
   for l:rcname in s:localvimrc_name
-    for l:rcfile in findfile(l:rcname, l:directory . ";", -1)
+    for l:rcfile in findfile(l:rcname, l:directory . l:searchDirection, -1)
       let l:rcfile_unresolved = fnamemodify(l:rcfile, ":p")
       let l:rcfile_resolved = resolve(l:rcfile_unresolved)
       call insert(l:rcfiles, { "resolved": l:rcfile_resolved, "unresolved": l:rcfile_unresolved } )

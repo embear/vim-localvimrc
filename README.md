@@ -248,6 +248,13 @@ every local vimrc file.
 
   - Default: `1`
 
+### The `g:localvimrc_disable_upward_search` setting
+
+The plugin searches for `g:localvimrc_name` file from the directory of the current file up to the root directory.
+Set this option to `1` to disable upward search. If set to `1` plugin searches only in the file directory.
+
+  - Default: `0`
+
 ### The `g:localvimrc_debug` setting
 
 Debug level for this script.
