@@ -206,16 +206,17 @@ function! s:LocalVimRC()
   call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
 
   " should Vim search upward?
-  let l:searchDirection = ";" " upward search
+  let l:directory = l:directory . ";" " enable upward search
   if (g:localvimrc_disable_upward_search == 1)
-      let l:searchDirection = "" " only current directory
-      call s:LocalVimRCDebug(2, "Upward search is disabled")
+      " set stop directory to current working directory
+      let l:directory = l:directory . ";" . fnameescape(getcwd())
+      call s:LocalVimRCDebug(2, "Upward search till root is disabled")
   endif
 
   " generate a list of all local vimrc files with absolute file names along path to root
   let l:rcfiles = []
   for l:rcname in s:localvimrc_name
-    for l:rcfile in findfile(l:rcname, l:directory . l:searchDirection, -1)
+    for l:rcfile in findfile(l:rcname, l:directory, -1)
       let l:rcfile_unresolved = fnamemodify(l:rcfile, ":p")
       let l:rcfile_resolved = resolve(l:rcfile_unresolved)
       call insert(l:rcfiles, { "resolved": l:rcfile_resolved, "unresolved": l:rcfile_unresolved } )
