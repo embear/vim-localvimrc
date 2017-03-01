@@ -21,14 +21,15 @@ Contents ~
   2. The |g:localvimrc_event| setting
   3. The |g:localvimrc_reverse| setting
   4. The |g:localvimrc_count| setting
-  5. The |g:localvimrc_sandbox| setting
-  6. The |g:localvimrc_ask| setting
-  7. The |g:localvimrc_persistent| setting
-  8. The |g:localvimrc_persistence_file| setting
-  9. The |g:localvimrc_whitelist| setting
-  10. The |g:localvimrc_blacklist| setting
-  11. The |g:localvimrc_autocmd| setting
-  12. The |g:localvimrc_debug| setting
+  5. The |g:localvimrc_file_directory_only| setting
+  6. The |g:localvimrc_sandbox| setting
+  7. The |g:localvimrc_ask| setting
+  8. The |g:localvimrc_persistent| setting
+  9. The |g:localvimrc_persistence_file| setting
+  10. The |g:localvimrc_whitelist| setting
+  11. The |g:localvimrc_blacklist| setting
+  12. The |g:localvimrc_autocmd| setting
+  13. The |g:localvimrc_debug| setting
  5. Autocommands                                      |localvimrc-autocommands|
   1. The |LocalVimRCPre| autocommand
   2. The |LocalVimRCPost| autocommand
@@ -209,7 +210,28 @@ The *g:localvimrc_count* setting
 
 On the way from root, the last localvimrc_count files are sourced.
 
+**NOTE:**
+
+This might load files not located in the edited files directory or even not
+located in the projects directory. If this is of concern use the
+|g:localvimrc_file_directory_only| setting.
+
 - Default: '-1' (all)
+
+-------------------------------------------------------------------------------
+The *g:localvimrc_file_directory_only* setting
+
+Just use local vimrc file located in the edited files directory.
+
+**NOTE:**
+
+This might end in not loading any local vimrc files at all. If limiting the
+number of loaded local vimrc files is of concern use the |g:localvimrc_count|
+setting.
+
+- Value '0': Load all local vimrc files in the tree from root to file.
+- Value '1': Load only file in the same directory as edited file.
+- Default: '0'
 
 -------------------------------------------------------------------------------
 The *g:localvimrc_sandbox* setting
@@ -363,6 +385,9 @@ vX.X.X : XXXX-XX-XX
   enabled.
 
 - emit autocommands before and after sourcing files.
+
+- add |g:localvimrc_file_directory_only| to limit sourcing to local vimrc
+  files in the same directory as the edited file.
 
 v2.4.0 : 2016-02-05
 

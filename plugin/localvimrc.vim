@@ -65,6 +65,15 @@ else
   let s:localvimrc_count = g:localvimrc_count
 endif
 
+" define default "localvimrc_file_directory_only" {{{2
+" copy to script local variable to prevent .lvimrc modifying the file
+" directory only option.
+if (!exists("g:localvimrc_file_directory_only"))
+  let s:localvimrc_file_directory_only = 0
+else
+  let s:localvimrc_file_directory_only = g:localvimrc_file_directory_only
+endif
+
 " define default "localvimrc_sandbox" {{{2
 " copy to script local variable to prevent .lvimrc disabling the sandbox
 " again.
@@ -200,10 +209,18 @@ function! s:LocalVimRC()
   endif
   call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
 
+  " check if the local vimrc file shall be searched just in the files
+  " directory or in the whole tree
+  if s:localvimrc_file_directory_only == 1
+    let l:search_option = ""
+  else
+    let l:search_option = ";"
+  endif
+
   " generate a list of all local vimrc files with absolute file names along path to root
   let l:rcfiles = []
   for l:rcname in s:localvimrc_name
-    for l:rcfile in findfile(l:rcname, l:directory . ";", -1)
+    for l:rcfile in findfile(l:rcname, l:directory . l:search_option, -1)
       let l:rcfile_unresolved = fnamemodify(l:rcfile, ":p")
       let l:rcfile_resolved = resolve(l:rcfile_unresolved)
       call insert(l:rcfiles, { "resolved": l:rcfile_resolved, "unresolved": l:rcfile_unresolved } )

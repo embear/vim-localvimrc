@@ -159,7 +159,27 @@ Reverse behavior of loading local vimrc files.
 
 On the way from root, the last localvimrc_count files are sourced.
 
+**NOTE:**
+
+This might load files not located in the edited files directory or even not
+located in the projects directory. If this is of concern use the
+`g:localvimrc_file_directory_only` setting.
+
   - Default: `-1` (all)
+
+### The `g:localvimrc_file_directory_only` setting
+
+Just use local vimrc file located in the edited files directory.
+
+**NOTE:**
+
+This might end in not loading any local vimrc files at all. If limiting the
+number of loaded local vimrc files is of concern use the `g:localvimrc_count`
+setting.
+
+  - Value `0`: Load all local vimrc files in the tree from root to file.
+  - Value `1`: Load only file in the same directory as edited file.
+  - Default: `0`
 
 ### The `g:localvimrc_sandbox` setting
 
@@ -290,6 +310,7 @@ vX.X.X : XXXX-XX-XX
   - add convenience variables |g:localvimrc_script_unresolved| and |g:localvimrc_script_dir_unresolved|.
   - add ability to view local vimrc before sourcing when |g:localvimrc_ask| is enabled.
   - emit autocommands before and after sourcing files.
+  - add |g:localvimrc_file_directory_only| to limit sourcing to local vimrc files in the same directory as the edited file.
 
 v2.4.0 : 2016-02-05
 
