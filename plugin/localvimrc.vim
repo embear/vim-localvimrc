@@ -164,6 +164,9 @@ let s:localvimrc_persistence_file_checksum = ""
 " initialize persistent data {{{2
 let s:localvimrc_persistent_data = {}
 
+" initialize processing finish flag {{{2
+let s:localvimrc_finish = 0
+
 " Section: Autocmd setup {{{1
 
 if has("autocmd")
@@ -240,7 +243,8 @@ function! s:LocalVimRC()
 
   call s:LocalVimRCDebug(1, "candidate files: " . string(l:rcfiles))
 
-  " source all found local vimrc files along path from root (reverse order)
+  " source all found local vimrc files in l:rcfiles variable
+  let s:localvimrc_finish = 0
   let l:answer = ""
   let l:sandbox_answer = ""
   for l:rcfile_dict in l:rcfiles
@@ -511,6 +515,12 @@ function! s:LocalVimRC()
             silent doautocmd User LocalVimRCPost
             call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
           endif
+
+          " check if sourcing of files should be ended by variable set by
+          " local vimrc file
+          if (s:localvimrc_finish != 0)
+            break
+          endif
         endif
 
         " remove global variables again
@@ -736,6 +746,15 @@ function! s:LocalVimRCClear()
     call delete(s:localvimrc_persistence_file)
     call s:LocalVimRCDebug(3, "deleted persistence file")
   endif
+endfunction
+
+" Function: LocalVimRCFinish() {{{2
+"
+" finish processing local vimrc files
+"
+function! LocalVimRCFinish()
+  call s:LocalVimRCDebug(1, "will finish sourcing files after this file")
+  let s:localvimrc_finish = 1
 endfunction
 
 " Function: s:LocalVimRCError(text) {{{2

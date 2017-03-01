@@ -7,7 +7,9 @@ Contents ~
  2. Commands                                              |localvimrc-commands|
   1. The |LocalVimRC| command
   2. The |LocalVimRCClear| command
- 3. Variables                                            |localvimrc-variables|
+ 3. Functions                                            |localvimrc-functions|
+  1. The |LocalVimRCFinish| command
+ 4. Variables                                            |localvimrc-variables|
   1. The |g:localvimrc_file| variable
   2. The |g:localvimrc_file_dir| variable
   3. The |g:localvimrc_script| variable
@@ -16,7 +18,7 @@ Contents ~
   6. The |g:localvimrc_script_dir_unresolved| variable
   7. The |g:localvimrc_sourced_once| variable
   8. The |g:localvimrc_sourced_once_for_file| setting
- 4. Settings                                              |localvimrc-settings|
+ 5. Settings                                              |localvimrc-settings|
   1. The |g:localvimrc_name| setting
   2. The |g:localvimrc_event| setting
   3. The |g:localvimrc_reverse| setting
@@ -30,13 +32,13 @@ Contents ~
   11. The |g:localvimrc_blacklist| setting
   12. The |g:localvimrc_autocmd| setting
   13. The |g:localvimrc_debug| setting
- 5. Autocommands                                      |localvimrc-autocommands|
+ 6. Autocommands                                      |localvimrc-autocommands|
   1. The |LocalVimRCPre| autocommand
   2. The |LocalVimRCPost| autocommand
- 6. Contribute                                          |localvimrc-contribute|
- 7. Credits                                                |localvimrc-credits|
- 8. Changelog                                            |localvimrc-changelog|
- 9. References                                          |localvimrc-references|
+ 7. Contribute                                          |localvimrc-contribute|
+ 8. Credits                                                |localvimrc-credits|
+ 9. Changelog                                            |localvimrc-changelog|
+ 10. References                                         |localvimrc-references|
 
 ===============================================================================
                                                       *localvimrc-introduction*
@@ -73,6 +75,21 @@ The *LocalVimRCClear* command
 Clear all stored decisions made in the past, when the plugin asked about
 sourcing a local vimrc file.
 
+===============================================================================
+                                                         *localvimrc-functions*
+Functions ~
+
+-------------------------------------------------------------------------------
+The *LocalVimRCFinish* command
+
+After a call to this function the sourcing of any remaining local vimrc files
+will be skipped. In combination with the |g:localvimrc_reverse| option it is
+possible to end the processing of local vimrc files for example at the root of
+the project by adding the following command to the local vimrc file in the root
+of the project:
+>
+  call LocalVimRCFinish()
+<
 ===============================================================================
                                                          *localvimrc-variables*
 Variables ~
@@ -388,6 +405,9 @@ vX.X.X : XXXX-XX-XX
 
 - add |g:localvimrc_file_directory_only| to limit sourcing to local vimrc
   files in the same directory as the edited file.
+
+- add |LocalVimRCFinish| function to stop loading of remaining local vimrc
+  files from within a local vimrc file.
 
 v2.4.0 : 2016-02-05
 
