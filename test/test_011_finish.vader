@@ -1,0 +1,29 @@
+# localvimrc test finish behavior
+
+Before (setup test):
+  " create test directory tree
+  silent! !./setup.sh
+
+  " default setup localvimrc
+  source default.vim
+
+  " initialize test variables
+  let g:localvimrc_test_var = []
+
+################################################################################
+Execute (finish):
+  " add finish command
+  !echo "call LocalVimRCFinish()" >> /tmp/localvimrc_test/a/b/c/.lvimrc
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (finish):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c" ]
+  Assert expected == g:localvimrc_test_var

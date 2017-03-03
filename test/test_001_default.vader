@@ -1,0 +1,26 @@
+# localvimrc test default behavior
+
+Before (setup test):
+  " create test directory tree
+  silent! !./setup.sh
+
+  " default setup localvimrc
+  source default.vim
+
+  " initialize test variables
+  let g:localvimrc_test_var = []
+
+################################################################################
+Execute (default):
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (default):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var

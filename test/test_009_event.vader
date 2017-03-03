@@ -1,0 +1,65 @@
+# localvimrc test event behavior
+
+Before (setup test):
+  " create test directory tree
+  silent! !./setup.sh
+
+  " default setup localvimrc
+  source default.vim
+
+  " initialize test variables
+  let g:localvimrc_test_var = []
+
+################################################################################
+Execute (event none 2):
+  " change setup for this test
+  let g:localvimrc_event = []
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (event none 2):
+  let expected = []
+  Assert expected == g:localvimrc_test_var
+
+################################################################################
+Execute (event changed):
+  " change setup for this test
+  let g:localvimrc_event = [ "BufEnter" ]
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (event changed):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var
+
+################################################################################
+Execute (event backward compatibility):
+  " change setup for this test
+  let g:localvimrc_event = "FileReadPost"
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (event backward compatibility):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var

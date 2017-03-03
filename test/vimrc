@@ -1,0 +1,10 @@
+" clear all settings
+set nocompatible
+set all&
+mapclear
+abclear
+comclear
+autocmd!
+
+" add vader to runtime path
+set rtp+=~/.vim/bundle/vader

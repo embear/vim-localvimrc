@@ -1,0 +1,98 @@
+# localvimrc test file name behavior
+
+Before (setup test):
+  " create test directory tree
+  silent! !./setup.sh
+
+  " default setup localvimrc
+  source default.vim
+
+  " initialize test variables
+  let g:localvimrc_test_var = []
+
+################################################################################
+Execute (file name standard):
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (file name standard):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var
+
+################################################################################
+Execute (file name unset):
+  " change setup for this test
+  unlet g:localvimrc_name
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (file name unset):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var
+
+################################################################################
+Execute (file name changed):
+  " change setup for this test
+  let g:localvimrc_name = [ ".localvimrc" ]
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (file name changed):
+  let expected = [ "localvimrc: ./a", "localvimrc: ./a/b", "localvimrc: ./a/b/c", "localvimrc: ./a/b/c/d", "localvimrc: ./a/b/c/d/e", "localvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var
+
+################################################################################
+Execute (file name multiple):
+  " change setup for this test
+  let g:localvimrc_name = [ ".lvimrc", ".localvimrc" ]
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (file name multiple):
+  let expected = [ "localvimrc: ./a", "localvimrc: ./a/b", "localvimrc: ./a/b/c", "localvimrc: ./a/b/c/d", "localvimrc: ./a/b/c/d/e", "localvimrc: ./a/b/c/d/e/f", "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var
+
+################################################################################
+Execute (file name backward compatibility):
+  " change setup for this test
+  let g:localvimrc_name = ".lvimrc"
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (file name backward compatibility):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var

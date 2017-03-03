@@ -1,0 +1,84 @@
+# localvimrc test autocmd behavior
+
+Before (setup test):
+  " create test directory tree
+  silent! !./setup.sh
+
+  " default setup localvimrc
+  source default.vim
+
+  " setup autocommands
+  autocmd!
+  autocmd User LocalVimRCPre  let g:localvimrc_test_ac_pre_var += [ "pre" ]
+  autocmd User LocalVimRCPost let g:localvimrc_test_ac_post_var += [ "post" ]
+
+  " initialize test variables
+  let g:localvimrc_test_var = []
+  let g:localvimrc_test_ac_pre_var = []
+  let g:localvimrc_test_ac_post_var = []
+
+################################################################################
+Execute (autocommand pre):
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (autocommand pre):
+  let expected = [ "pre", "pre", "pre", "pre", "pre", "pre" ]
+  Assert expected == g:localvimrc_test_ac_pre_var
+
+################################################################################
+Execute (autocommand post):
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (autocommand pre):
+  let expected = [ "post", "post", "post", "post", "post", "post" ]
+  Assert expected == g:localvimrc_test_ac_post_var
+
+################################################################################
+Execute (autocommand pre disable):
+  " change setup for this test
+  let g:localvimrc_autocmd = 0
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (autocommand pre disable):
+  let expected = []
+  Assert expected == g:localvimrc_test_ac_pre_var
+
+################################################################################
+Execute (autocommand post disable):
+  " change setup for this test
+  let g:localvimrc_autocmd = 0
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " edit a file in the test tree
+  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+
+Then (autocommand pre disable):
+  let expected = []
+  Assert expected == g:localvimrc_test_ac_post_var
