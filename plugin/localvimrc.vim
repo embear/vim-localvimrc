@@ -432,6 +432,12 @@ function! s:LocalVimRC()
         " generate command
         let l:command = "source " . fnameescape(l:rcfile)
 
+        " emit an autocommand before sourcing
+        if (s:localvimrc_autocmd == 1)
+          silent doautocmd User LocalVimRCPre
+          call s:LocalVimRCDebug(1, "pre sourcing autocommand emitted")
+        endif
+
         " add 'sandbox' if requested
         if (s:localvimrc_sandbox != 0)
           call s:LocalVimRCDebug(2, "using sandbox")
@@ -500,27 +506,21 @@ function! s:LocalVimRC()
             endif
           endtry
         else
-          " emit an autocommands before sourcing
-          if (s:localvimrc_autocmd == 1)
-            silent doautocmd User LocalVimRCPre
-            call s:LocalVimRCDebug(1, "pre sourcing autocommand emitted")
-          endif
-
           " execute the command
           exec l:command
           call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
+        endif
 
-          " emit an autocommands after sourcing
-          if (s:localvimrc_autocmd == 1)
-            silent doautocmd User LocalVimRCPost
-            call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
-          endif
+        " emit an autocommands after sourcing
+        if (s:localvimrc_autocmd == 1)
+          silent doautocmd User LocalVimRCPost
+          call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
+        endif
 
-          " check if sourcing of files should be ended by variable set by
-          " local vimrc file
-          if (s:localvimrc_finish != 0)
-            break
-          endif
+        " check if sourcing of files should be ended by variable set by
+        " local vimrc file
+        if (s:localvimrc_finish != 0)
+          break
         endif
 
         " remove global variables again
