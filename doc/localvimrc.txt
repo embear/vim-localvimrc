@@ -390,7 +390,7 @@ Credits ~
                                                          *localvimrc-changelog*
 Changelog ~
 
-vX.X.X : XXXX-XX-XX
+v2.5.0 : 2017-03-08
 
 - |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally
   a list of regular expressions.
@@ -408,6 +408,8 @@ vX.X.X : XXXX-XX-XX
 
 - add |LocalVimRCFinish| function to stop loading of remaining local vimrc
   files from within a local vimrc file.
+
+- add unit tests.
 
 v2.4.0 : 2016-02-05
 

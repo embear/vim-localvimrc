@@ -318,7 +318,7 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
-vX.X.X : XXXX-XX-XX
+v2.5.0 : 2017-03-08
 
   - |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally a list of regular expressions.
   - add convenience variables |g:localvimrc_script_unresolved| and |g:localvimrc_script_dir_unresolved|.
@@ -326,6 +326,7 @@ vX.X.X : XXXX-XX-XX
   - emit autocommands before and after sourcing files.
   - add |g:localvimrc_file_directory_only| to limit sourcing to local vimrc files in the same directory as the edited file.
   - add |LocalVimRCFinish| function to stop loading of remaining local vimrc files from within a local vimrc file.
+  - add unit tests.
 
 v2.4.0 : 2016-02-05
 
