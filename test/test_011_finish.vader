@@ -13,7 +13,7 @@ Before (setup test):
 ################################################################################
 Execute (finish):
   " add finish command
-  !echo "call LocalVimRCFinish()" >> /tmp/localvimrc_test/a/b/c/.lvimrc
+  silent !echo "call LocalVimRCFinish()" >> /tmp/localvimrc_test/a/b/c/.lvimrc
 
   " (re)load localvimrc plugin
   if exists("g:loaded_localvimrc")

@@ -40,7 +40,7 @@ Execute (file directory only empty):
   source ../plugin/localvimrc.vim
 
   " remove local vimrc file
-  !rm -f /tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc
+  silent !rm -f /tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc
 
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
