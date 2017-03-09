@@ -7,7 +7,7 @@
   5. Push release to [Bitbucket] and [GitHub]:
     - `hg push ssh://hg@bitbucket.org/embear/localvimrc`
     - `hg push git+ssh://git@github.com:embear/vim-localvimrc.git`
-  6. Create a Vimball archive: `hg locate | vim -C -c '%MkVimball! localvimrc .' -c 'q!' -`
+  6. Create a Vimball archive: `hg locate | grep -v '^\.\|^test' | vim -C -c '%MkVimball! localvimrc .' -c 'q!' -`
   7. Update [VIM online]
 
 [Bitbucket]: https://bitbucket.org/embear/localvimrc
