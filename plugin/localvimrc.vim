@@ -517,12 +517,6 @@ function! s:LocalVimRC()
           call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
         endif
 
-        " check if sourcing of files should be ended by variable set by
-        " local vimrc file
-        if (s:localvimrc_finish != 0)
-          break
-        endif
-
         " remove global variables again
         unlet g:localvimrc_file
         unlet g:localvimrc_file_dir
@@ -541,6 +535,12 @@ function! s:LocalVimRC()
 
       " store information again
       let s:localvimrc_data[l:rcfile] = [ l:stored_answer, l:stored_sandbox_answer, l:stored_checksum ]
+
+      " check if sourcing of files should be ended by variable set by
+      " local vimrc file
+      if (s:localvimrc_finish != 0)
+        break
+      endif
     endif
   endfor
 
