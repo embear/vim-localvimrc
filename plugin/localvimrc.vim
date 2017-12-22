@@ -200,7 +200,7 @@ function! s:LocalVimRC()
   " only consider normal buffers (skip especially CommandT's GoToFile buffer)
   " NOTE: in general the buftype is not set for new buffers (BufWinEnter),
   "       e.g. for help files via plugins (pydoc)
-  if (&buftype != "")
+  if !empty(&buftype)
     call s:LocalVimRCDebug(1, "not a normal buffer, exiting")
     return
   endif
@@ -280,7 +280,7 @@ function! s:LocalVimRC()
 
       " reset answers if checksum changed
       if (!l:checksum_is_same)
-        call s:LocalVimRCDebug(2, "checksum mismatch, no answer reuse")
+        call s:LocalVimRCDebug(2, "checksum mismatch, not reusing answer")
         let l:stored_answer = ""
         let l:stored_sandbox_answer = ""
       else
