@@ -167,6 +167,9 @@ let s:localvimrc_persistent_data = {}
 " initialize processing finish flag {{{2
 let s:localvimrc_finish = 0
 
+" initialize list of last source files {{{2
+let s:last_sourced_files = []
+
 " Section: Autocmd setup {{{1
 
 if has("autocmd")
@@ -247,6 +250,7 @@ function! s:LocalVimRC()
   let s:localvimrc_finish = 0
   let l:answer = ""
   let l:sandbox_answer = ""
+  let s:last_sourced_files = []
   for l:rcfile_dict in l:rcfiles
     " get values from dictionary
     let l:rcfile = l:rcfile_dict["resolved"]
@@ -517,6 +521,8 @@ function! s:LocalVimRC()
           call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
         endif
 
+        call add(s:last_sourced_files, l:rcfile)
+
         " remove global variables again
         unlet g:localvimrc_file
         unlet g:localvimrc_file_dir
@@ -775,8 +781,31 @@ function! s:LocalVimRCDebug(level, text)
   endif
 endfunction
 
+" Function: s:LocalVimRCEdit() {{{2
+"
+" Open the local vimrc files for the current buffer (the last sourced ones)
+" in a new tab page for editing.
+"
+function! s:LocalVimRCEdit()
+  if empty(s:last_sourced_files)
+    echom 'localvimrc: no local vimrc files have been sourced'
+    return
+  endif
+
+  let fnames = join(map(s:last_sourced_files, 'fnameescape(v:val)'))
+  tabnew
+  let c = len(s:last_sourced_files)
+  if c > 1
+    exe 'arglocal '.fnames
+    echom printf('localvimrc: added %d files to arglist', c)
+  else
+    exe 'edit '.fnames
+  endif
+endfunction
+
 " Section: Commands {{{1
 command! LocalVimRC      call s:LocalVimRC()
 command! LocalVimRCClear call s:LocalVimRCClear()
+command! LocalVimRCEdit  call s:LocalVimRCEdit()
 
 " vim600: foldmethod=marker foldlevel=0 :

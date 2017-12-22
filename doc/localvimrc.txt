@@ -7,6 +7,7 @@ Contents ~
  2. Commands                                              |localvimrc-commands|
   1. The |LocalVimRC| command
   2. The |LocalVimRCClear| command
+  3. The |LocalVimRCEdit| command
  3. Functions                                            |localvimrc-functions|
   1. The |LocalVimRCFinish| command
  4. Variables                                            |localvimrc-variables|
@@ -74,6 +75,12 @@ The *LocalVimRCClear* command
 
 Clear all stored decisions made in the past, when the plugin asked about
 sourcing a local vimrc file.
+
+-------------------------------------------------------------------------------
+The *LocalVimRCEdit* command
+
+Open the local vimrc files for the current buffer (the last sourced ones) in a
+new tab page for editing.
 
 ===============================================================================
                                                          *localvimrc-functions*
@@ -392,8 +399,10 @@ Changelog ~
 
 v2.5.0 : 2017-03-08
 
-- |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes optionally
-  a list of regular expressions.
+- add unit tests.
+
+- settings |g:localvimrc_whitelist| and |g:localvimrc_blacklist| now takes
+  optionally a list of regular expressions.
 
 - add convenience variables |g:localvimrc_script_unresolved| and
   |g:localvimrc_script_dir_unresolved|.
@@ -408,8 +417,6 @@ v2.5.0 : 2017-03-08
 
 - add |LocalVimRCFinish| function to stop loading of remaining local vimrc
   files from within a local vimrc file.
-
-- add unit tests.
 
 v2.4.0 : 2016-02-05
 
