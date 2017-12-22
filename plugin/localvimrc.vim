@@ -434,8 +434,7 @@ function! s:LocalVimRC()
 
         " emit an autocommand before sourcing
         if (s:localvimrc_autocmd == 1)
-          silent doautocmd User LocalVimRCPre
-          call s:LocalVimRCDebug(1, "pre sourcing autocommand emitted")
+          call s:LocalVimRCUserAutocommand('LocalVimRCPre')
         endif
 
         " add 'sandbox' if requested
@@ -513,8 +512,7 @@ function! s:LocalVimRC()
 
         " emit an autocommands after sourcing
         if (s:localvimrc_autocmd == 1)
-          silent doautocmd User LocalVimRCPost
-          call s:LocalVimRCDebug(1, "post sourcing autocommand emitted")
+          call s:LocalVimRCUserAutocommand('LocalVimRCPost')
         endif
 
         " remove global variables again
@@ -549,6 +547,20 @@ function! s:LocalVimRC()
 
   " end marker
   call s:LocalVimRCDebug(1, "==================================================")
+endfunction
+
+
+" Function: s:LocalVimRCUserAutocommand(event) {{{2
+"
+function! s:LocalVimRCUserAutocommand(event)
+  if exists('#User#'.a:event)
+    call s:LocalVimRCDebug(1, 'executing User autocommand '.a:event)
+    if v:version >= 704 || (v:version == 703 && has('patch442'))
+      exec 'doautocmd <nomodeline> User ' . a:event
+    else
+      exec 'doautocmd User ' . a:event
+    endif
+  endif
 endfunction
 
 " Function: s:LocalVimRCMatchAny(str, patterns) {{{2
