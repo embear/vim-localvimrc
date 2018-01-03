@@ -29,8 +29,9 @@ sourcing a local vimrc file.
 
 ### The `LocalVimRCEdit` command
 
-Open the local vimrc files for the current buffer (the last sourced ones)
-in a new tab page for editing.
+Open the local vimrc file for the current buffer in an split window for
+editing. If more than one local vimrc file has been sourced, the user can
+decide which file to edit.
 
 ## Functions
 
@@ -322,6 +323,10 @@ send a pull request or just tell me your ideas.
 - Michon van Dooren for autocommands patch
 
 ## Changelog
+
+v2.6.0 : XXXX-XX-XXX
+
+  - add command |LocalVimRCEdit| to edit sourced local vimrc files for the current buffer.
 
 v2.5.0 : 2017-03-08
 

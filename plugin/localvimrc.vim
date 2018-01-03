@@ -799,22 +799,31 @@ endfunction
 
 " Function: s:LocalVimRCEdit() {{{2
 "
-" Open the local vimrc files for the current buffer (the last sourced ones)
-" in a new tab page for editing.
+" open the local vimrc file for the current buffer in an split window for
+" editing. If more than one local vimrc file has been sourced, the user
+" can decide which file to edit.
 "
 function! s:LocalVimRCEdit()
   if exists("b:localvimrc_sourced_files")
-    let fnames = join(map(b:localvimrc_sourced_files, 'fnameescape(v:val)'))
-    tabnew
-    let c = len(b:localvimrc_sourced_files)
-    if c > 1
-      exe 'arglocal '.fnames
-      echom printf('localvimrc: added %d files to arglist', c)
+    let l:items = len(b:localvimrc_sourced_files)
+    if l:items > 1
+      " build message for asking the user
+      let l:message = [ "Select local vimrc file to edit:" ]
+      call extend(l:message, map(copy(b:localvimrc_sourced_files), 'v:key+1 . " " . v:val'))
+
+      " ask the user which one should be edited
+      let l:answer = inputlist(l:message)
+      if l:answer =~ '^\d\+$' && l:answer > 0 && l:answer <= l:items
+        let l:file = b:localvimrc_sourced_files[l:answer-1]
+      endif
     else
-      exe 'edit '.fnames
+      " edit the sourced file
+      let l:file = b:localvimrc_sourced_files[0]
     endif
-  else
-    echom 'localvimrc: no local vimrc files have been sourced'
+
+    if exists("l:file")
+      execute 'silent! split ' . fnameescape(l:file)
+    endif
   endif
 endfunction
 
