@@ -15,7 +15,7 @@ package:
 	  -X README.md  \
 	  -X RELEASE.md \
 	  -X Makefile   \
-	  | vim -C -u NONE --not-a-term -c '%%MkVimball! localvimrc .' -c 'q!' -
+	  | vim -C --not-a-term -c '%%MkVimball! localvimrc .' -c 'q!' -
 
 $(html2vimdoc):
 	@echo "#### building markdown to vim help converter ####"
