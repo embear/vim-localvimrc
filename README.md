@@ -27,6 +27,11 @@ Resource all local vimrc files for the current buffer.
 Clear all stored decisions made in the past, when the plugin asked about
 sourcing a local vimrc file.
 
+### The `LocalVimRCEdit` command
+
+Open the local vimrc files for the current buffer (the last sourced ones)
+in a new tab page for editing.
+
 ## Functions
 
 ### The `LocalVimRCFinish` command
