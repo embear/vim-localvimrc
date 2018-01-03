@@ -1,10 +1,21 @@
-.PHONY: all doc
+.PHONY: all doc package
 
 html2vimdoc = support/vim-tools/bin/html2vimdoc
 
-all: doc
+all: doc package
 
 doc: doc/localvimrc.txt
+
+package:
+	@echo "#### creating vimball package ####"
+	@hg locate       \
+	  -X 'test/'    \
+	  -X 'support/' \
+	  -X '\.*'      \
+	  -X README.md  \
+	  -X RELEASE.md \
+	  -X Makefile   \
+	  | vim -C -u NONE --not-a-term -c '%%MkVimball! localvimrc .' -c 'q!' -
 
 $(html2vimdoc):
 	@echo "#### building markdown to vim help converter ####"
