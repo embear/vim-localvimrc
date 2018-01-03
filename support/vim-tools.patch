@@ -1,0 +1,13 @@
+diff --git a/html2vimdoc.py b/html2vimdoc.py
+index cb64075..0c9261d 100755
+--- a/html2vimdoc.py
++++ b/html2vimdoc.py
+@@ -84,7 +84,7 @@ SHIFT_WIDTH = 2
+ # Initialize the logging subsystem.
+ logger = logging.getLogger('html2vimdoc')
+ logger.setLevel(logging.INFO)
+-logger.addHandler(coloredlogs.ColoredStreamHandler(show_name=True))
++#logger.addHandler(coloredlogs.ColoredStreamHandler(show_name=True))
+ 
+ # Mapping of HTML element names to custom Node types.
+ name_to_type_mapping = {}
