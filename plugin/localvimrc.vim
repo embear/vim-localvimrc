@@ -167,9 +167,6 @@ let s:localvimrc_persistent_data = {}
 " initialize processing finish flag {{{2
 let s:localvimrc_finish = 0
 
-" initialize list of last source files {{{2
-let s:last_sourced_files = []
-
 " Section: Autocmd setup {{{1
 
 if has("autocmd")
@@ -250,7 +247,7 @@ function! s:LocalVimRC()
   let s:localvimrc_finish = 0
   let l:answer = ""
   let l:sandbox_answer = ""
-  let s:last_sourced_files = []
+  let l:sourced_files = []
   for l:rcfile_dict in l:rcfiles
     " get values from dictionary
     let l:rcfile = l:rcfile_dict["resolved"]
@@ -519,7 +516,7 @@ function! s:LocalVimRC()
           call s:LocalVimRCUserAutocommand('LocalVimRCPost')
         endif
 
-        call add(s:last_sourced_files, l:rcfile)
+        call add(l:sourced_files, l:rcfile)
 
         " remove global variables again
         unlet g:localvimrc_file
@@ -547,6 +544,13 @@ function! s:LocalVimRC()
       endif
     endif
   endfor
+
+  " store information about source local vimrc files in buffer local variable
+  if exists("b:localvimrc_sourced_files")
+    call extend(l:sourced_files, b:localvimrc_sourced_files)
+  endif
+  call uniq(sort(l:sourced_files))
+  let b:localvimrc_sourced_files = l:sourced_files
 
   " make information persistent
   call s:LocalVimRCWritePersistent()
@@ -799,19 +803,18 @@ endfunction
 " in a new tab page for editing.
 "
 function! s:LocalVimRCEdit()
-  if empty(s:last_sourced_files)
-    echom 'localvimrc: no local vimrc files have been sourced'
-    return
-  endif
-
-  let fnames = join(map(s:last_sourced_files, 'fnameescape(v:val)'))
-  tabnew
-  let c = len(s:last_sourced_files)
-  if c > 1
-    exe 'arglocal '.fnames
-    echom printf('localvimrc: added %d files to arglist', c)
+  if exists("b:localvimrc_sourced_files")
+    let fnames = join(map(b:localvimrc_sourced_files, 'fnameescape(v:val)'))
+    tabnew
+    let c = len(b:localvimrc_sourced_files)
+    if c > 1
+      exe 'arglocal '.fnames
+      echom printf('localvimrc: added %d files to arglist', c)
+    else
+      exe 'edit '.fnames
+    endif
   else
-    exe 'edit '.fnames
+    echom 'localvimrc: no local vimrc files have been sourced'
   endif
 endfunction
 
