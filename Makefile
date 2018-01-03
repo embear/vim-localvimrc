@@ -1,8 +1,13 @@
-.PHONY: all doc package
+.PHONY: all clean doc package
 
-html2vimdoc = support/vim-tools/bin/html2vimdoc
+vim-tools = support/vim-tools
+html2vimdoc = $(vim-tools)/bin/html2vimdoc
 
 all: doc package
+
+clean:
+	@echo "#### purging markdown to vim help converter ####"
+	@rm -rf $(vim-tools)
 
 doc: doc/localvimrc.txt
 
