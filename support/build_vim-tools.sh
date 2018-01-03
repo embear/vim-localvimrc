@@ -3,7 +3,7 @@
 
 # package settings
 PACKAGE=vim-tools
-REPO="http://github.com/xolox/vim-tools.git"
+REPO="https://github.com/xolox/vim-tools.git"
 HERE=$(readlink -f "$(dirname $0)")
 DEST=$(readlink -f "$HERE/vim-tools")
 
