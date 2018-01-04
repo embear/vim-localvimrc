@@ -2,7 +2,7 @@
 
 Before (setup test):
   " create test directory tree
-  silent! !./setup.sh
+  exec "silent! !./setup.sh " . $LOCALVIMRC_TEST_DIR
 
   " default setup localvimrc
   source default.vim
@@ -13,7 +13,7 @@ Before (setup test):
 ################################################################################
 Execute (finish):
   " add finish command
-  silent !echo "call LocalVimRCFinish()" >> /tmp/localvimrc_test/a/b/c/.lvimrc
+  exec "silent !echo 'call LocalVimRCFinish()' >> " . $LOCALVIMRC_TEST_DIR . "/a/b/c/.lvimrc"
 
   " (re)load localvimrc plugin
   if exists("g:loaded_localvimrc")
@@ -22,16 +22,16 @@ Execute (finish):
   source ../plugin/localvimrc.vim
 
   " delete buffer if it exists
-  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
-    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  if bufexists($LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo")
+    exec "bwipeout! " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
   endif
 
   " edit a file in the test tree
-  e /tmp/localvimrc_test/a/b/c/d/e/f/foo
+  exec "edit " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
 
 Then (finish):
   let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c" ]
   Assert expected == g:localvimrc_test_var
 
-  let expected = [ "/tmp/localvimrc_test/a/.lvimrc", "/tmp/localvimrc_test/a/b/.lvimrc", "/tmp/localvimrc_test/a/b/c/.lvimrc" ]
+  let expected = [ $LOCALVIMRC_TEST_DIR . "/a/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/c/.lvimrc" ]
   Assert expected == b:localvimrc_sourced_files
