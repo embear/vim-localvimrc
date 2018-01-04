@@ -1,4 +1,4 @@
-.PHONY: all clean doc package
+.PHONY: all clean doc package test
 
 vim-tools = support/vim-tools
 html2vimdoc = $(vim-tools)/bin/html2vimdoc
@@ -21,6 +21,10 @@ package:
 	  -X RELEASE.md \
 	  -X Makefile   \
 	  | vim -C --not-a-term -c '%%MkVimball! localvimrc .' -c 'q!' -
+
+test:
+	@echo "#### running tests ####"
+	@test/run.sh
 
 $(html2vimdoc):
 	@echo "#### building markdown to vim help converter ####"
