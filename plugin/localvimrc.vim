@@ -806,7 +806,12 @@ endfunction
 function! s:LocalVimRCEdit()
   if exists("b:localvimrc_sourced_files")
     let l:items = len(b:localvimrc_sourced_files)
-    if l:items > 1
+    if l:items == 0
+      call s:LocalVimRCError("No local vimrc file has been sourced")
+    elseif l:items == 1
+      " edit the only sourced file
+      let l:file = b:localvimrc_sourced_files[0]
+    elseif l:items > 1
       " build message for asking the user
       let l:message = [ "Select local vimrc file to edit:" ]
       call extend(l:message, map(copy(b:localvimrc_sourced_files), 'v:key+1 . " " . v:val'))
@@ -816,9 +821,6 @@ function! s:LocalVimRCEdit()
       if l:answer =~ '^\d\+$' && l:answer > 0 && l:answer <= l:items
         let l:file = b:localvimrc_sourced_files[l:answer-1]
       endif
-    else
-      " edit the sourced file
-      let l:file = b:localvimrc_sourced_files[0]
     endif
 
     if exists("l:file")
