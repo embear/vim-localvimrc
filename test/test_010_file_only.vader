@@ -21,12 +21,20 @@ Execute (file directory only):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (file directory only):
   let expected = [ "lvimrc: ./a/b/c/d/e/f" ]
   Assert expected == g:localvimrc_test_var
+
+  let expected = [ "/tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
 
 ################################################################################
 Execute (file directory only empty):
@@ -42,9 +50,17 @@ Execute (file directory only empty):
   " remove local vimrc file
   silent !rm -f /tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (file directory only empty):
   let expected = []
   Assert expected == g:localvimrc_test_var
+
+  let expected = []
+  Assert expected == b:localvimrc_sourced_files

@@ -18,12 +18,20 @@ Execute (file name standard):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (file name standard):
   let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
   Assert expected == g:localvimrc_test_var
+
+  let expected = [ "/tmp/localvimrc_test/a/.lvimrc", "/tmp/localvimrc_test/a/b/.lvimrc", "/tmp/localvimrc_test/a/b/c/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
 
 ################################################################################
 Execute (file name unset):
@@ -36,12 +44,20 @@ Execute (file name unset):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (file name unset):
   let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
   Assert expected == g:localvimrc_test_var
+
+  let expected = [ "/tmp/localvimrc_test/a/.lvimrc", "/tmp/localvimrc_test/a/b/.lvimrc", "/tmp/localvimrc_test/a/b/c/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
 
 ################################################################################
 Execute (file name changed):
@@ -54,12 +70,20 @@ Execute (file name changed):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (file name changed):
   let expected = [ "localvimrc: ./a", "localvimrc: ./a/b", "localvimrc: ./a/b/c", "localvimrc: ./a/b/c/d", "localvimrc: ./a/b/c/d/e", "localvimrc: ./a/b/c/d/e/f" ]
   Assert expected == g:localvimrc_test_var
+
+  let expected = [ "/tmp/localvimrc_test/a/.localvimrc", "/tmp/localvimrc_test/a/b/.localvimrc", "/tmp/localvimrc_test/a/b/c/.localvimrc", "/tmp/localvimrc_test/a/b/c/d/.localvimrc", "/tmp/localvimrc_test/a/b/c/d/e/.localvimrc", "/tmp/localvimrc_test/a/b/c/d/e/f/.localvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
 
 ################################################################################
 Execute (file name multiple):
@@ -72,12 +96,20 @@ Execute (file name multiple):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (file name multiple):
   let expected = [ "localvimrc: ./a", "localvimrc: ./a/b", "localvimrc: ./a/b/c", "localvimrc: ./a/b/c/d", "localvimrc: ./a/b/c/d/e", "localvimrc: ./a/b/c/d/e/f", "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
   Assert expected == g:localvimrc_test_var
+
+  let expected = [ "/tmp/localvimrc_test/a/.localvimrc", "/tmp/localvimrc_test/a/.lvimrc", "/tmp/localvimrc_test/a/b/.localvimrc", "/tmp/localvimrc_test/a/b/.lvimrc", "/tmp/localvimrc_test/a/b/c/.localvimrc", "/tmp/localvimrc_test/a/b/c/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/.localvimrc", "/tmp/localvimrc_test/a/b/c/d/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/.localvimrc", "/tmp/localvimrc_test/a/b/c/d/e/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/f/.localvimrc", "/tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
 
 ################################################################################
 Execute (file name backward compatibility):
@@ -90,9 +122,17 @@ Execute (file name backward compatibility):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (file name backward compatibility):
   let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
   Assert expected == g:localvimrc_test_var
+
+  let expected = [ "/tmp/localvimrc_test/a/.lvimrc", "/tmp/localvimrc_test/a/b/.lvimrc", "/tmp/localvimrc_test/a/b/c/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/e/f/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files

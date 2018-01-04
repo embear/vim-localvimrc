@@ -25,6 +25,11 @@ Execute (autocommand pre):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
@@ -39,6 +44,11 @@ Execute (autocommand post):
     unlet g:loaded_localvimrc
   endif
   source ../plugin/localvimrc.vim
+
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
 
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
@@ -58,6 +68,11 @@ Execute (autocommand pre disable):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
@@ -75,6 +90,11 @@ Execute (autocommand post disable):
     unlet g:loaded_localvimrc
   endif
   source ../plugin/localvimrc.vim
+
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
 
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo

@@ -22,6 +22,11 @@ Execute (white single):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
@@ -41,9 +46,17 @@ Execute (white multiple):
   endif
   source ../plugin/localvimrc.vim
 
+  " delete buffer if it exists
+  if bufexists("/tmp/localvimrc_test/a/b/c/d/e/f/foo")
+    exec "bwipeout! /tmp/localvimrc_test/a/b/c/d/e/f/foo"
+  endif
+
   " edit a file in the test tree
   e /tmp/localvimrc_test/a/b/c/d/e/f/foo
 
 Then (white multiple):
   let expected = [ "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d" ]
   Assert expected == g:localvimrc_test_var
+
+  let expected = [ "/tmp/localvimrc_test/a/b/c/.lvimrc", "/tmp/localvimrc_test/a/b/c/d/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
