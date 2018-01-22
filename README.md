@@ -324,7 +324,7 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
-v2.6.0 : XXXX-XX-XXX
+v2.6.0 : 2018-01-22
 
   - add command |LocalVimRCEdit| to edit sourced local vimrc files for the current buffer.
 
