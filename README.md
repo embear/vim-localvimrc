@@ -324,6 +324,10 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
+vX.X.X : XXXX-XX-XX
+
+  - fix a bug with missing uniq() in Vim version 7.4
+
 v2.6.0 : 2018-01-22
 
   - add command |LocalVimRCEdit| to edit sourced local vimrc files for the current buffer.
