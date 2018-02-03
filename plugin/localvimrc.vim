@@ -549,9 +549,8 @@ function! s:LocalVimRC()
   if exists("b:localvimrc_sourced_files")
     call extend(l:sourced_files, b:localvimrc_sourced_files)
   endif
-  call sort(l:sourced_files)
   if exists("*uniq")
-    call uniq(l:sourced_files)
+    call uniq(sort(l:sourced_files))
   else
     let l:sourced_files_uniq = {}
     for l:file in l:sourced_files
