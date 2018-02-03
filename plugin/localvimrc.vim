@@ -552,6 +552,12 @@ function! s:LocalVimRC()
   call sort(l:sourced_files)
   if exists("*uniq")
     call uniq(l:sourced_files)
+  else
+    let l:sourced_files_uniq = {}
+    for l:file in l:sourced_files
+      let l:sourced_files_uniq[l:file] = 1
+    endfor
+    let l:sourced_files = sort(keys(l:sourced_files_uniq))
   endif
   let b:localvimrc_sourced_files = l:sourced_files
 
