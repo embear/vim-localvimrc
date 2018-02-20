@@ -324,7 +324,7 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
-vX.X.X : XXXX-XX-XX
+v2.6.1 : 2018-02-20
 
   - fix a bug with missing uniq() in Vim version 7.4
 
