@@ -1,4 +1,5 @@
 " default setup localvimrc
+let g:localvimrc_enable              = 1
 let g:localvimrc_name                = [ ".lvimrc" ]
 let g:localvimrc_event               = [ "BufWinEnter" ]
 let g:localvimrc_reverse             = 0

@@ -33,6 +33,18 @@ Open the local vimrc file for the current buffer in an split window for
 editing. If more than one local vimrc file has been sourced, the user can
 decide which file to edit.
 
+### The `LocalVimRCEnable` command
+
+Globally enable the loading of local vimrc files if loading has been disabled
+by |LocalVimRCDisable| or by setting |g:localvimrc_enable| to `0` during
+startup.
+
+### The `LocalVimRCDisable` command
+
+Globally disable the loading of local vimrc files if loading has been disabled
+by |LocalVimRCEnable| or by setting |g:localvimrc_enable| to `1` during
+startup.
+
 ## Functions
 
 ### The `LocalVimRCFinish` command
@@ -135,6 +147,16 @@ To change settings from their default add  similar line to your global |vimrc| f
 ``` {.vim}
 let g:option_name=option_value
 ```
+
+### The `g:localvimrc_enable` setting
+
+Globally enable/disable loading of local vimrc files globally. The behavior can
+be changed during runtime using the commands |LocalVimRCEnable| and
+|LocalvimRCDisable|.
+
+  - Value `0`: Disable loading of any local vimrc files.
+  - Value `1`: Enable loading of local vimrc files.
+  - Default: `1`
 
 ### The `g:localvimrc_name` setting
 
@@ -323,6 +345,10 @@ send a pull request or just tell me your ideas.
 - Michon van Dooren for autocommands patch
 
 ## Changelog
+
+v2.7.0 : XXXX-XX-XX
+
+  - add setting |g:localvimrc_enable| and commands |LocalVimRCEnable| and |LocalVimRCDisable| to globally disable processing of local vimrc files.
 
 v2.6.1 : 2018-02-20
 

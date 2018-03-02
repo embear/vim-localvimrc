@@ -28,6 +28,13 @@ if version < 702
   finish
 endif
 
+" define default "localvimrc_enable" {{{2
+if (!exists("g:localvimrc_enable"))
+  let s:localvimrc_enable = 1
+else
+  let s:localvimrc_enable = g:localvimrc_enable
+endif
+
 " define default "localvimrc_name" {{{2
 " copy to script local variable to prevent .lvimrc modifying the name option.
 if (!exists("g:localvimrc_name"))
@@ -193,6 +200,11 @@ function! s:LocalVimRC()
 
   " print version
   call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
+
+  " finish immediately if localvimrc is disabled
+  if s:localvimrc_enable == 0
+    return
+  endif
 
   " read persistent information
   call s:LocalVimRCReadPersistent()
@@ -778,9 +790,27 @@ function! s:LocalVimRCClear()
   endif
 endfunction
 
+" Function: LocalVimRCEnable() {{{2
+"
+" enable prprocessing of local vimrc files
+"
+function! s:LocalVimRCEnable()
+  call s:LocalVimRCDebug(1, "enabled processing of local vimrc files")
+  let s:localvimrc_enable = 1
+endfunction
+
+" Function: LocalVimRCDisable() {{{2
+"
+" disable prprocessing of local vimrc files
+"
+function! s:LocalVimRCDisable()
+  call s:LocalVimRCDebug(1, "enabled processing of local vimrc files")
+  let s:localvimrc_enable = 0
+endfunction
+
 " Function: LocalVimRCFinish() {{{2
 "
-" finish processing local vimrc files
+" finish processing of local vimrc files
 "
 function! LocalVimRCFinish()
   call s:LocalVimRCDebug(1, "will finish sourcing files after this file")
@@ -838,8 +868,10 @@ function! s:LocalVimRCEdit()
 endfunction
 
 " Section: Commands {{{1
-command! LocalVimRC      call s:LocalVimRC()
-command! LocalVimRCClear call s:LocalVimRCClear()
-command! LocalVimRCEdit  call s:LocalVimRCEdit()
+command! LocalVimRC        call s:LocalVimRC()
+command! LocalVimRCClear   call s:LocalVimRCClear()
+command! LocalVimRCEdit    call s:LocalVimRCEdit()
+command! LocalVimRCEnable  call s:LocalVimRCEnable()
+command! LocalVimRCDisable call s:LocalVimRCDisable()
 
 " vim600: foldmethod=marker foldlevel=0 :
