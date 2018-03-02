@@ -153,7 +153,7 @@ let g:option_name=option_value
 
 Globally enable/disable loading of local vimrc files globally. The behavior can
 be changed during runtime using the commands |LocalVimRCEnable| and
-|LocalvimRCDisable|.
+|LocalVimRCDisable|.
 
   - Value `0`: Disable loading of any local vimrc files.
   - Value `1`: Enable loading of local vimrc files.
@@ -177,15 +177,6 @@ List of autocommand events that trigger local vimrc file loading.
 
 For more information see |autocmd-events|.
 
-### The `g:localvimrc_event_pattern` setting
-
-String defining the pattern for which the autocommand events trigger local
-vimrc file loading.
-
-  - Default: `[ "BufWinEnter" ]`
-
-For more information see |autocmd-patterns|.
-
 ------------------------------------------------------------
 
 **NOTE:**
@@ -200,6 +191,15 @@ in the local vimrc file. Settings "local to window" need to be set for every
 time a buffer is displayed in a window.
 
 ------------------------------------------------------------
+
+### The `g:localvimrc_event_pattern` setting
+
+String defining the pattern for which the autocommand events trigger local
+vimrc file loading.
+
+  - Default: `"*"`
+
+For more information see |autocmd-patterns|.
 
 ### The `g:localvimrc_reverse` setting
 
