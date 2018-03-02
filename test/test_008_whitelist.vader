@@ -34,6 +34,9 @@ Then (white single):
   let expected = [ "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d" ]
   Assert expected == g:localvimrc_test_var
 
+  let expected = [ $LOCALVIMRC_TEST_DIR . "/a/b/c/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/c/d/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
+
 ################################################################################
 Execute (white multiple):
   " change setup for this test

@@ -11,7 +11,7 @@ Before (setup test):
   let g:localvimrc_test_var = []
 
 ################################################################################
-Execute (event none 2):
+Execute (event none):
   " change setup for this test
   let g:localvimrc_event = []
 
@@ -29,9 +29,11 @@ Execute (event none 2):
   " edit a file in the test tree
   exec "edit " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
 
-Then (event none 2):
+Then (event none):
   let expected = []
   Assert expected == g:localvimrc_test_var
+
+  Assert !exists("b:localvimrc_sourced_files")
 
 ################################################################################
 Execute (event changed):
