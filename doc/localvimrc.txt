@@ -25,17 +25,18 @@ Contents ~
   1. The |g:localvimrc_enable| setting
   2. The |g:localvimrc_name| setting
   3. The |g:localvimrc_event| setting
-  4. The |g:localvimrc_reverse| setting
-  5. The |g:localvimrc_count| setting
-  6. The |g:localvimrc_file_directory_only| setting
-  7. The |g:localvimrc_sandbox| setting
-  8. The |g:localvimrc_ask| setting
-  9. The |g:localvimrc_persistent| setting
-  10. The |g:localvimrc_persistence_file| setting
-  11. The |g:localvimrc_whitelist| setting
-  12. The |g:localvimrc_blacklist| setting
-  13. The |g:localvimrc_autocmd| setting
-  14. The |g:localvimrc_debug| setting
+  4. The |g:localvimrc_event_pattern| setting
+  5. The |g:localvimrc_reverse| setting
+  6. The |g:localvimrc_count| setting
+  7. The |g:localvimrc_file_directory_only| setting
+  8. The |g:localvimrc_sandbox| setting
+  9. The |g:localvimrc_ask| setting
+  10. The |g:localvimrc_persistent| setting
+  11. The |g:localvimrc_persistence_file| setting
+  12. The |g:localvimrc_whitelist| setting
+  13. The |g:localvimrc_blacklist| setting
+  14. The |g:localvimrc_autocmd| setting
+  15. The |g:localvimrc_debug| setting
  6. Autocommands                                      |localvimrc-autocommands|
   1. The |LocalVimRCPre| autocommand
   2. The |LocalVimRCPost| autocommand
@@ -236,6 +237,18 @@ List of autocommand events that trigger local vimrc file loading.
 
 - Default: '[ "BufWinEnter" ]'
 
+For more information see |autocmd-events|.
+
+-------------------------------------------------------------------------------
+The *g:localvimrc_event_pattern* setting
+
+String defining the pattern for which the autocommand events trigger local
+vimrc file loading.
+
+- Default: '[ "BufWinEnter" ]'
+
+For more information see |autocmd-patterns|.
+
 **NOTE:**
 
 BufWinEnter is the default to enable lines like
@@ -430,6 +443,9 @@ v2.7.0 : XXXX-XX-XX
 
 - add setting |g:localvimrc_enable| and commands |LocalVimRCEnable| and
   |LocalVimRCDisable| to globally disable processing of local vimrc files.
+
+- add setting |g:localvimrc_event_pattern| to change the pattern for which
+  the autocommand is executed.
 
 v2.6.1 : 2018-02-20
 

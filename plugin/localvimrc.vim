@@ -52,6 +52,14 @@ if (exists("g:localvimrc_event") && type(g:localvimrc_event) == v:t_list)
   let s:localvimrc_event = g:localvimrc_event
 endif
 
+" define default "localvimrc_event_pattern" {{{2
+" copy to script local variable to prevent .lvimrc modifying the event pattern
+" option.
+let s:localvimrc_event_pattern = "*"
+if (exists("g:localvimrc_event_pattern") && type(g:localvimrc_event_pattern) == v:t_string)
+  let s:localvimrc_event_pattern = g:localvimrc_event_pattern
+endif
+
 " define default "localvimrc_reverse" {{{2
 " copy to script local variable to prevent .lvimrc modifying the reverse option.
 let s:localvimrc_reverse = 0
@@ -170,7 +178,7 @@ if has("autocmd")
 
     for event in s:localvimrc_event
       " call s:LocalVimRC() when creating or reading any file
-      exec "autocmd ".event." * call s:LocalVimRC()"
+      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRC()"
     endfor
   augroup END
 endif

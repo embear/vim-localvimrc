@@ -174,6 +174,17 @@ List of autocommand events that trigger local vimrc file loading.
 
   - Default: `[ "BufWinEnter" ]`
 
+For more information see |autocmd-events|.
+
+### The `g:localvimrc_event_pattern` setting
+
+String defining the pattern for which the autocommand events trigger local
+vimrc file loading.
+
+  - Default: `[ "BufWinEnter" ]`
+
+For more information see |autocmd-patterns|.
+
 ------------------------------------------------------------
 
 **NOTE:**
@@ -349,6 +360,7 @@ send a pull request or just tell me your ideas.
 v2.7.0 : XXXX-XX-XX
 
   - add setting |g:localvimrc_enable| and commands |LocalVimRCEnable| and |LocalVimRCDisable| to globally disable processing of local vimrc files.
+  - add setting |g:localvimrc_event_pattern| to change the pattern for which the autocommand is executed.
 
 v2.6.1 : 2018-02-20
 
