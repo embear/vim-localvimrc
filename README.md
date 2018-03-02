@@ -6,9 +6,9 @@ of the file up to the root directory. By default those files are loaded in
 order from the root directory to the directory of the file. The filename and
 amount of loaded files are customizable through global variables.
 
-For security reasons it the plugin asks for confirmation before loading a
-local vimrc file and loads it using |:sandbox| command. The plugin asks once
-per session and local vimrc before loading it, if the file didn't change since
+For security reasons it the plugin asks for confirmation before loading a local
+vimrc file and loads it using |:sandbox| command. The plugin asks once per
+session and local vimrc before loading it, if the file didn't change since
 previous loading.
 
 It is possible to define a whitelist and a blacklist of local vimrc files that
@@ -142,7 +142,8 @@ this session for the currently edited file. Set to `0` otherwise.
 
 ## Settings
 
-To change settings from their default add  similar line to your global |vimrc| file.
+To change settings from their default add  similar line to your global |vimrc|
+file.
 
 ``` {.vim}
 let g:option_name=option_value
@@ -163,8 +164,8 @@ be changed during runtime using the commands |LocalVimRCEnable| and
 List of filenames of local vimrc files. The given name can include a directory
 name such as ".config/localvimrc".
 
-Previous versions of localvimrc only supported a single file as string. This
-is still supported for backward compatibility.
+Previous versions of localvimrc only supported a single file as string. This is
+still supported for backward compatibility.
 
   - Default: `[ ".lvimrc" ]`
 
@@ -195,8 +196,8 @@ BufWinEnter is the default to enable lines like
 setlocal colorcolumn=+1
 ```
 
-in the local vimrc file. Settings "local to window" need to be set for
-every time a buffer is displayed in a window.
+in the local vimrc file. Settings "local to window" need to be set for every
+time a buffer is displayed in a window.
 
 ------------------------------------------------------------
 
@@ -244,8 +245,8 @@ Source the found local vimrc files in a sandbox for security reasons.
 
 ### The `g:localvimrc_ask` setting
 
-Ask before sourcing any local vimrc file. In a vim session the question is
-only asked once as long as the local vimrc file has not been changed.
+Ask before sourcing any local vimrc file. In a vim session the question is only
+asked once as long as the local vimrc file has not been changed.
 
   - Value `0`: Don't ask before loading a vimrc file.
   - Value `1`: Ask before loading a vimrc file.
@@ -275,8 +276,8 @@ local vimrc files.
 If a local vimrc file matches the regular expression given by
 |g:localvimrc_whitelist| this file is loaded unconditionally.
 
-Files matching |g:localvimrc_whitelist| are sourced even if they are matched
-by |g:localvimrc_blacklist|.
+Files matching |g:localvimrc_whitelist| are sourced even if they are matched by
+|g:localvimrc_blacklist|.
 
 See |regular-expression| for patterns that are accepted.
 
@@ -329,7 +330,8 @@ Debug level for this script.
 
 ## Autocommands
 
-If enabled localvimrc emits autocommands before and after sourcing an local vimrc file.
+If enabled localvimrc emits autocommands before and after sourcing an local
+vimrc file.
 
 ### The `LocalVimRCPre` autocommand
 
