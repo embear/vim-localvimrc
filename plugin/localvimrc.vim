@@ -29,124 +29,112 @@ if version < 702
 endif
 
 " define default "localvimrc_enable" {{{2
-if (!exists("g:localvimrc_enable"))
-  let s:localvimrc_enable = 1
-else
+let s:localvimrc_enable = 1
+if (exists("g:localvimrc_enable") && type(g:localvimrc_enable) == v:t_number)
   let s:localvimrc_enable = g:localvimrc_enable
 endif
 
 " define default "localvimrc_name" {{{2
 " copy to script local variable to prevent .lvimrc modifying the name option.
-if (!exists("g:localvimrc_name"))
-  let s:localvimrc_name = [ ".lvimrc" ]
-else
-  if type(g:localvimrc_name) == type("")
+let s:localvimrc_name = [ ".lvimrc" ]
+if (exists("g:localvimrc_name"))
+  if type(g:localvimrc_name) == v:t_string
     let s:localvimrc_name = [ g:localvimrc_name ]
-  elseif type(g:localvimrc_name) == type([])
+  elseif type(g:localvimrc_name) == v:t_list
     let s:localvimrc_name = g:localvimrc_name
   endif
 endif
 
 " define default "localvimrc_event" {{{2
-" copy to script local variable to prevent .lvimrc modifying the name option.
-if (!exists("g:localvimrc_event") || !(type(g:localvimrc_event) == type([])))
-  let s:localvimrc_event = [ "BufWinEnter" ]
-else
+" copy to script local variable to prevent .lvimrc modifying the event option.
+let s:localvimrc_event = [ "BufWinEnter" ]
+if (exists("g:localvimrc_event") && type(g:localvimrc_event) == v:t_list)
   let s:localvimrc_event = g:localvimrc_event
 endif
 
 " define default "localvimrc_reverse" {{{2
-" copy to script local variable to prevent .lvimrc modifying the reverse
-" option.
-if (!exists("g:localvimrc_reverse"))
-  let s:localvimrc_reverse = 0
-else
+" copy to script local variable to prevent .lvimrc modifying the reverse option.
+let s:localvimrc_reverse = 0
+if (exists("g:localvimrc_reverse") && type(g:localvimrc_reverse) == v:t_number)
   let s:localvimrc_reverse = g:localvimrc_reverse
 endif
 
 " define default "localvimrc_count" {{{2
 " copy to script local variable to prevent .lvimrc modifying the count option.
-if (!exists("g:localvimrc_count"))
-  let s:localvimrc_count = -1
-else
+let s:localvimrc_count = -1
+if (exists("g:localvimrc_count") && type(g:localvimrc_count) == v:t_number)
   let s:localvimrc_count = g:localvimrc_count
 endif
 
 " define default "localvimrc_file_directory_only" {{{2
 " copy to script local variable to prevent .lvimrc modifying the file
 " directory only option.
-if (!exists("g:localvimrc_file_directory_only"))
-  let s:localvimrc_file_directory_only = 0
-else
+let s:localvimrc_file_directory_only = 0
+if (exists("g:localvimrc_file_directory_only") && type(g:localvimrc_file_directory_only) == v:t_number)
   let s:localvimrc_file_directory_only = g:localvimrc_file_directory_only
 endif
 
 " define default "localvimrc_sandbox" {{{2
-" copy to script local variable to prevent .lvimrc disabling the sandbox
-" again.
-if (!exists("g:localvimrc_sandbox"))
-  let s:localvimrc_sandbox = 1
-else
+" copy to script local variable to prevent .lvimrc disabling the sandbox again.
+let s:localvimrc_sandbox = 1
+if (exists("g:localvimrc_sandbox") && type(g:localvimrc_sandbox) == v:t_number)
   let s:localvimrc_sandbox = g:localvimrc_sandbox
 endif
 
 " define default "localvimrc_ask" {{{2
 " copy to script local variable to prevent .lvimrc modifying the ask option.
-if (!exists("g:localvimrc_ask"))
-  let s:localvimrc_ask = 1
-else
+let s:localvimrc_ask = 1
+if (exists("g:localvimrc_ask") && type(g:localvimrc_ask) == v:t_number)
   let s:localvimrc_ask = g:localvimrc_ask
 endif
 
 " define default "localvimrc_whitelist" {{{2
 " copy to script local variable to prevent .lvimrc modifying the whitelist.
-if (!exists("g:localvimrc_whitelist"))
-  let s:localvimrc_whitelist = [ "^$" ] " this never matches a file
-else
-  if type(g:localvimrc_whitelist) == type("")
+let s:localvimrc_whitelist = [ "^$" ] " this never matches a file
+if (exists("g:localvimrc_whitelist"))
+  if type(g:localvimrc_whitelist) == v:t_string
     let s:localvimrc_whitelist = [ g:localvimrc_whitelist ]
-  else
+  elseif type(g:localvimrc_whitelist) == v:t_list
     let s:localvimrc_whitelist = g:localvimrc_whitelist
   endif
 endif
 
 " define default "localvimrc_blacklist" {{{2
 " copy to script local variable to prevent .lvimrc modifying the blacklist.
-if (!exists("g:localvimrc_blacklist"))
-  let s:localvimrc_blacklist = [ "^$" ] " this never matches a file
-else
-  if type(g:localvimrc_blacklist) == type("")
+let s:localvimrc_blacklist = [ "^$" ] " this never matches a file
+if (exists("g:localvimrc_blacklist"))
+  if type(g:localvimrc_blacklist) == v:t_string
     let s:localvimrc_blacklist = [ g:localvimrc_blacklist ]
-  else
+  elseif type(g:localvimrc_blacklist) == v:t_list
     let s:localvimrc_blacklist = g:localvimrc_blacklist
   endif
 endif
 
 " define default "localvimrc_persistent" {{{2
-" make decisions persistent over multiple vim runs
-if (!exists("g:localvimrc_persistent"))
-  let s:localvimrc_persistent = 0
-else
+" copy to script local variable to prevent .lvimrc modifying the persistent
+" option.
+let s:localvimrc_persistent = 0
+if (exists("g:localvimrc_persistent") && type(g:localvimrc_persistent) == v:t_number)
   let s:localvimrc_persistent = g:localvimrc_persistent
 endif
 
 " define default "localvimrc_persistence_file" {{{2
-" file where to store persistence information
-if (!exists("g:localvimrc_persistence_file"))
-  if has("win16") || has("win32") || has("win64") || has("win95")
-    let s:localvimrc_persistence_file = expand('$HOME') . "/_localvimrc_persistent"
-  else
-    let s:localvimrc_persistence_file = expand('$HOME') . "/.localvimrc_persistent"
-  endif
+" copy to script local variable to prevent .lvimrc modifying the persistence
+" file.
+if has("win16") || has("win32") || has("win64") || has("win95")
+  let s:localvimrc_persistence_file = expand('$HOME') . "/_localvimrc_persistent"
 else
+  let s:localvimrc_persistence_file = expand('$HOME') . "/.localvimrc_persistent"
+endif
+if (exists("g:localvimrc_persistence_file") && type(g:localvimrc_persistence_file) == v:t_string)
   let s:localvimrc_persistence_file = g:localvimrc_persistence_file
 endif
 
 " define default "localvimrc_autocmd" {{{2
-" enable emitting of autocommands before and after sourcing a .lvimrc file
-if (!exists("g:localvimrc_autocmd"))
-  let s:localvimrc_autocmd = 1
-else
+" copy to script local variable to prevent .lvimrc modifying the autocommand
+" option.
+let s:localvimrc_autocmd = 1
+if (exists("g:localvimrc_autocmd") && type(g:localvimrc_autocmd) == v:t_number)
   let s:localvimrc_autocmd = g:localvimrc_autocmd
 endif
 
