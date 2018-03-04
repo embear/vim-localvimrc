@@ -59,7 +59,7 @@ Then (disable setting):
   Assert !exists("b:localvimrc_sourced_files")
 
 ################################################################################
-Execute (enable using command):
+Execute (enable early using command):
   " change setup for this test
   let g:localvimrc_enable = 0
 
@@ -79,7 +79,35 @@ Execute (enable using command):
   " edit a file in the test tree
   exec "edit " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
 
-Then (enable using command):
+Then (enable early using command):
+  let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
+  Assert expected == g:localvimrc_test_var
+
+  let expected = [ $LOCALVIMRC_TEST_DIR . "/a/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/c/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/c/d/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/.lvimrc", $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/.lvimrc" ]
+  Assert expected == b:localvimrc_sourced_files
+
+################################################################################
+Execute (enable late using command):
+  " change setup for this test
+  let g:localvimrc_enable = 0
+
+  " (re)load localvimrc plugin
+  if exists("g:loaded_localvimrc")
+    unlet g:loaded_localvimrc
+  endif
+  source ../plugin/localvimrc.vim
+
+  " delete buffer if it exists
+  if bufexists($LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo")
+    exec "bwipeout! " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
+  endif
+
+  " edit a file in the test tree
+  exec "edit " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
+
+  exec "LocalVimRCEnable"
+
+Then (enable late using command):
   let expected = [ "lvimrc: ./a", "lvimrc: ./a/b", "lvimrc: ./a/b/c", "lvimrc: ./a/b/c/d", "lvimrc: ./a/b/c/d/e", "lvimrc: ./a/b/c/d/e/f" ]
   Assert expected == g:localvimrc_test_var
 
@@ -109,4 +137,3 @@ Then (disable using command):
   Assert expected == g:localvimrc_test_var
 
   Assert !exists("b:localvimrc_sourced_files")
-

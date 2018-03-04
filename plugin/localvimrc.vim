@@ -788,19 +788,24 @@ endfunction
 
 " Function: LocalVimRCEnable() {{{2
 "
-" enable prprocessing of local vimrc files
+" enable processing of local vimrc files
 "
 function! s:LocalVimRCEnable()
-  call s:LocalVimRCDebug(1, "enabled processing of local vimrc files")
-  let s:localvimrc_enable = 1
+  " if this call really enables the plugin load the local vimrc files for the
+  " current buffer
+  if s:localvimrc_enable == 0
+    call s:LocalVimRCDebug(1, "enable processing of local vimrc files")
+    let s:localvimrc_enable = 1
+    call s:LocalVimRC()
+  endif
 endfunction
 
 " Function: LocalVimRCDisable() {{{2
 "
-" disable prprocessing of local vimrc files
+" disable processing of local vimrc files
 "
 function! s:LocalVimRCDisable()
-  call s:LocalVimRCDebug(1, "enabled processing of local vimrc files")
+  call s:LocalVimRCDebug(1, "disable processing of local vimrc files")
   let s:localvimrc_enable = 0
 endfunction
 

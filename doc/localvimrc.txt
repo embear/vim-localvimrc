@@ -94,6 +94,12 @@ Globally enable the loading of local vimrc files if loading has been disabled
 by |LocalVimRCDisable| or by setting |g:localvimrc_enable| to '0' during
 startup.
 
+Enabling local vimrc using this command will trigger loading of local vimrc
+files for the currently active buffer. It will _not_ load the local vimrc files
+for any other buffer. This will be done by an autocommand later when another
+buffer gets active and the configured |g:localvimrc_event| autocommand gets
+active. This is the case for the default |BufWinEnter|.
+
 -------------------------------------------------------------------------------
 The *LocalVimRCDisable* command
 
