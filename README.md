@@ -365,7 +365,7 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
-v2.7.0 : XXXX-XX-XX
+v2.7.0 : 2018-03-19
 
   - add setting |g:localvimrc_enable| and commands |LocalVimRCEnable| and |LocalVimRCDisable| to globally disable processing of local vimrc files.
   - add setting |g:localvimrc_event_pattern| to change the pattern for which the autocommand is executed.
