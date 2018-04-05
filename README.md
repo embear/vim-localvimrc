@@ -336,8 +336,14 @@ Debug level for this script.
 
 ## Autocommands
 
-If enabled localvimrc emits autocommands before and after sourcing an local
-vimrc file.
+If enabled localvimrc emits autocommands before and after sourcing a local
+vimrc file. The autocommands are emitted as |User| events. Because of that
+commands need to be registered in the following way:
+
+``` {.vim}
+autocmd User LocalVimRCPre  echom 'before loading local vimrc'
+autocmd User LocalVimRCPost echom 'after loading local vimrc'
+```
 
 ### The `LocalVimRCPre` autocommand
 
