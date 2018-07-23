@@ -649,7 +649,11 @@ endfunction
 "
 function! s:LocalVimRCCalcChecksum(file)
   let l:content = join(readfile(a:file))
-  let l:checksum = s:LocalVimRCCalcFNV(l:content)
+  if exists("*sha256")
+    let l:checksum = sha256(l:content)
+  else
+    let l:checksum = s:LocalVimRCCalcFNV(l:content)
+  endif
 
   call s:LocalVimRCDebug(3, "checksum calc -> " . fnameescape(a:file) . " : " . l:checksum)
 
