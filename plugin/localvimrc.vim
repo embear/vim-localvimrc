@@ -575,7 +575,6 @@ function! s:LocalVimRC()
   call s:LocalVimRCDebug(1, "==================================================")
 endfunction
 
-
 " Function: s:LocalVimRCUserAutocommand(event) {{{2
 "
 function! s:LocalVimRCUserAutocommand(event)
@@ -604,12 +603,53 @@ function! s:LocalVimRCMatchAny(str, patterns)
   return 0
 endfunction
 
+" Function: s:LocalVimRCCalcFNV() {{{2
+"
+" implementation of Fowler–Noll–Vo (FNV-1) hash function calculated on given
+" string (https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function)
+"
+function! s:LocalVimRCCalcFNV(text)
+  if has("python")
+python << EOF
+import vim
+
+FNV_PRIME_32  = 0x01000193
+FNV_OFFSET_32 = 0x811c9dc5
+
+# initialize the hash with defined offset value
+hash = FNV_OFFSET_32
+
+# loop over all characters
+for c in vim.eval("a:text"):
+  hash = (hash * FNV_PRIME_32) & 0xFFFFFFFF
+  hash = hash ^ ord(c)
+
+vim.command("let l:hash = %s" % hash)
+EOF
+  else
+    let l:FNV_PRIME_32  = 0x01000193
+    let l:FNV_OFFSET_32 = 0x811c9dc5
+
+    " initialize the hash with defined offset value
+    let l:hash = l:FNV_OFFSET_32
+
+    " loop over all characters
+    for i in range(0, len(a:text)-1)
+      let l:hash = and((l:hash * l:FNV_PRIME_32), 0xFFFFFFFF)
+      let l:hash = xor(l:hash, char2nr(a:text[i]))
+    endfor
+  endif
+
+  return l:hash
+endfunction
+
 " Function: s:LocalVimRCCalcChecksum(filename) {{{2
 "
-" calculate checksum and store it in dictionary
+" calculate FNV-1 checksum
 "
 function! s:LocalVimRCCalcChecksum(file)
-  let l:checksum = getfsize(a:file) . getfperm(a:file) . getftime(a:file)
+  let l:content = join(readfile(a:file))
+  let l:checksum = s:LocalVimRCCalcFNV(l:content)
 
   call s:LocalVimRCDebug(3, "checksum calc -> " . fnameescape(a:file) . " : " . l:checksum)
 
@@ -618,7 +658,7 @@ endfunction
 
 " Function: s:LocalVimRCCheckChecksum(filename, checksum) {{{2
 "
-" Check checksum in dictionary. Return "0" if it does not exist, "1" otherwise
+" Check checksum. Return "0" if it does not exist, "1" otherwise
 "
 function! s:LocalVimRCCheckChecksum(file, checksum)
   let l:return = 0

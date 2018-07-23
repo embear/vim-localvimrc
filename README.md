@@ -53,7 +53,7 @@ startup.
 
 ## Functions
 
-### The `LocalVimRCFinish` command
+### The `LocalVimRCFinish` function
 
 After a call to this function the sourcing of any remaining local vimrc files
 will be skipped. In combination with the |g:localvimrc_reverse| option it is
@@ -370,6 +370,10 @@ send a pull request or just tell me your ideas.
 - Michon van Dooren for autocommands patch
 
 ## Changelog
+
+v2.8.0 : XXXX-XX-XX
+
+  - use a more secure but still fast checksum algorithm
 
 v2.7.0 : 2018-03-19
 
