@@ -31,6 +31,10 @@ sourcing a local vimrc file.
 
 Remove all stored decisions for local vimrc files that no longer exist.
 
+### The `LocalVimRCForget` command
+
+Remove stored decisions for given local vimrc files.
+
 ### The `LocalVimRCEdit` command
 
 Open the local vimrc file for the current buffer in an split window for
@@ -379,6 +383,7 @@ v2.8.0 : XXXX-XX-XX
 
   - use a more secure but still fast checksum algorithm.
   - add command |LocalVimRCCleanup| to remove all unusable persistence data.
+  - add command |LocalVimRCForget| to remove persistence data for given files.
 
 v2.7.0 : 2018-03-19
 

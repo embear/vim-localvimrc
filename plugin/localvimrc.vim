@@ -854,6 +854,33 @@ function! s:LocalVimRCCleanup()
   call s:LocalVimRCDebug(3, "write persistent data")
 endfunction
 
+" Function: s:LocalVimRCForget(...) {{{2
+"
+" forget stored persistence data for given files
+"
+function! s:LocalVimRCForget(...)
+  " read persistent information
+  call s:LocalVimRCReadPersistent()
+  call s:LocalVimRCDebug(3, "read persistent data")
+
+  " loop over all persistent data entries
+  for l:file in a:000
+    if !filereadable(l:file)
+      let l:file = resolve(fnamemodify(l:file, ":p"))
+      if has_key(s:localvimrc_data, l:file)
+        unlet s:localvimrc_data[l:file]
+        call s:LocalVimRCDebug(3, "removed file '".l:file."' from persistence file")
+      else
+        call s:LocalVimRCDebug(3, "file '".l:file."' does not exist in persistence file")
+      endif
+    endif
+  endfor
+
+  " make information persistent
+  call s:LocalVimRCWritePersistent()
+  call s:LocalVimRCDebug(3, "write persistent data")
+endfunction
+
 " Function: LocalVimRCEnable() {{{2
 "
 " enable processing of local vimrc files
@@ -940,6 +967,7 @@ endfunction
 command! LocalVimRC        call s:LocalVimRC()
 command! LocalVimRCClear   call s:LocalVimRCClear()
 command! LocalVimRCCleanup call s:LocalVimRCCleanup()
+command! -nargs=+ -complete=file LocalVimRCForget  call s:LocalVimRCForget(<f-args>)
 command! LocalVimRCEdit    call s:LocalVimRCEdit()
 command! LocalVimRCEnable  call s:LocalVimRCEnable()
 command! LocalVimRCDisable call s:LocalVimRCDisable()
