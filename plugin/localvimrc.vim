@@ -608,34 +608,33 @@ endfunction
 " implementation of Fowler–Noll–Vo (FNV-1) hash function calculated on given
 " string (https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function)
 "
+let s:FNV_PRIME_32  = 0x01000193
+let s:FNV_OFFSET_32 = 0x811c9dc5
+
 function! s:LocalVimRCCalcFNV(text)
   if has("python")
 python << EOF
 import vim
 
-FNV_PRIME_32  = 0x01000193
-FNV_OFFSET_32 = 0x811c9dc5
-
 # initialize the hash with defined offset value
-hash = FNV_OFFSET_32
+prime = vim.eval("s:FNV_PRIME_32")
+hash = vim.eval("s:FNV_OFFSET_32")
 
 # loop over all characters
 for c in vim.eval("a:text"):
-  hash = (hash * FNV_PRIME_32) & 0xFFFFFFFF
+  hash = (hash * prime) & 0xFFFFFFFF
   hash = hash ^ ord(c)
 
 vim.command("let l:hash = %s" % hash)
 EOF
   else
-    let l:FNV_PRIME_32  = 0x01000193
-    let l:FNV_OFFSET_32 = 0x811c9dc5
-
     " initialize the hash with defined offset value
-    let l:hash = l:FNV_OFFSET_32
+    let l:prime = s:FNV_PRIME_32
+    let l:hash = s:FNV_OFFSET_32
 
     " loop over all characters
     for i in range(0, len(a:text)-1)
-      let l:hash = and((l:hash * l:FNV_PRIME_32), 0xFFFFFFFF)
+      let l:hash = and((l:hash * prime), 0xFFFFFFFF)
       let l:hash = xor(l:hash, char2nr(a:text[i]))
     endfor
   endif
@@ -645,7 +644,8 @@ endfunction
 
 " Function: s:LocalVimRCCalcChecksum(filename) {{{2
 "
-" calculate FNV-1 checksum
+" calculate checksum. depending on Vim version this is done with sha256 or
+" with FNV-1
 "
 function! s:LocalVimRCCalcChecksum(file)
   let l:content = join(readfile(a:file))
