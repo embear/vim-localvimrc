@@ -7,9 +7,10 @@ Contents ~
  2. Commands                                              |localvimrc-commands|
   1. The |LocalVimRC| command
   2. The |LocalVimRCClear| command
-  3. The |LocalVimRCEdit| command
-  4. The |LocalVimRCEnable| command
-  5. The |LocalVimRCDisable| command
+  3. The |LocalVimRCCleanup| command
+  4. The |LocalVimRCEdit| command
+  5. The |LocalVimRCEnable| command
+  6. The |LocalVimRCDisable| command
  3. Functions                                            |localvimrc-functions|
   1. The |LocalVimRCFinish| function
  4. Variables                                            |localvimrc-variables|
@@ -79,6 +80,11 @@ The *LocalVimRCClear* command
 
 Clear all stored decisions made in the past, when the plugin asked about
 sourcing a local vimrc file.
+
+-------------------------------------------------------------------------------
+The *LocalVimRCCleanup* command
+
+Remove all stored decisions for local vimrc files that no longer exist.
 
 -------------------------------------------------------------------------------
 The *LocalVimRCEdit* command
@@ -451,7 +457,8 @@ Changelog ~
 
 v2.8.0 : XXXX-XX-XX
 
-- use a more secure but still fast checksum algorithm
+- use a more secure but still fast checksum algorithm.
+- add command |LocalVimRCCleanup| to remove all unusable persistence data.
 
 v2.7.0 : 2018-03-19
 

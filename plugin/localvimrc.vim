@@ -812,7 +812,7 @@ endfunction
 
 " Function: s:LocalVimRCClear() {{{2
 "
-" clear all stored data
+" clear all stored persistence data
 "
 function! s:LocalVimRCClear()
   let s:localvimrc_data = {}
@@ -828,6 +828,30 @@ function! s:LocalVimRCClear()
     call delete(s:localvimrc_persistence_file)
     call s:LocalVimRCDebug(3, "deleted persistence file")
   endif
+endfunction
+
+" Function: s:LocalVimRCCleanup() {{{2
+"
+" cleanup stored persistence data
+"
+function! s:LocalVimRCCleanup()
+  " read persistent information
+  call s:LocalVimRCReadPersistent()
+  call s:LocalVimRCDebug(3, "read persistent data")
+
+  " loop over all persistent data entries
+  for l:file in keys(s:localvimrc_data)
+    if !filereadable(l:file)
+      unlet s:localvimrc_data[l:file]
+      call s:LocalVimRCDebug(3, "removed file '".l:file."' from persistence file")
+    else
+      call s:LocalVimRCDebug(3, "keeping file '".l:file."' in persistence file")
+    endif
+  endfor
+
+  " make information persistent
+  call s:LocalVimRCWritePersistent()
+  call s:LocalVimRCDebug(3, "write persistent data")
 endfunction
 
 " Function: LocalVimRCEnable() {{{2
@@ -915,6 +939,7 @@ endfunction
 " Section: Commands {{{1
 command! LocalVimRC        call s:LocalVimRC()
 command! LocalVimRCClear   call s:LocalVimRCClear()
+command! LocalVimRCCleanup call s:LocalVimRCCleanup()
 command! LocalVimRCEdit    call s:LocalVimRCEdit()
 command! LocalVimRCEnable  call s:LocalVimRCEnable()
 command! LocalVimRCDisable call s:LocalVimRCDisable()

@@ -27,6 +27,10 @@ Resource all local vimrc files for the current buffer.
 Clear all stored decisions made in the past, when the plugin asked about
 sourcing a local vimrc file.
 
+### The `LocalVimRCCleanup` command
+
+Remove all stored decisions for local vimrc files that no longer exist.
+
 ### The `LocalVimRCEdit` command
 
 Open the local vimrc file for the current buffer in an split window for
@@ -373,7 +377,8 @@ send a pull request or just tell me your ideas.
 
 v2.8.0 : XXXX-XX-XX
 
-  - use a more secure but still fast checksum algorithm
+  - use a more secure but still fast checksum algorithm.
+  - add command |LocalVimRCCleanup| to remove all unusable persistence data.
 
 v2.7.0 : 2018-03-19
 
