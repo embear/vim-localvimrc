@@ -608,38 +608,40 @@ endfunction
 " implementation of Fowler–Noll–Vo (FNV-1) hash function calculated on given
 " string (https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function)
 "
-let s:FNV_PRIME_32  = 0x01000193
-let s:FNV_OFFSET_32 = 0x811c9dc5
-
 function! s:LocalVimRCCalcFNV(text)
+  " initialize the hash with defined offset value
+  let l:prime = 0x01000193
+  let l:checksum = 0x811c9dc5
+
+  " loop over all characters
+  for i in range(0, len(a:text)-1)
+    let l:checksum = and((l:checksum * prime), 0xFFFFFFFF)
+    let l:checksum = xor(l:checksum, char2nr(a:text[i]))
+  endfor
+
+  return l:checksum
+endfunction
+
+" Function: s:LocalVimRCCalcSHA256() {{{2
+"
+" calculate sha256 checksum using python hashlib
+"
+function! s:LocalVimRcCalcSHA256(text)
   if has("python")
 python << EOF
 import vim
+import hashlib
 
-# initialize the hash with defined offset value
-prime = vim.eval("s:FNV_PRIME_32")
-hash = vim.eval("s:FNV_OFFSET_32")
+text = vim.eval("a:text")
+checksum = hashlib.sha256(text)
 
-# loop over all characters
-for c in vim.eval("a:text"):
-  hash = (hash * prime) & 0xFFFFFFFF
-  hash = hash ^ ord(c)
-
-vim.command("let l:hash = %s" % hash)
+vim.command("let l:checksum = \"%s\"" % checksum.hexdigest())
 EOF
   else
-    " initialize the hash with defined offset value
-    let l:prime = s:FNV_PRIME_32
-    let l:hash = s:FNV_OFFSET_32
-
-    " loop over all characters
-    for i in range(0, len(a:text)-1)
-      let l:hash = and((l:hash * prime), 0xFFFFFFFF)
-      let l:hash = xor(l:hash, char2nr(a:text[i]))
-    endfor
+    let l:checksum = ""
   endif
 
-  return l:hash
+  return l:checksum
 endfunction
 
 " Function: s:LocalVimRCCalcChecksum(filename) {{{2
@@ -651,6 +653,8 @@ function! s:LocalVimRCCalcChecksum(file)
   let l:content = join(readfile(a:file))
   if exists("*sha256")
     let l:checksum = sha256(l:content)
+  elseif has("python")
+    let l:checksum = s:LocalVimRcCalcSHA256(l:content)
   else
     let l:checksum = s:LocalVimRCCalcFNV(l:content)
   endif
