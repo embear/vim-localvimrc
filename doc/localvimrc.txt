@@ -8,9 +8,10 @@ Contents ~
   1. The |LocalVimRC| command
   2. The |LocalVimRCClear| command
   3. The |LocalVimRCCleanup| command
-  4. The |LocalVimRCEdit| command
-  5. The |LocalVimRCEnable| command
-  6. The |LocalVimRCDisable| command
+  4. The |LocalVimRCForget| command
+  5. The |LocalVimRCEdit| command
+  6. The |LocalVimRCEnable| command
+  7. The |LocalVimRCDisable| command
  3. Functions                                            |localvimrc-functions|
   1. The |LocalVimRCFinish| function
  4. Variables                                            |localvimrc-variables|
@@ -85,6 +86,11 @@ sourcing a local vimrc file.
 The *LocalVimRCCleanup* command
 
 Remove all stored decisions for local vimrc files that no longer exist.
+
+-------------------------------------------------------------------------------
+The *LocalVimRCForget* command
+
+Remove stored decisions for given local vimrc files.
 
 -------------------------------------------------------------------------------
 The *LocalVimRCEdit* command
