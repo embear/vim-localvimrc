@@ -627,19 +627,25 @@ endfunction
 " calculate sha256 checksum using python hashlib
 "
 function! s:LocalVimRcCalcSHA256(text)
+  " determine python version
   if has("python")
-python << EOF
+    let l:python_start = "python << EOF"
+  elseif has("python3")
+    let l:python_start = "python3 << EOF"
+  else
+    " try generate a invalid checksum
+    return "invalid_" . string(localtime())
+  endif
+
+  " run correct python version
+  exec l:python_start
 import vim
 import hashlib
 
 text = vim.eval("a:text")
-checksum = hashlib.sha256(text)
-
+checksum = hashlib.sha256(text.encode('utf-8'))
 vim.command("let l:checksum = \"%s\"" % checksum.hexdigest())
 EOF
-  else
-    let l:checksum = ""
-  endif
 
   return l:checksum
 endfunction
@@ -651,9 +657,9 @@ endfunction
 "
 function! s:LocalVimRCCalcChecksum(file)
   let l:content = join(readfile(a:file))
-  if exists("*sha256")
+  if !exists("*sha256")
     let l:checksum = sha256(l:content)
-  elseif has("python")
+  elseif has("python") || has("python3")
     let l:checksum = s:LocalVimRcCalcSHA256(l:content)
   else
     let l:checksum = s:LocalVimRCCalcFNV(l:content)
