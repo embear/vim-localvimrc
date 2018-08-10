@@ -28,6 +28,8 @@ if version < 702
   finish
 endif
 
+" Section: Default settings {{{1
+
 " define default "localvimrc_enable" {{{2
 let s:localvimrc_enable = 1
 if (exists("g:localvimrc_enable") && type(g:localvimrc_enable) == type(0))
@@ -157,24 +159,6 @@ let s:localvimrc_debug_lines = 100
 if (exists("g:localvimrc_debug_lines"))
   let s:localvimrc_debug_lines = g:localvimrc_debug_lines
 endif
-" initialize data dictionary {{{2
-" key: localvimrc file
-" value: [ answer, sandbox_answer, checksum ]
-let s:localvimrc_data = {}
-
-" initialize sourced dictionary {{{2
-" key: localvimrc file
-" value: [ list of files triggered sourcing ]
-let s:localvimrc_sourced = {}
-
-" initialize persistence file checksum {{{2
-let s:localvimrc_persistence_file_checksum = ""
-
-" initialize persistent data {{{2
-let s:localvimrc_persistent_data = {}
-
-" initialize processing finish flag {{{2
-let s:localvimrc_finish = 0
 
 " Section: Autocmd setup {{{1
 
@@ -633,18 +617,8 @@ endfunction
 " calculate sha256 checksum using python hashlib
 "
 function! s:LocalVimRcCalcSHA256(text)
-  " determine python version
-  if has("python")
-    let l:python_start = "python << EOF"
-  elseif has("python3")
-    let l:python_start = "python3 << EOF"
-  else
-    " try generate a invalid checksum
-    return "invalid_" . string(localtime())
-  endif
-
   " run correct python version
-  exec l:python_start
+  exec s:localvimrc_python_start
 import vim
 import hashlib
 
@@ -661,13 +635,7 @@ endfunction
 "
 function! s:LocalVimRCCalcChecksum(file)
   let l:content = join(readfile(a:file))
-  if exists("*sha256")
-    let l:checksum = sha256(l:content)
-  elseif has("python") || has("python3")
-    let l:checksum = s:LocalVimRcCalcSHA256(l:content)
-  else
-    let l:checksum = s:LocalVimRCCalcFNV(l:content)
-  endif
+  let l:checksum = s:localvimrc_checksum_func(l:content)
 
   call s:LocalVimRCDebug(3, "checksum calc -> " . fnameescape(a:file) . " : " . l:checksum)
 
@@ -992,7 +960,50 @@ function! s:LocalVimRCDebugShow()
   endfor
 endfunction
 
+" Section: Initialize internal variables {{{1
+
+" initialize data dictionary {{{2
+" key: localvimrc file
+" value: [ answer, sandbox_answer, checksum ]
+let s:localvimrc_data = {}
+
+" initialize sourced dictionary {{{2
+" key: localvimrc file
+" value: [ list of files triggered sourcing ]
+let s:localvimrc_sourced = {}
+
+" initialize persistence file checksum {{{2
+let s:localvimrc_persistence_file_checksum = ""
+
+" initialize persistent data {{{2
+let s:localvimrc_persistent_data = {}
+
+" initialize processing finish flag {{{2
+let s:localvimrc_finish = 0
+
+" initialize debug message buffer {{{2
+let s:localvimrc_debug_message = []
+
+" determine which function shall be used to calculate checksums {{{2
+if exists("*sha256")
+  let s:localvimrc_checksum_func = function("sha256")
+elseif has("python") || has("python3")
+  let s:localvimrc_checksum_func = function("s:LocalVimRcCalcSHA256")
+else
+  let s:localvimrc_checksum_func = function("s:LocalVimRCCalcFNV")
+endif
+
+" determine python version {{{2
+if has("pythonx")
+  let s:localvimrc_python_start = "pythonx << EOF"
+elseif has("python")
+  let s:localvimrc_python_start = "python << EOF"
+elseif has("python3")
+  let s:localvimrc_python_start = "python3 << EOF"
+endif
+
 " Section: Report settings {{{1
+
 call s:LocalVimRCDebug(1, "== START settings ================================")
 call s:LocalVimRCDebug(1, "localvimrc_enable = \"" . string(s:localvimrc_enable) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_name = \"" . string(s:localvimrc_name) . "\"")
@@ -1010,9 +1021,12 @@ call s:LocalVimRCDebug(1, "localvimrc_persistence_file = \"" . string(s:localvim
 call s:LocalVimRCDebug(1, "localvimrc_autocmd = \"" . string(s:localvimrc_autocmd) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_debug = \"" . string(g:localvimrc_debug) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_debug_lines = \"" . string(s:localvimrc_debug_lines) . "\"")
+call s:LocalVimRCDebug(1, "localvimrc_checksum_func = \"" . string(s:localvimrc_checksum_func) . "\"")
+call s:LocalVimRCDebug(1, "localvimrc_python_start = \"" . string(s:localvimrc_python_start) . "\"")
 call s:LocalVimRCDebug(1, "== END settings ==================================")
 
 " Section: Commands {{{1
+
 command! LocalVimRC        call s:LocalVimRC()
 command! LocalVimRCClear   call s:LocalVimRCClear()
 command! LocalVimRCCleanup call s:LocalVimRCCleanup()
