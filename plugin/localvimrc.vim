@@ -650,10 +650,8 @@ import hashlib
 
 text = vim.eval("a:text")
 checksum = hashlib.sha256(text.encode('utf-8'))
-vim.command("let l:checksum = \"%s\"" % checksum.hexdigest())
+vim.command("return \"%s\"" % checksum.hexdigest())
 EOF
-
-  return l:checksum
 endfunction
 
 " Function: s:LocalVimRCCalcChecksum(filename) {{{2
