@@ -657,7 +657,7 @@ endfunction
 "
 function! s:LocalVimRCCalcChecksum(file)
   let l:content = join(readfile(a:file))
-  if !exists("*sha256")
+  if exists("*sha256")
     let l:checksum = sha256(l:content)
   elseif has("python") || has("python3")
     let l:checksum = s:LocalVimRcCalcSHA256(l:content)
