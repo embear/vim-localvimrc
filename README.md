@@ -59,6 +59,12 @@ Globally disable the loading of local vimrc files if loading has been disabled
 by |LocalVimRCEnable| or by setting |g:localvimrc_enable| to `1` during
 startup.
 
+### The `LocalVimRCDebugShow` command
+
+Show all stored debugging messages. To see any message with this command
+debugging needs to be enabled with |g:localvimrc_debug|. The number of messages
+stored and printed can be limited using the setting |g:localvimrc_debug_lines|.
+
 ## Functions
 
 ### The `LocalVimRCFinish` function
@@ -338,9 +344,17 @@ every local vimrc file.
 
 ### The `g:localvimrc_debug` setting
 
-Debug level for this script.
+Debug level for this script. The messages can be shown with
+|LocalVimRCDebugShow|.
 
   - Default: `0`
+
+### The `g:localvimrc_debug_lines` setting
+
+Limit for the number of debug messages stored. The messages can be shown with
+|LocalVimRCDebugShow|.
+
+  - Default: `100`
 
 ## Autocommands
 
@@ -384,6 +398,8 @@ v2.8.0 : XXXX-XX-XX
   - use a more secure but still fast checksum algorithm.
   - add command |LocalVimRCCleanup| to remove all unusable persistence data.
   - add command |LocalVimRCForget| to remove persistence data for given files.
+  - add command |LocalVimRCDebugShow| to show debug messages.
+  - add setting |g:localvimrc_debug_lines| to limit the number of stored debug messages.
 
 v2.7.0 : 2018-03-19
 
