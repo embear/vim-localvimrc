@@ -982,6 +982,7 @@ let s:localvimrc_debug_message = []
 " for each available python version try to load the required modules and use
 " this version only if loading worked
 let s:localvimrc_python_available = v:false
+let s:localvimrc_python_command = "no working python available"
 if !s:localvimrc_python_available && has("pythonx")
   try
     pythonx import hashlib, vim
