@@ -1,5 +1,5 @@
 " Name:    localvimrc.vim
-" Version: 2.7.0
+" Version: 3.0.0
 " Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin to search local vimrc files and load them.
 " Licence: This program is free software: you can redistribute it and/or modify

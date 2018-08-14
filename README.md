@@ -402,9 +402,9 @@ vim --cmd "let g:localvimrc_debug=99" -c "redir! > localvimrc_debug.txt" -c "Loc
 
 ## Changelog
 
-v2.8.0 : XXXX-XX-XX
+v3.0.0 : 2018-08-14
 
-  - use a more secure but still fast checksum algorithm.
+  - use SHA256 as for calculating checksums and use FNV-1 as fallback.
   - add command |LocalVimRCCleanup| to remove all unusable persistence data.
   - add command |LocalVimRCForget| to remove persistence data for given files.
   - add command |LocalVimRCDebugShow| to show debug messages.
