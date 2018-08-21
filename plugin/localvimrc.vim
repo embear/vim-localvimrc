@@ -981,32 +981,32 @@ let s:localvimrc_debug_message = []
 " determine python version {{{2
 " for each available python version try to load the required modules and use
 " this version only if loading worked
-let s:localvimrc_python_available = v:false
+let s:localvimrc_python_available = 0
 let s:localvimrc_python_command = "no working python available"
-if !s:localvimrc_python_available && has("pythonx")
+if s:localvimrc_python_available == 0 && has("pythonx")
   try
     pythonx import hashlib, vim
-    let s:localvimrc_python_available = v:true
+    let s:localvimrc_python_available = 1
     let s:localvimrc_python_command = "pythonx"
   catch
     call s:LocalVimRCDebug(1, "pythonx is available but not working")
   endtry
 endif
 
-if !s:localvimrc_python_available && has("python")
+if s:localvimrc_python_available == 0 && has("python")
   try
     python import hashlib, vim
-    let s:localvimrc_python_available = v:true
+    let s:localvimrc_python_available = 1
     let s:localvimrc_python_command = "python"
   catch
     call s:LocalVimRCDebug(1, "python is available but not working")
   endtry
 endif
 
-if !s:localvimrc_python_available && has("python3")
+if s:localvimrc_python_available == 0 && has("python3")
   try
     python3 import hashlib, vim
-    let s:localvimrc_python_available = v:true
+    let s:localvimrc_python_available = 1
     let s:localvimrc_python_command = "python3"
   catch
     call s:LocalVimRCDebug(1, "python3 is available but not working")
