@@ -1,5 +1,5 @@
 " Name:    localvimrc.vim
-" Version: 3.0.0
+" Version: 3.0.1
 " Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin to search local vimrc files and load them.
 " Licence: This program is free software: you can redistribute it and/or modify
@@ -1016,7 +1016,7 @@ endif
 " determine which function shall be used to calculate checksums {{{2
 if exists("*sha256")
   let s:localvimrc_checksum_func = function("sha256")
-elseif s:localvimrc_python_available
+elseif s:localvimrc_python_available == 1
   let s:localvimrc_checksum_func = function("s:LocalVimRcCalcSHA256")
 else
   let s:localvimrc_checksum_func = function("s:LocalVimRCCalcFNV")

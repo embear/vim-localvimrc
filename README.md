@@ -402,6 +402,10 @@ vim --cmd "let g:localvimrc_debug=99" -c "redir! > localvimrc_debug.txt" -c "Loc
 
 ## Changelog
 
+v3.0.1 : 2018-08-21
+
+  - fix a compatibility issue with unavailable |v:true| and |v:false| in Vim version 7.4
+
 v3.0.0 : 2018-08-14
 
   - use SHA256 as for calculating checksums and use FNV-1 as fallback.
