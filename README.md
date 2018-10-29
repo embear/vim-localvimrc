@@ -342,6 +342,20 @@ every local vimrc file.
 
   - Default: `1`
 
+### The `g:localvimrc_python2_enable` setting
+
+Enable probing whether python 2 is available and usable for calculating local
+vimrc file checksums.
+
+- Default: `1`
+
+### The `g:localvimrc_python3_enable` setting
+
+Enable probing whether python 3 is available and usable for calculating local
+vimrc file checksums.
+
+- Default: `1`
+
 ### The `g:localvimrc_debug` setting
 
 Debug level for this script. The messages can be shown with

@@ -148,6 +148,22 @@ if (exists("g:localvimrc_autocmd") && type(g:localvimrc_autocmd) == type(0))
   let s:localvimrc_autocmd = g:localvimrc_autocmd
 endif
 
+" define default "localvimrc_python2_enable" {{{2
+" copy to script local variable to prevent .lvimrc modifying the enable
+" option.
+let s:localvimrc_python2_enable = 1
+if (exists("g:localvimrc_python2_enable") && type(g:localvimrc_python2_enable) == type(0))
+  let s:localvimrc_python2_enable = g:localvimrc_python2_enable
+endif
+
+" define default "localvimrc_python3_enable" {{{2
+" copy to script local variable to prevent .lvimrc modifying the enable
+" option.
+let s:localvimrc_python3_enable = 1
+if (exists("g:localvimrc_python3_enable") && type(g:localvimrc_python3_enable) == type(0))
+  let s:localvimrc_python3_enable = g:localvimrc_python3_enable
+endif
+
 " define default "localvimrc_debug" {{{2
 if (!exists("g:localvimrc_debug"))
   let g:localvimrc_debug = 0
@@ -979,48 +995,47 @@ let s:localvimrc_finish = 0
 " initialize debug message buffer {{{2
 let s:localvimrc_debug_message = []
 
-" determine python version {{{2
-" for each available python version try to load the required modules and use
-" this version only if loading worked
-let s:localvimrc_python_available = 0
-let s:localvimrc_python_command = "no working python available"
-if s:localvimrc_python_available == 0 && has("pythonx")
-  try
-    pythonx import hashlib, vim
-    let s:localvimrc_python_available = 1
-    let s:localvimrc_python_command = "pythonx"
-  catch
-    call s:LocalVimRCDebug(1, "pythonx is available but not working")
-  endtry
-endif
-
-if s:localvimrc_python_available == 0 && has("python")
-  try
-    python import hashlib, vim
-    let s:localvimrc_python_available = 1
-    let s:localvimrc_python_command = "python"
-  catch
-    call s:LocalVimRCDebug(1, "python is available but not working")
-  endtry
-endif
-
-if s:localvimrc_python_available == 0 && has("python3")
-  try
-    python3 import hashlib, vim
-    let s:localvimrc_python_available = 1
-    let s:localvimrc_python_command = "python3"
-  catch
-    call s:LocalVimRCDebug(1, "python3 is available but not working")
-  endtry
-endif
-
 " determine which function shall be used to calculate checksums {{{2
+let s:localvimrc_python_command = "not checked for python"
+let s:localvimrc_python_available = 0
+
 if exists("*sha256")
   let s:localvimrc_checksum_func = function("sha256")
-elseif s:localvimrc_python_available == 1
-  let s:localvimrc_checksum_func = function("s:LocalVimRcCalcSHA256")
 else
-  let s:localvimrc_checksum_func = function("s:LocalVimRCCalcFNV")
+  " determine python version
+  " for each available python version try to load the required modules and use
+  " this version only if loading worked
+  let s:localvimrc_python_command = "no working python available"
+
+  if s:localvimrc_python_available == 0 &&
+    s:localvimrc_python2_enable == 1 &&
+    has("python")
+    try
+      python import hashlib, vim
+      let s:localvimrc_python_available = 1
+      let s:localvimrc_python_command = "python"
+    catch
+      call s:LocalVimRCDebug(1, "python is available but not working")
+    endtry
+  endif
+
+  if s:localvimrc_python_available == 0 &&
+    s:localvimrc_python3_enable == 1 &&
+    has("python3")
+    try
+      python3 import hashlib, vim
+      let s:localvimrc_python_available = 1
+      let s:localvimrc_python_command = "python3"
+    catch
+      call s:LocalVimRCDebug(1, "python3 is available but not working")
+    endtry
+  endif
+
+  if s:localvimrc_python_available == 1
+    let s:localvimrc_checksum_func = function("s:LocalVimRcCalcSHA256")
+  else
+    let s:localvimrc_checksum_func = function("s:LocalVimRCCalcFNV")
+  endif
 endif
 
 " Section: Report settings {{{1
@@ -1040,6 +1055,8 @@ call s:LocalVimRCDebug(1, "localvimrc_blacklist = \"" . string(s:localvimrc_blac
 call s:LocalVimRCDebug(1, "localvimrc_persistent = \"" . string(s:localvimrc_persistent) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_persistence_file = \"" . string(s:localvimrc_persistence_file) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_autocmd = \"" . string(s:localvimrc_autocmd) . "\"")
+call s:LocalVimRCDebug(1, "localvimrc_python2_enable = \"" . string(s:localvimrc_python2_enable) . "\"")
+call s:LocalVimRCDebug(1, "localvimrc_python3_enable = \"" . string(s:localvimrc_python3_enable) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_debug = \"" . string(g:localvimrc_debug) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_debug_lines = \"" . string(s:localvimrc_debug_lines) . "\"")
 call s:LocalVimRCDebug(1, "localvimrc_checksum_func = \"" . string(s:localvimrc_checksum_func) . "\"")

@@ -39,8 +39,10 @@ Contents ~
   12. The |g:localvimrc_whitelist| setting
   13. The |g:localvimrc_blacklist| setting
   14. The |g:localvimrc_autocmd| setting
-  15. The |g:localvimrc_debug| setting
-  16. The |g:localvimrc_debug_lines| setting
+  15. The |g:localvimrc_python2_enable| setting
+  16. The |g:localvimrc_python3_enable| setting
+  17. The |g:localvimrc_debug| setting
+  18. The |g:localvimrc_debug_lines| setting
  6. Autocommands                                      |localvimrc-autocommands|
   1. The |LocalVimRCPre| autocommand
   2. The |LocalVimRCPost| autocommand
@@ -414,6 +416,22 @@ The *g:localvimrc_autocmd* setting
 
 Emit autocommands |LocalVimRCPre| before and |LocalVimRCPost| after sourcing
 every local vimrc file.
+
+- Default: '1'
+
+-------------------------------------------------------------------------------
+The *g:localvimrc_python2_enable* setting
+
+Enable probing whether python 2 is available and usable for calculating local
+vimrc file checksums.
+
+- Default: '1'
+
+-------------------------------------------------------------------------------
+The *g:localvimrc_python3_enable* setting
+
+Enable probing whether python 3 is available and usable for calculating local
+vimrc file checksums.
 
 - Default: '1'
 
