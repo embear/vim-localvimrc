@@ -184,19 +184,26 @@ if has("autocmd")
 
     for event in s:localvimrc_event
       " call s:LocalVimRC() when creating or reading any file
-      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRC()"
+      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRC('".event."')"
     endfor
   augroup END
 endif
 
 " Section: Functions {{{1
 
-" Function: s:LocalVimRC() {{{2
+" Function: s:LocalVimRC(event) {{{2
 "
 " search all local vimrc files from current directory up to root directory and
 " source them in reverse order.
 "
-function! s:LocalVimRC()
+function! s:LocalVimRC(event)
+  " if called recursively by 'doautocmd' to force re-read of file modeline, 
+  " exit immediately; the modeline re-read has already occurred
+  if exists("b:localvimrc_reparse_modeline")
+    unlet b:localvimrc_reparse_modeline
+    return
+  endif
+
   " begin marker
   call s:LocalVimRCDebug(1, "== START LocalVimRC() ============================")
 
@@ -580,6 +587,14 @@ function! s:LocalVimRC()
 
   " end marker
   call s:LocalVimRCDebug(1, "== END LocalVimRC() ==============================")
+
+  " if 'modeline' option is set, refire the autocmd that called this function
+  " to ensure that settings in any modeline for the current buffer will
+  " overwrite sttings from localvimrc files
+  if &modeline
+    let b:localvimrc_reparse_modeline = 1
+    exec 'doautocmd localvimrc '.a:event
+  endif
 endfunction
 
 " Function: s:LocalVimRCUserAutocommand(event) {{{2
