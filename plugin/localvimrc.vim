@@ -590,7 +590,7 @@ function! s:LocalVimRC(event)
 
   " if 'modeline' option is set, refire the autocmd that called this function
   " to ensure that settings in any modeline for the current buffer will
-  " overwrite sttings from localvimrc files
+  " overwrite settings from localvimrc files
   if &modeline
     let b:localvimrc_reparse_modeline = 1
     exec 'doautocmd localvimrc '.a:event
