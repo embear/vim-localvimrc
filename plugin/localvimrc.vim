@@ -183,6 +183,8 @@ if has("autocmd")
     autocmd!
 
     for event in s:localvimrc_event
+      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRCDebug(1, 'autocommand triggered on event ".event."')"
+
       " call s:LocalVimRC() when creating or reading any file
       exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRC()"
     endfor
@@ -205,6 +207,7 @@ function! s:LocalVimRC()
 
   " finish immediately if localvimrc is disabled
   if s:localvimrc_enable == 0
+    call s:LocalVimRCDebug(1, "== END LocalVimRC() (localvimrc is disabled) =====")
     return
   endif
 
@@ -458,7 +461,7 @@ function! s:LocalVimRC()
           try
             " execute the command
             exec "sandbox " . l:command
-            call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
+            call s:LocalVimRCDebug(1, "sourced (with sandbox) " . l:rcfile)
           catch ^Vim\%((\a\+)\)\=:E48
             let l:message = printf("unable to use sandbox on '%s': %s (%s)", l:rcfile, v:exception, v:throwpoint)
             call s:LocalVimRCDebug(1, l:message)
@@ -513,7 +516,7 @@ function! s:LocalVimRC()
               if (l:sandbox_answer =~? '^[ya]$')
                 " execute the command
                 exec l:command
-                call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
+                call s:LocalVimRCDebug(1, "sourced (without sandbox) " . l:rcfile)
               elseif (l:sandbox_answer =~? "^q$")
                 call s:LocalVimRCDebug(1, "ended processing files")
                 break
