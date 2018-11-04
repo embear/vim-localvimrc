@@ -193,6 +193,27 @@ endif
 
 " Section: Functions {{{1
 
+function! s:LocalVimRCExecScript(script_path, sandbox)
+  let l:command = "source " . fnameescape(a:script_path)
+
+  if a:sandbox == 1
+    let l:command = "sandbox " . l:command
+  endif
+
+  call s:LocalVimRCDebug(1, "Executing script, command is: " . l:command)
+
+  let s:localvimrc_exec_running = 1
+  exec l:command
+  let s:localvimrc_exec_running = 0
+
+  if a:sandbox == 1
+    call s:LocalVimRCDebug(1, "sourced (with sandbox) " . a:script_path)
+  else
+    call s:LocalVimRCDebug(1, "sourced (without sandbox) " . a:script_path)
+  endif
+endf
+let s:localvimrc_exec_running = 0
+
 " Function: s:LocalVimRC() {{{2
 "
 " search all local vimrc files from current directory up to root directory and
@@ -208,6 +229,13 @@ function! s:LocalVimRC()
   " finish immediately if localvimrc is disabled
   if s:localvimrc_enable == 0
     call s:LocalVimRCDebug(1, "== END LocalVimRC() (localvimrc is disabled) =====")
+    return
+  endif
+
+  " finish immediately if an exec is running
+  " we are being called recursively
+  if s:localvimrc_exec_running == 1
+    call s:LocalVimRCDebug(1, "== END LocalVimRC() (exec already running) =======")
     return
   endif
 
@@ -447,9 +475,6 @@ function! s:LocalVimRC()
         endif
         call s:LocalVimRCDebug(3, "g:localvimrc_sourced_once = " . g:localvimrc_sourced_once . ", g:localvimrc_sourced_once_for_file = " . g:localvimrc_sourced_once_for_file)
 
-        " generate command
-        let l:command = "source " . fnameescape(l:rcfile)
-
         " emit an autocommand before sourcing
         if (s:localvimrc_autocmd == 1)
           call s:LocalVimRCUserAutocommand('LocalVimRCPre')
@@ -460,8 +485,7 @@ function! s:LocalVimRC()
           call s:LocalVimRCDebug(2, "using sandbox")
           try
             " execute the command
-            exec "sandbox " . l:command
-            call s:LocalVimRCDebug(1, "sourced (with sandbox) " . l:rcfile)
+            call s:LocalVimRCExecScript(l:rcfile, 1)
           catch ^Vim\%((\a\+)\)\=:E48
             let l:message = printf("unable to use sandbox on '%s': %s (%s)", l:rcfile, v:exception, v:throwpoint)
             call s:LocalVimRCDebug(1, l:message)
@@ -515,8 +539,7 @@ function! s:LocalVimRC()
               " check the sandbox_answer
               if (l:sandbox_answer =~? '^[ya]$')
                 " execute the command
-                exec l:command
-                call s:LocalVimRCDebug(1, "sourced (without sandbox) " . l:rcfile)
+                call s:LocalVimRCExecScript(l:rcfile, 0)
               elseif (l:sandbox_answer =~? "^q$")
                 call s:LocalVimRCDebug(1, "ended processing files")
                 break
@@ -525,8 +548,7 @@ function! s:LocalVimRC()
           endtry
         else
           " execute the command
-          exec l:command
-          call s:LocalVimRCDebug(1, "sourced " . l:rcfile)
+          call s:LocalVimRCExecScript(l:rcfile, 0)
         endif
 
         " emit an autocommands after sourcing
