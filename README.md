@@ -417,6 +417,10 @@ vim --cmd "let g:localvimrc_debug=99" -c "redir! > localvimrc_debug.txt" -c "Loc
 
 ## Changelog
 
+vX.X.X : XXXX-XX-XX
+
+  - prevent recursive sourcing of local vimrc files
+
 v3.0.1 : 2018-08-21
 
   - fix a compatibility issue with unavailable |v:true| and |v:false| in Vim version 7.4

@@ -505,6 +505,10 @@ Credits ~
                                                          *localvimrc-changelog*
 Changelog ~
 
+vX.X.X : XXXX-XX-XX
+
+- prevent recursive sourcing of local vimrc files
+
 v3.0.1 : 2018-08-21
 
 - fix a compatibility issue with unavailable |v:true| and |v:false| in Vim
