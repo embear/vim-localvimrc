@@ -183,36 +183,37 @@ if has("autocmd")
     autocmd!
 
     for event in s:localvimrc_event
-      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRCDebug(1, 'autocommand triggered on event ".event."')"
-
-      " call s:LocalVimRC() when creating or reading any file
-      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRC()"
+      " call s:LocalVimRC() when event occurs
+      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRCDebug(1, 'autocommand triggered on event ".event."')|call s:LocalVimRC()"
     endfor
   augroup END
 endif
 
 " Section: Functions {{{1
 
-function! s:LocalVimRCExecScript(script_path, sandbox)
+" Function: s:LocalVimRCSourceScript() {{{2
+"
+" actually source script file and prevent nested local vimrc triggers by
+" setting a guard variable.
+"
+function! s:LocalVimRCSourceScript(script_path, sandbox)
   let l:command = "source " . fnameescape(a:script_path)
 
   if a:sandbox == 1
     let l:command = "sandbox " . l:command
   endif
 
-  call s:LocalVimRCDebug(1, "Executing script, command is: " . l:command)
+  " prevent nested sourcing possibly triggered by content of sourced script by
+  " setting a guard variable
+  let s:localvimrc_running = 1
 
-  let s:localvimrc_exec_running = 1
+  " execute the command sourcing the local vimrc file
+  call s:LocalVimRCDebug(1, "sourcing script, command is: \"" . l:command . "\"")
   exec l:command
-  let s:localvimrc_exec_running = 0
 
-  if a:sandbox == 1
-    call s:LocalVimRCDebug(1, "sourced (with sandbox) " . a:script_path)
-  else
-    call s:LocalVimRCDebug(1, "sourced (without sandbox) " . a:script_path)
-  endif
+  " release the guard variable
+  let s:localvimrc_running = 0
 endf
-let s:localvimrc_exec_running = 0
 
 " Function: s:LocalVimRC() {{{2
 "
@@ -223,21 +224,19 @@ function! s:LocalVimRC()
   " begin marker
   call s:LocalVimRCDebug(1, "== START LocalVimRC() ============================")
 
-  " print version
-  call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
-
   " finish immediately if localvimrc is disabled
   if s:localvimrc_enable == 0
-    call s:LocalVimRCDebug(1, "== END LocalVimRC() (localvimrc is disabled) =====")
+    call s:LocalVimRCDebug(1, "== END LocalVimRC() (disabled) ===================")
     return
   endif
 
-  " finish immediately if an exec is running
-  " we are being called recursively
-  if s:localvimrc_exec_running == 1
-    call s:LocalVimRCDebug(1, "== END LocalVimRC() (exec already running) =======")
+  " finish immediately if we are being called recursively
+  if s:localvimrc_running == 1
+    call s:LocalVimRCDebug(1, "== END LocalVimRC() (already running) ============")
     return
   endif
+
+  call s:LocalVimRCDebug(1, "running for file \"" .  fnameescape(expand("%:p")) . "\"")
 
   " read persistent information
   call s:LocalVimRCReadPersistent()
@@ -485,7 +484,7 @@ function! s:LocalVimRC()
           call s:LocalVimRCDebug(2, "using sandbox")
           try
             " execute the command
-            call s:LocalVimRCExecScript(l:rcfile, 1)
+            call s:LocalVimRCSourceScript(l:rcfile, 1)
           catch ^Vim\%((\a\+)\)\=:E48
             let l:message = printf("unable to use sandbox on '%s': %s (%s)", l:rcfile, v:exception, v:throwpoint)
             call s:LocalVimRCDebug(1, l:message)
@@ -539,7 +538,7 @@ function! s:LocalVimRC()
               " check the sandbox_answer
               if (l:sandbox_answer =~? '^[ya]$')
                 " execute the command
-                call s:LocalVimRCExecScript(l:rcfile, 0)
+                call s:LocalVimRCSourceScript(l:rcfile, 0)
               elseif (l:sandbox_answer =~? "^q$")
                 call s:LocalVimRCDebug(1, "ended processing files")
                 break
@@ -548,7 +547,7 @@ function! s:LocalVimRC()
           endtry
         else
           " execute the command
-          call s:LocalVimRCExecScript(l:rcfile, 0)
+          call s:LocalVimRCSourceScript(l:rcfile, 0)
         endif
 
         " emit an autocommands after sourcing
@@ -1013,6 +1012,9 @@ let s:localvimrc_persistence_file_checksum = ""
 
 " initialize persistent data {{{2
 let s:localvimrc_persistent_data = {}
+
+" initialize nested execution guard {{{2
+let s:localvimrc_running = 0
 
 " initialize processing finish flag {{{2
 let s:localvimrc_finish = 0
