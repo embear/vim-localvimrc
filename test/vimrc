@@ -5,6 +5,3 @@ mapclear
 abclear
 comclear
 autocmd!
-
-" add vader to runtime path
-set rtp+=~/.vim/bundle/vader
