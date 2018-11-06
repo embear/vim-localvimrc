@@ -508,7 +508,7 @@ function! s:LocalVimRC()
 
                     " turn off possible previous :silent command to force this
                     " message to be printed
-                    unsilent let l:sandbox_answer = inputdialog(l:message)
+                    unsilent let l:sandbox_answer = inputdialog("\n" . l:message)
                     call s:LocalVimRCDebug(2, "sandbox answer is \"" . l:sandbox_answer . "\"")
 
                     if empty(l:sandbox_answer)
