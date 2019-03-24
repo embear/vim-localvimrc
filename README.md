@@ -389,6 +389,31 @@ This autocommand is emitted right before sourcing each local vimrc file.
 
 This autocommands is emitted right after sourcing each local vimrc file.
 
+## Frequently Asked Questions
+
+### modeline settings are overwritten by local vimrc
+
+Depending on the |g:localvimrc_event| that is used to trigger loading local
+vimrc files it is possible that |modeline| already had been parsed. This might
+be cause problems. If for example there is `set ts=8 sts=4 sw=4 et` in the
+local vimrc and a Makefile contains `# vim: ts=4 sts=0 sw=4 noet` this modeline
+will not get applied with default settings of localvimrc. There are two
+possibilities to solve this.
+
+The first solution is to use |BufRead| as value for |g:localvimrc_event|. This
+event is emitted by Vim before modelines are processed.
+
+The second solution is to move all those settings to the local vimrc file and
+use different settings depending on the |filetype|:
+
+``` {.vim}
+if &ft == "make"
+  ts=4 sts=0 sw=4 noet
+else
+  ts=8 sts=4 sw=4 et
+endif
+```
+
 ## Contribute
 
 To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>
