@@ -1034,9 +1034,9 @@ else
   " this version only if loading worked
   let s:localvimrc_python_command = "no working python available"
 
-  if s:localvimrc_python_available == 0 &&
-    s:localvimrc_python2_enable == 1 &&
-    has("python")
+  if s:localvimrc_python_available == 0
+        \ && s:localvimrc_python2_enable == 1
+        \ && has("python")
     try
       python import hashlib, vim
       let s:localvimrc_python_available = 1
@@ -1046,9 +1046,9 @@ else
     endtry
   endif
 
-  if s:localvimrc_python_available == 0 &&
-    s:localvimrc_python3_enable == 1 &&
-    has("python3")
+  if s:localvimrc_python_available == 0
+        \ && s:localvimrc_python3_enable == 1
+        \ && has("python3")
     try
       python3 import hashlib, vim
       let s:localvimrc_python_available = 1
