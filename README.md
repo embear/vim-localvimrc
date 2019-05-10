@@ -408,9 +408,9 @@ use different settings depending on the |filetype|:
 
 ``` {.vim}
 if &ft == "make"
-  ts=4 sts=0 sw=4 noet
+  setl ts=4 sts=0 sw=4 noet
 else
-  ts=8 sts=4 sw=4 et
+  setl ts=8 sts=4 sw=4 et
 endif
 ```
 
