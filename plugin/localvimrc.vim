@@ -718,7 +718,6 @@ function! s:LocalVimRCReadPersistent()
         for l:line in l:serialized
           let l:columns = split(l:line, '[^\\]\zs|\|^|', 1)
           if len(l:columns) != 3 && len(l:columns) != 4
-            call s:LocalVimRCDebug(1, "error in persistence file")
             call s:LocalVimRCError("error in persistence file")
           else
             if len(l:columns) == 3
@@ -973,6 +972,9 @@ endfunction
 "
 function! s:LocalVimRCError(text)
   echohl ErrorMsg | echom "localvimrc: " . a:text | echohl None
+
+  " put every error message to the debug message array
+  call s:LocalVimRCDebug(0, a:text)
 endfunction
 
 " Function: s:LocalVimRCDebug(level, text) {{{2
