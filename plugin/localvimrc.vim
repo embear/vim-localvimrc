@@ -206,13 +206,18 @@ function! s:LocalVimRCSourceScript(script_path, sandbox)
   " prevent nested sourcing possibly triggered by content of sourced script by
   " setting a guard variable
   let s:localvimrc_running = 1
-
-  " execute the command sourcing the local vimrc file
-  call s:LocalVimRCDebug(1, "sourcing script, command is: \"" . l:command . "\"")
-  exec l:command
-
-  " release the guard variable
-  let s:localvimrc_running = 0
+  try
+    " execute the command sourcing the local vimrc file
+    call s:LocalVimRCDebug(1, "sourcing script, command is: \"" . l:command . "\"")
+    exec l:command
+  catch
+    let l:errormsg = printf('error when sourcing script: %s (%s)',
+          \ v:exception, v:throwpoint)
+    call s:LocalVimRCDebug(1, l:errormsg)
+    call s:LocalVimRCError(l:errormsg)
+  finally
+    let s:localvimrc_running = 0
+  endtry
 endf
 
 " Function: s:LocalVimRC() {{{2
