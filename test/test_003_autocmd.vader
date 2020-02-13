@@ -53,7 +53,7 @@ Execute (autocommand post):
   " edit a file in the test tree
   exec "edit " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
 
-Then (autocommand pre):
+Then (autocommand post):
   let expected = [ "post", "post", "post", "post", "post", "post" ]
   Assert expected == g:localvimrc_test_ac_post_var
 
@@ -99,6 +99,6 @@ Execute (autocommand post disable):
   " edit a file in the test tree
   exec "edit " . $LOCALVIMRC_TEST_DIR . "/a/b/c/d/e/f/foo"
 
-Then (autocommand pre disable):
+Then (autocommand post disable):
   let expected = []
   Assert expected == g:localvimrc_test_ac_post_var
