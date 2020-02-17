@@ -211,11 +211,9 @@ function! s:LocalVimRCSourceScript(script_path, sandbox)
     call s:LocalVimRCDebug(1, "sourcing script, command is: \"" . l:command . "\"")
     exec l:command
   catch
-    let l:errormsg = printf('error when sourcing script: %s (%s)',
-          \ v:exception, v:throwpoint)
-    call s:LocalVimRCDebug(1, l:errormsg)
-    call s:LocalVimRCError(l:errormsg)
+    call s:LocalVimRCError("error when sourcing script: \"" . v:exception . "\" (" . v:throwpoint . ")")
   finally
+    " release the guard variable
     let s:localvimrc_running = 0
   endtry
 endf
