@@ -445,6 +445,7 @@ vim --cmd "let g:localvimrc_debug=99" -c "redir! > localvimrc_debug.txt" -c "Loc
 vX.X.X : XXXX-XX-XX
 
   - prevent recursive sourcing of local vimrc files
+  - better handling of syntax errors in sourced local vimrc files
 
 v3.0.1 : 2018-08-21
 

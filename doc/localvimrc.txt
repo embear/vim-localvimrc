@@ -496,9 +496,9 @@ The second solution is to move all those settings to the local vimrc file and
 use different settings depending on the |filetype|:
 >
   if &ft == "make"
-    ts=4 sts=0 sw=4 noet
+    setl ts=4 sts=0 sw=4 noet
   else
-    ts=8 sts=4 sw=4 et
+    setl ts=8 sts=4 sw=4 et
   endif
 <
 ===============================================================================
@@ -537,6 +537,7 @@ Changelog ~
 vX.X.X : XXXX-XX-XX
 
 - prevent recursive sourcing of local vimrc files
+- better handling of syntax errors in sourced local vimrc files
 
 v3.0.1 : 2018-08-21
 
