@@ -1,5 +1,6 @@
 " clear all settings
 set nocompatible
+set noloadplugins
 set all&
 mapclear
 abclear
