@@ -444,7 +444,7 @@ vim --cmd "let g:localvimrc_debug=99" -c "redir! > localvimrc_debug.txt" -c "Loc
 
 v3.1.0 : 2020-05-20
 
-  - add option to disable probing od Python versions
+  - add option to disable probing of Python versions
   - prevent recursive sourcing of local vimrc files
   - better handling of syntax errors in sourced local vimrc files
 
