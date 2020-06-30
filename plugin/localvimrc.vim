@@ -497,7 +497,7 @@ function! s:LocalVimRC()
             " execute the command
             call s:LocalVimRCSourceScript(l:rcfile, 1)
           catch /^sandbox$/
-            let l:message = printf("localvimrc: unable to use sandbox for \"" . l:rcfile . "\".")
+            let l:message = printf("localvimrc: unable to use sandbox for \"%s\".", l:rcfile)
             call s:LocalVimRCDebug(1, l:message)
 
             if (s:localvimrc_ask == 1)
