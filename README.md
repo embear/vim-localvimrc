@@ -65,6 +65,13 @@ Show all stored debugging messages. To see any message with this command
 debugging needs to be enabled with |g:localvimrc_debug|. The number of messages
 stored and printed can be limited using the setting |g:localvimrc_debug_lines|.
 
+### The `LocalVimRCDebugDump` command
+
+Write all stored debugging messages to given file. To write any message with
+this command debugging needs to be enabled with |g:localvimrc_debug|. The
+number of messages stored and written can be limited using the setting
+|g:localvimrc_debug_lines|.
+
 ## Functions
 
 ### The `LocalVimRCFinish` function
@@ -359,14 +366,14 @@ vimrc file checksums, in case |sha256()| is not available.
 ### The `g:localvimrc_debug` setting
 
 Debug level for this script. The messages can be shown with
-|LocalVimRCDebugShow|.
+|LocalVimRCDebugShow| or written to a file with |LocalVimRCDebugDump|.
 
   - Default: `0`
 
 ### The `g:localvimrc_debug_lines` setting
 
 Limit for the number of debug messages stored. The messages can be shown with
-|LocalVimRCDebugShow|.
+|LocalVimRCDebugShow| or written to a file with |LocalVimRCDebugDump|.
 
   - Default: `100`
 
@@ -427,7 +434,7 @@ messages can be enabled temporary and exported to a file called
 `localvimrc_debug.txt` on command line with the following command:
 
 ``` {.sh}
-vim --cmd "let g:localvimrc_debug=99" -c "redir! > localvimrc_debug.txt" -c "LocalVimRCDebugShow" -c "redir END" your_file
+vim --cmd "let g:localvimrc_debug=99" -c "LocalVimRCDebugDump localvimrc_debug.txt" your_file
 ```
 
 ## Credits
@@ -442,6 +449,10 @@ vim --cmd "let g:localvimrc_debug=99" -c "redir! > localvimrc_debug.txt" -c "Loc
 
 ## Changelog
 
+vX.X.X : XXXX-XX-XX
+
+  - add command |LocalVimRCDebugDump| to write debug messages to a file.
+  
 v3.1.0 : 2020-05-20
 
   - add option to disable probing of Python versions

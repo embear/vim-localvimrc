@@ -1000,12 +1000,24 @@ endfunction
 
 " Function: s:LocalVimRCDebugShow() {{{2
 "
-" output stored debug message
+" output stored debug messages to console
 "
 function! s:LocalVimRCDebugShow()
+  redir! > /tmp/localvimrc.log
+
   for l:message in s:localvimrc_debug_message
     echo l:message
   endfor
+
+  redir END
+endfunction
+
+" Function: s:LocalVimRCDebugDump(logfile) {{{2
+"
+" output stored debug message to file
+"
+function! s:LocalVimRCDebugDump(logfile)
+  call writefile(s:localvimrc_debug_message, a:logfile, "s")
 endfunction
 
 " Section: Initialize internal variables {{{1
@@ -1113,5 +1125,6 @@ command! LocalVimRCEdit    call s:LocalVimRCEdit()
 command! LocalVimRCEnable  call s:LocalVimRCEnable()
 command! LocalVimRCDisable call s:LocalVimRCDisable()
 command! LocalVimRCDebugShow call s:LocalVimRCDebugShow()
+command! -nargs=+ -complete=file LocalVimRCDebugDump call s:LocalVimRCDebugDump(<f-args>)
 
 " vim600: foldmethod=marker foldlevel=0 :
