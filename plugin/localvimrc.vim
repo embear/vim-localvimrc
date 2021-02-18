@@ -638,9 +638,14 @@ endfunction
 "
 function! s:LocalVimRCMatchAny(str, patterns)
   for l:pattern in a:patterns
-    if (match(a:str, l:pattern) != -1)
-      return 1
-    endif
+    try
+      if (match(a:str, l:pattern) != -1)
+        return 1
+      endif
+    catch
+      " the given patterns contain an illegal regular expression
+      call s:LocalVimRCError("localvimrc_whitelist or localvimrc_blacklist contains illegal regular expression '" . l:pattern . "'")
+    endtry
   endfor
   return 0
 endfunction
