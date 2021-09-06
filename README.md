@@ -14,7 +14,7 @@ previous loading.
 It is possible to define a whitelist and a blacklist of local vimrc files that
 are loaded or ignored unconditionally.
 
-The plugin can be found on [Bitbucket], [GitHub] and [VIM online].
+The plugin can be found on [GitHub] and [VIM online].
 
 ## Commands
 
@@ -425,13 +425,13 @@ endif
 
 To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>
 
-If you think this plugin could be improved, fork on [Bitbucket] or [GitHub] and
-send a pull request or just tell me your ideas.
+If you think this plugin could be improved, fork on [GitHub] and send a pull
+request or just tell me your ideas.
 
 If you encounter a bug please enable debugging, export debugging messages to
-a file and create a bug report either on [Bitbucket] or [GitHub]. Debug
-messages can be enabled temporary and exported to a file called
-`localvimrc_debug.txt` on command line with the following command:
+a file and create a bug report on [GitHub]. Debug messages can be enabled
+temporary and exported to a file called `localvimrc_debug.txt` on command line
+with the following command:
 
 ``` {.sh}
 vim --cmd "let g:localvimrc_debug=99" -c "LocalVimRCDebugDump localvimrc_debug.txt" your_file
@@ -544,6 +544,5 @@ v1.2 : 2002-10-09
   - initial version
 
 
-[Bitbucket]: https://bitbucket.org/embear/localvimrc
 [GitHub]: https://github.com/embear/vim-localvimrc
 [VIM online]: http://www.vim.org/scripts/script.php?script_id=441
