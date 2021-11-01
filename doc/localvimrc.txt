@@ -288,6 +288,15 @@ BufWinEnter is the default to enable lines like
 in the local vimrc file. Settings "local to window" need to be set for every
 time a buffer is displayed in a window.
 
+Because the plugin searches local vimrc files in the path of the currently
+opened file not all autocommand events make sense. For example the event
+|VimEnter| might cause problems. When that event is emitted it is possible that
+no file is opened but some temporary buffer is currently shown. This will lead
+to an unexpected behavior. If you would like to apply settings only once per
+running Vim instance please use |g:localvimrc_sourced_once_for_file| and
+|g:localvimrc_sourced_once|. An example how to use those variables in a local
+vimrc file is described in the introduction to |localvimrc-variables|.
+
 -------------------------------------------------------------------------------
 The *g:localvimrc_event_pattern* setting
 
