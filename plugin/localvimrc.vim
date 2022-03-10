@@ -197,7 +197,13 @@ endif
 " setting a guard variable.
 "
 function! s:LocalVimRCSourceScript(script_path, sandbox)
-  let l:command = "source " . fnameescape(a:script_path)
+  if a:script_path=~? '\M.lua$'
+    if has('nvim')
+      let l:command = "luafile " . fnameescape(a:script_path)
+    endif
+  else
+    let l:command = "source " . fnameescape(a:script_path)
+  endif
 
   if a:sandbox == 1
     let l:command = "sandbox " . l:command
