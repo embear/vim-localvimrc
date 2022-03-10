@@ -194,6 +194,10 @@ name such as ".config/localvimrc".
 Previous versions of localvimrc only supported a single file as string. This is
 still supported for backward compatibility.
 
+By default the local vimrc files are expected to contain vim script. For Neovim
+there is additional support for Lua. In order to use Lua code in the local
+vimrc, the file name must have the extension `.lua`.
+
   - Default: `[ ".lvimrc" ]`
 
 ### The `g:localvimrc_event` setting
@@ -455,12 +459,14 @@ vim --cmd "let g:localvimrc_debug=99" -c "LocalVimRCDebugDump localvimrc_debug.t
 - Lars Winderling for whitelist/blacklist patch
 - Michon van Dooren for autocommands patch
 - Benoit de Chezell for fix with nested execution
+- Huy Le for patch to support Lua scripts in Neovim
 
 ## Changelog
 
 vX.X.X : XXXX-XX-XX
 
   - add command |LocalVimRCDebugDump| to write debug messages to a file.
+  - add support for Lua scripts when using Neovim.
   
 v3.1.0 : 2020-05-20
 
