@@ -4,7 +4,11 @@
 Contents ~
 
  1. Introduction                                      |localvimrc-introduction|
- 2. Commands                                              |localvimrc-commands|
+ 2. Installation                                      |localvimrc-installation|
+  1. Using a vimball archive                 |localvimrc-using-vimball-archive|
+  2. Using Vim 8 package management |localvimrc-using-vim-8-package-management|
+  3. Using a third party package manager |localvimrc-using-third-party-package-manager|
+ 3. Commands                                              |localvimrc-commands|
   1. The |LocalVimRC| command
   2. The |LocalVimRCClear| command
   3. The |LocalVimRCCleanup| command
@@ -14,9 +18,9 @@ Contents ~
   7. The |LocalVimRCDisable| command
   8. The |LocalVimRCDebugShow| command
   9. The |LocalVimRCDebugDump| command
- 3. Functions                                            |localvimrc-functions|
+ 4. Functions                                            |localvimrc-functions|
   1. The |LocalVimRCFinish| function
- 4. Variables                                            |localvimrc-variables|
+ 5. Variables                                            |localvimrc-variables|
   1. The |g:localvimrc_file| variable
   2. The |g:localvimrc_file_dir| variable
   3. The |g:localvimrc_script| variable
@@ -25,7 +29,7 @@ Contents ~
   6. The |g:localvimrc_script_dir_unresolved| variable
   7. The |g:localvimrc_sourced_once| variable
   8. The |g:localvimrc_sourced_once_for_file| setting
- 5. Settings                                              |localvimrc-settings|
+ 6. Settings                                              |localvimrc-settings|
   1. The |g:localvimrc_enable| setting
   2. The |g:localvimrc_name| setting
   3. The |g:localvimrc_event| setting
@@ -44,15 +48,15 @@ Contents ~
   16. The |g:localvimrc_python3_enable| setting
   17. The |g:localvimrc_debug| setting
   18. The |g:localvimrc_debug_lines| setting
- 6. Autocommands                                      |localvimrc-autocommands|
+ 7. Autocommands                                      |localvimrc-autocommands|
   1. The |LocalVimRCPre| autocommand
   2. The |LocalVimRCPost| autocommand
- 7. Frequently Asked Questions          |localvimrc-frequently-asked-questions|
+ 8. Frequently Asked Questions          |localvimrc-frequently-asked-questions|
   1. modeline settings are overwritten by local vimrc |localvimrc-modeline-settings-are-overwritten-by-local-vimrc|
- 8. Contribute                                          |localvimrc-contribute|
- 9. Credits                                                |localvimrc-credits|
- 10. Changelog                                           |localvimrc-changelog|
- 11. References                                         |localvimrc-references|
+ 9. Contribute                                          |localvimrc-contribute|
+ 10. Credits                                               |localvimrc-credits|
+ 11. Changelog                                           |localvimrc-changelog|
+ 12. References                                         |localvimrc-references|
 
 ===============================================================================
                                                       *localvimrc-introduction*
@@ -73,6 +77,50 @@ It is possible to define a whitelist and a blacklist of local vimrc files that
 are loaded or ignored unconditionally.
 
 The plugin can be found on GitHub [1] and VIM online [2].
+
+===============================================================================
+                                                      *localvimrc-installation*
+Installation ~
+
+-------------------------------------------------------------------------------
+                                             *localvimrc-using-vimball-archive*
+Using a vimball archive ~
+
+Download the archive at VIM online [2] and run
+>
+  vim -c 'so %|q' localvimrc.vmb
+<
+-------------------------------------------------------------------------------
+                                    *localvimrc-using-vim-8-package-management*
+Using Vim 8 package management ~
+
+This is an elegant way to separate plugins from each other and be easily able
+to completely remove a plugin later.
+>
+  mkdir -p ~/.vim/pack/localvimrc/start/
+  git clone --depth 1 https://github.com/embear/vim-localvimrc.git ~/.vim/pack/localvimrc/start/localvimrc
+  vim -c 'packloadall|helptags ALL'
+<
+-------------------------------------------------------------------------------
+                                 *localvimrc-using-third-party-package-manager*
+Using a third party package manager ~
+
+If the installed vim is older than version 8 it is possible to use a third
+party package manager. For example install vim-plug [3] and add the following
+to your global vimrc:
+>
+  call plug#begin()
+  
+  Plug 'embear/vim-localvimrc'
+  
+  call plug#end()
+<
+Then actually install the plugin:
+>
+  vim -c 'PlugInstall'
+<
+Other options for a package manager are vundle [4], dein [5], neobundle [6],
+pathogen [7] or packer [8].
 
 ===============================================================================
                                                           *localvimrc-commands*
@@ -693,6 +741,12 @@ v1.2 : 2002-10-09
 References ~
 
 [1] https://github.com/embear/vim-localvimrc
-[2] http://www.vim.org/scripts/script.php?script_id=441
+[2] https://www.vim.org/scripts/script.php?script_id=441
+[3] https://github.com/junegunn/vim-plug
+[4] https://github.com/gmarik/vundle
+[5] https://github.com/Shougo/dein.vim
+[6] https://github.com/Shougo/neobundle.vim
+[7] https://github.com/tpope/vim-pathogen
+[8] https://github.com/wbthomason/packer.nvim
 
 vim: ft=help

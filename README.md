@@ -16,6 +16,49 @@ are loaded or ignored unconditionally.
 
 The plugin can be found on [GitHub] and [VIM online].
 
+## Installation
+
+### Using a vimball archive
+
+Download the archive at [VIM online] and run
+
+``` {.sh}
+vim -c 'so %|q' localvimrc.vmb
+```
+
+### Using Vim 8 package management
+
+This is an elegant way to separate plugins from each other and be easily able
+to completely remove a plugin later.
+
+``` {.sh}
+mkdir -p ~/.vim/pack/localvimrc/start/
+git clone --depth 1 https://github.com/embear/vim-localvimrc.git ~/.vim/pack/localvimrc/start/localvimrc
+vim -c 'packloadall|helptags ALL'
+```
+
+### Using a third party package manager
+
+If the installed vim is older than version 8 it is possible to use a third
+party package manager. For example install [vim-plug] and add the following to
+your global vimrc:
+
+``` {.vim}
+call plug#begin()
+
+Plug 'embear/vim-localvimrc'
+
+call plug#end()
+```
+
+Then actually install the plugin:
+
+``` {.sh}
+vim -c 'PlugInstall'
+```
+
+Other options for a package manager are [vundle], [dein], [neobundle], [pathogen] or [packer].
+
 ## Commands
 
 ### The `LocalVimRC` command
@@ -560,4 +603,10 @@ v1.2 : 2002-10-09
 
 
 [GitHub]: https://github.com/embear/vim-localvimrc
-[VIM online]: http://www.vim.org/scripts/script.php?script_id=441
+[VIM online]: https://www.vim.org/scripts/script.php?script_id=441
+[dein]: https://github.com/Shougo/dein.vim
+[neobundle]: https://github.com/Shougo/neobundle.vim
+[packer]: https://github.com/wbthomason/packer.nvim
+[pathogen]: https://github.com/tpope/vim-pathogen
+[vim-plug]: https://github.com/junegunn/vim-plug
+[vundle]: https://github.com/gmarik/vundle
