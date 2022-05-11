@@ -477,6 +477,29 @@ else
 endif
 ```
 
+### Project specific settings for other plugins are ignored
+
+Most plugins require to have their configuration variables set when the plugin
+is loaded. If you want to have project specific settings for those plugins you
+run into a chicken and egg problem. This is because localvimrc is only able to
+load the project specific configuration when a buffer in the project is loaded.
+By that time the other plugins are already loaded and the project specific
+configurations are most likely ignored. A solution to this is to make the
+plugin you want to configure an optional plugin (see |:packadd|). This way it
+is possible to do the settings in the local vimrc file and activate the plugin
+afterwards. To do so add something like this to your local vimrc file:
+
+``` {.vim}
+" NOTE: <PLUGIN> needs to be replaced with the directory name of the plugin
+if !g:localvimrc_sourced_once
+  " add your <PLUGIN> settings here
+  let g:plugin_setting = 1000
+
+  " late loading of plugin
+  packadd <PLUGIN>
+endif
+```
+
 ## Contribute
 
 To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>

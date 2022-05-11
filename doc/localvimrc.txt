@@ -53,6 +53,7 @@ Contents ~
   2. The |LocalVimRCPost| autocommand
  8. Frequently Asked Questions          |localvimrc-frequently-asked-questions|
   1. modeline settings are overwritten by local vimrc |localvimrc-modeline-settings-are-overwritten-by-local-vimrc|
+  2. Project specific settings for other plugins are ignored |localvimrc-project-specific-settings-for-other-plugins-are-ignored|
  9. Contribute                                          |localvimrc-contribute|
  10. Credits                                               |localvimrc-credits|
  11. Changelog                                           |localvimrc-changelog|
@@ -569,6 +570,29 @@ use different settings depending on the |filetype|:
     setl ts=4 sts=0 sw=4 noet
   else
     setl ts=8 sts=4 sw=4 et
+  endif
+<
+-------------------------------------------------------------------------------
+           *localvimrc-project-specific-settings-for-other-plugins-are-ignored*
+Project specific settings for other plugins are ignored ~
+
+Most plugins require to have their configuration variables set when the plugin
+is loaded. If you want to have project specific settings for those plugins you
+run into a chicken and egg problem. This is because localvimrc is only able to
+load the project specific configuration when a buffer in the project is loaded.
+By that time the other plugins are already loaded and the project specific
+configurations are most likely ignored. A solution to this is to make the
+plugin you want to configure an optional plugin (see |:packadd|). This way it
+is possible to do the settings in the local vimrc file and activate the plugin
+afterwards. To do so add something like this to your local vimrc file:
+>
+  " NOTE: <PLUGIN> needs to be replaced with the directory name of the plugin
+  if !g:localvimrc_sourced_once
+    " add your <PLUGIN> settings here
+    let g:plugin_setting = 1000
+  
+    " late loading of plugin
+    packadd <PLUGIN>
   endif
 <
 ===============================================================================
