@@ -270,7 +270,7 @@ function! s:LocalVimRC()
 
   " directory of current file (correctly escaped)
   let l:directory = fnameescape(expand("%:p:h"))
-  if empty(l:directory)
+  if !isdirectory(l:directory)
     let l:directory = fnameescape(getcwd())
   endif
   call s:LocalVimRCDebug(2, "searching directory \"" . l:directory . "\"")
