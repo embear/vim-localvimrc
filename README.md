@@ -22,7 +22,7 @@ The plugin can be found on [GitHub] and [VIM online].
 
 Download the archive at [VIM online] and run
 
-``` {.sh}
+```sh
 vim -c 'so %|q' localvimrc.vmb
 ```
 
@@ -31,7 +31,7 @@ vim -c 'so %|q' localvimrc.vmb
 This is an elegant way to separate plugins from each other and be easily able
 to completely remove a plugin later.
 
-``` {.sh}
+```sh
 mkdir -p ~/.vim/pack/localvimrc/start/
 git clone --depth 1 https://github.com/embear/vim-localvimrc.git ~/.vim/pack/localvimrc/start/localvimrc
 vim -c 'packloadall|helptags ALL'
@@ -43,7 +43,7 @@ If the installed vim is older than version 8 it is possible to use a third
 party package manager. For example install [vim-plug] and add the following to
 your global vimrc:
 
-``` {.vim}
+```vim
 call plug#begin()
 
 Plug 'embear/vim-localvimrc'
@@ -53,7 +53,7 @@ call plug#end()
 
 Then actually install the plugin:
 
-``` {.sh}
+```sh
 vim -c 'PlugInstall'
 ```
 
@@ -125,7 +125,7 @@ possible to end the processing of local vimrc files for example at the root of
 the project by adding the following command to the local vimrc file in the root
 of the project:
 
-``` {.vim}
+```vim
 call LocalVimRCFinish()
 ```
 
@@ -139,7 +139,7 @@ Adding the following lines to a local vimrc in the root directory of a project
 modify the behavior of |:make| to change into a build directory and call make
 there:
 
-``` {.vim}
+```vim
 let &l:makeprg="cd ".g:localvimrc_script_dir_unresolved."/build && make"
 ```
 
@@ -154,7 +154,7 @@ This is only possible if you disable sandbox mode.
 Other variables provide a way to prevent multiple execution of commands. They
 can be used to implement guards:
 
-``` {.vim}
+```vim
 " do stuff you want to do on every buffer enter event
 
 " guard to end loading if it has been loaded for the currently edited file
@@ -215,7 +215,7 @@ this session for the currently edited file. Set to `0` otherwise.
 To change settings from their default add  similar line to your global |vimrc|
 file.
 
-``` {.vim}
+```vim
 let g:option_name=option_value
 ```
 
@@ -257,7 +257,7 @@ For more information see |autocmd-events|.
 
 BufWinEnter is the default to enable lines like
 
-``` {.vim}
+```vim
 setlocal colorcolumn=+1
 ```
 
@@ -366,7 +366,7 @@ See |regular-expression| for patterns that are accepted.
 
 Example:
 
-``` {.vim}
+```vim
 " whitelist all local vimrc files in users project foo and bar
 let g:localvimrc_whitelist='/home/user/projects/\(foo\|bar\)/.*'
 
@@ -388,7 +388,7 @@ See |regular-expression| for patterns that are accepted.
 
 Example:
 
-``` {.vim}
+```vim
 " blacklist all local vimrc files in shared project directory
 let g:localvimrc_blacklist='/share/projects/.*'
 
@@ -439,7 +439,7 @@ If enabled localvimrc emits autocommands before and after sourcing a local
 vimrc file. The autocommands are emitted as |User| events. Because of that
 commands need to be registered in the following way:
 
-``` {.vim}
+```vim
 autocmd User LocalVimRCPre  echom 'before loading local vimrc'
 autocmd User LocalVimRCPost echom 'after loading local vimrc'
 ```
@@ -469,7 +469,7 @@ event is emitted by Vim before modelines are processed.
 The second solution is to move all those settings to the local vimrc file and
 use different settings depending on the |filetype|:
 
-``` {.vim}
+```vim
 if &ft == "make"
   setl ts=4 sts=0 sw=4 noet
 else
@@ -489,7 +489,7 @@ plugin you want to configure an optional plugin (see |:packadd|). This way it
 is possible to do the settings in the local vimrc file and activate the plugin
 afterwards. To do so add something like this to your local vimrc file:
 
-``` {.vim}
+```vim
 " NOTE: <PLUGIN> needs to be replaced with the directory name of the plugin
 if !g:localvimrc_sourced_once
   " add your <PLUGIN> settings here
@@ -512,7 +512,7 @@ a file and create a bug report on [GitHub]. Debug messages can be enabled
 temporary and exported to a file called `localvimrc_debug.txt` on command line
 with the following command:
 
-``` {.sh}
+```sh
 vim --cmd "let g:localvimrc_debug=99" -c "LocalVimRCDebugDump localvimrc_debug.txt" your_file
 ```
 
