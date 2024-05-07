@@ -184,7 +184,7 @@ if has("autocmd")
 
     for event in s:localvimrc_event
       " call s:LocalVimRC() when event occurs
-      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRCDebug(1, 'autocommand triggered on event "', event, '"')|call s:LocalVimRC()"
+      exec "autocmd ".event." ".s:localvimrc_event_pattern." call s:LocalVimRCDebug(1, 'autocommand triggered on event ', '".event."')|call s:LocalVimRC()"
     endfor
   augroup END
 endif
