@@ -6,13 +6,15 @@ vimball = localvimrc.vmb
 vim-tools = support/vim-tools
 html2vimdoc = $(vim-tools)/bin/html2vimdoc
 
-all: doc package
+all: test doc package
 
 clean:
 	@echo "#### purging markdown to vim help converter ####"
 	@rm -rf $(vim-tools)
 	@echo "#### purging vimball ####"
 	@rm -rf $(vimball)
+	@echo "#### purging testing framework ####"
+	@rm -rf test/vader
 
 doc: $(helpfile)
 
@@ -28,7 +30,7 @@ $(html2vimdoc):
 
 $(helpfile): README.md $(html2vimdoc)
 	@echo "#### converting README to vim documentation ####"
-	@$(html2vimdoc) -f $$(basename $@ .txt) $< >$@
+	@$(html2vimdoc) -f $$(basename $@ .txt) $< >$@ 2>/dev/null
 
 $(vimball): LICENSE $(helpfile) $(sources)
 	@echo "#### creating vimball package ####"
