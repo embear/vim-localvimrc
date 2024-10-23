@@ -227,7 +227,7 @@ function! s:LocalVimRCSourceScript(script_path, sandbox)
   catch
     " catch all other errors to prevent bad behavior when sourced script
     " contains a syntax error.
-    call s:LocalVimRCError("error when sourcing script: '", v:exception, "' (", v:throwpoint, ")")
+    call s:LocalVimRCError("error when sourcing script: '" . v:exception . "' (" . v:throwpoint . ")")
   finally
     " release the guard variable
     let s:localvimrc_running = 0
@@ -652,7 +652,7 @@ function! s:LocalVimRCMatchAny(str, patterns)
       endif
     catch
       " the given patterns contain an illegal regular expression
-      call s:LocalVimRCError("localvimrc_whitelist or localvimrc_blacklist contains illegal regular expression '", l:pattern, "'")
+      call s:LocalVimRCError("localvimrc_whitelist or localvimrc_blacklist contains illegal regular expression '" . l:pattern . "'")
     endtry
   endfor
   return 0
@@ -813,19 +813,19 @@ function! s:LocalVimRCWritePersistent()
               if writefile(l:serialized, s:localvimrc_persistence_file) == 0
                 call delete(l:backup_name)
               else
-                call s:LocalVimRCError("error while writing persistence file, backup stored in '", l:backup_name, "'")
+                call s:LocalVimRCError("error while writing persistence file, backup stored in '" . l:backup_name . "'")
               endif
             else
-              call s:LocalVimRCError("unable to write persistence file backup '", l:backup_name, "'")
+              call s:LocalVimRCError("unable to write persistence file backup '" . l:backup_name . "'")
             endif
           else
             " there is no persistence file to backup, just write new one
             if writefile(l:serialized, s:localvimrc_persistence_file) != 0
-              call s:LocalVimRCError("unable to write persistence file '", s:localvimrc_persistence_file, "'")
+              call s:LocalVimRCError("unable to write persistence file '" . s:localvimrc_persistence_file . "'")
             endif
           endif
         else
-          call s:LocalVimRCError("unable to write persistence file '", s:localvimrc_persistence_file, "'")
+          call s:LocalVimRCError("unable to write persistence file '" . s:localvimrc_persistence_file . "'")
         endif
 
         " store persistence file checksum
