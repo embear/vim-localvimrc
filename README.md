@@ -529,11 +529,12 @@ vim --cmd "let g:localvimrc_debug=99" -c "LocalVimRCDebugDump localvimrc_debug.t
 
 ## Changelog
 
-vX.X.X : XXXX-XX-XX
+v3.2.0 : 2024-10-25
 
   - add command |LocalVimRCDebugDump| to write debug messages to a file.
   - add support for Lua scripts when using Neovim.
   - for search path fallback to the current working directory, it checks for an existing directory of the current buffer rather than an empty directory name.
+  - fix a bug with printing error messages
   
 v3.1.0 : 2020-05-20
 
