@@ -985,18 +985,28 @@ function! s:LocalVimRCEdit()
   endif
 endfunction
 
-" Function: s:LocalVimRCError(text) {{{2
+" Function: s:LocalVimRCError(...) {{{2
 "
 " output error message
 "
-function! s:LocalVimRCError(text)
-  echohl ErrorMsg | echom "localvimrc: " . a:text | echohl None
+function! s:LocalVimRCError(...)
+  " generate output from optional arguments
+  let l:output = ""
+  for Arg in a:000
+    if type(Arg) != type("")
+      let l:output .= string(Arg)
+    else
+      let l:output .= Arg
+    endif
+  endfor
+
+  echohl ErrorMsg | echom "localvimrc: " . l:output | echohl None
 
   " put every error message to the debug message array
-  call s:LocalVimRCDebug(0, a:text)
+  call s:LocalVimRCDebug(0, l:output)
 endfunction
 
-" Function: s:LocalVimRCDebug(level, text) {{{2
+" Function: s:LocalVimRCDebug(level, ...) {{{2
 "
 " store debug message, if this message has high enough importance
 "
@@ -1007,6 +1017,7 @@ function! s:LocalVimRCDebug(level, ...)
       call add(s:localvimrc_debug_message, "lvl X: stacktrace " . expand('<sfile>'))
     endif
 
+    " generate output from optional arguments
     let l:output = "lvl " . a:level . ": "
     for Arg in a:000
       if type(Arg) != type("")
