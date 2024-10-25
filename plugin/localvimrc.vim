@@ -693,10 +693,17 @@ endfunction
 " with FNV-1
 "
 function! s:LocalVimRCCalcChecksum(file)
-  let l:content = join(readfile(a:file))
-  let l:checksum = s:localvimrc_checksum_func(l:content)
+  let l:checksum = 0
 
-  call s:LocalVimRCDebug(3, "checksum calc -> ", fnameescape(a:file), " : ", l:checksum)
+  " check if file is readable
+  if filereadable(a:file)
+    let l:content = join(readfile(a:file))
+    let l:checksum = s:localvimrc_checksum_func(l:content)
+
+    call s:LocalVimRCDebug(3, "checksum calc -> ", fnameescape(a:file), " : ", l:checksum)
+  else
+    call s:LocalVimRCError("unable to read file '", a:file, "'")
+  endif
 
   return l:checksum
 endfunction
